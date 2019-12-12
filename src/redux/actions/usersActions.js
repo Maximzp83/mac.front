@@ -6,11 +6,12 @@ export const types = {
 	// INITIALIZE_VIEW: "INITIALIZE_VIEW",
 	ITEMS_STATUS: "ITEMS_STATUS",
 	SET_ITEMS: "SET_ITEMS",
+	SET_FILTER: "SET_FILTER"
 	// SET_AUTH_TO_STORE: "SET_AUTH_TO_STORE",
 	// SET_AUTH_TO_LOCAL_STORAGE: "SET_AUTH_TO_LOCAL_STORAGE",
 }
 
-export function fetchUsers() {
+export function fetchUsers(payload) {
   return (dispatch) => { 
     dispatch({ type: types.ITEMS_STATUS, payload: {status:'loading', isLoading:true} });
 
@@ -21,17 +22,21 @@ export function fetchUsers() {
 	    	method: 'get'
 	    }
 
+	    if (!!payload) {
+	    	if (!!payload.getParams) options.getParams = payload.getParams
+	    }
+
 	    standardResponse(options)
 	    	.then( response => {
 	    		if (response.data) {
 	    			// console.log(response.data)
 						dispatch({
 							type: types.SET_ITEMS,
-							payload: { users: response.data }
+							payload: response.data
 						});
 
 						dispatch({ type: types.ITEMS_STATUS, payload: {status:'ready', isLoading:false} });
-						resolve()
+						resolve(response.data)
 					} else {
 						dispatch({ type: types.ITEMS_STATUS, payload: {status:'error', isLoading:false} });
 						reject({message: 'ошибка, ответ не содержит данных'})
@@ -43,4 +48,12 @@ export function fetchUsers() {
 	    	})
 	  })
   };
+}
+
+export function setUsers(users) {
+  return { type: types.SET_ITEMS, payload: users }
+}
+
+export function setUsersFilter(filter) {
+  return { type: types.SET_FILTER, payload: filter }
 }

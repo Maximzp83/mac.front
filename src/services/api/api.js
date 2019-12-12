@@ -12,25 +12,11 @@ export const standardResponse = (options) => {
 					options.url = options.url + '/' + options.getParams.itemId;
 				} else {
 	    		getParams = toUrl(options.getParams);
-	      	options.url = options.url + '?' + getParams;					
+	    		// console.log(getParams)
+	      	options.url = getParams ? options.url + '?' + getParams : options.url;
 				}
 			}
-			// console.log(options)
-			/*return new Promise((resolve, reject) => {
-			  setTimeout(() => {
-			    var response = {
-			    	status: 200,
-			    	data: {name: options.data.email, isActive: true }
-			    }
-			    // console.log(response.data)
-			    if (response && response.status === 200) {
-			    	resolve(response);
-			    } else {
-			    	reject(response)
-			    }
-			  }, 1000)
-			});*/
-			
+			console.log(options.url)
 			return axios({
 				url: options.url,
 				method: options.method,

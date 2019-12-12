@@ -31,7 +31,7 @@ const SignIn = () => {
   // console.log('ok')
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState('Ethan_Purdy@yahoo.com');
+  const [email, setEmail] = useState('Keeley50@yahoo.com');
   const [password, setPass] = useState('');
 
   const {authLoading, isAuthenticated, authUser} = useSelector(state => {
@@ -59,7 +59,7 @@ const SignIn = () => {
   return (
     <React.Fragment>
       <div className="text-center mt-4">
-        <h2>Hello {isAuthenticated ? authUser.name : 'Guest' }</h2>
+        <h2>Hello {isAuthenticated ? authUser.first_name : 'Guest' }</h2>
         <p className="lead">Sign in to your account to continue</p>
       </div>
 

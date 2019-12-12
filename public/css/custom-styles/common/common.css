@@ -1,0 +1,20 @@
+.preloader-text {
+  font-size: 18px; }
+
+.table-wrapper {
+  background-color: #fff; }
+
+.standard-table.centered th, .standard-table.centered td {
+  text-align: center; }
+
+.standard-table th:first-child {
+  padding-left: 5px; }
+
+.standard-table th.name {
+  min-width: 180px; }
+
+.items-filterbar .btn {
+  border-radius: 4px !important;
+  box-shadow: none !important; }
+  .items-filterbar .btn + .btn {
+    margin-left: 15px; }

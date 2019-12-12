@@ -3,7 +3,11 @@ import { types } from "../actions/usersActions";
 const initialState = {
   usersLoading: false,
   usersList: [],
-  status: 'ready'
+  usersStatus: 'ready',
+  usersFilter: {
+    isClient: null,
+    isActive: null
+  }
 };
 
 export default function(state = initialState, action) {
@@ -14,16 +18,20 @@ export default function(state = initialState, action) {
     case types.ITEMS_STATUS: {
       return { ...state, 
         usersLoading: action.payload.isLoading,
-        status: action.payload.status
+        usersStatus: action.payload.status
       }
     }
 
     case types.SET_ITEMS: {
-      return { ...state, usersList: action.payload.users }
+      return { ...state, usersList: action.payload }
     }
 
     case types.ITEMS_CLEAR: {
       return { ...state, usersList: [] }      
+    }
+
+    case types.SET_FILTER: {
+      return { ...state, usersFilter: action.payload }
     }
 
     default:
