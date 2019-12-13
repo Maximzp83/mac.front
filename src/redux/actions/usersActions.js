@@ -3,10 +3,11 @@ import {standardResponse} from 'services/api/api';
 // import {findItemBy} from 'helpers';
 
 export const types = {
-	// INITIALIZE_VIEW: "INITIALIZE_VIEW",
 	ITEMS_STATUS: "ITEMS_STATUS",
 	SET_ITEMS: "SET_ITEMS",
-	SET_FILTER: "SET_FILTER"
+	SET_FILTER: "SET_FILTER",
+	SET_META: "SET_META"
+
 	// SET_AUTH_TO_STORE: "SET_AUTH_TO_STORE",
 	// SET_AUTH_TO_LOCAL_STORAGE: "SET_AUTH_TO_LOCAL_STORAGE",
 }
@@ -56,4 +57,8 @@ export function setUsers(users) {
 
 export function setUsersFilter(filter) {
   return { type: types.SET_FILTER, payload: filter }
+}
+
+export function setUsersMeta(meta) {
+  return { type: types.SET_META, payload: meta }
 }

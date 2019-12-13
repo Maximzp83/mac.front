@@ -1,38 +1,33 @@
 import { types } from "../actions/authActions";
 
+let token = localStorage.getItem('access_token')
+let user = JSON.parse( localStorage.getItem('authUser') )
+
 const initialState = {
   authLoading: false,
-  authUser: null,
-  isAuthenticated: false,
-  access_token: null,
-  error: null
+  authUser: !!token && !!user ? user : null,
+  isAuthenticated: !!token || false,
+  access_token:  token || null,
+  // error: null
 };
 
 export default function(state = initialState, action) {
       // console.log(action.type)
-
   switch (action.type) {
 
     case types.AUTH_REQUEST: {
-      // console.log('request')
       return { ...state, authLoading: true }
     }
 
     case types.AUTH_SUCCESS: {
-      // console.log('request')
       return { ...state, authLoading: false }
     }
 
     case types.AUTH_FAILURE: {
-      return {
-        ...state,
-        authLoading: false,
-        // error: action.payload
-      }
+      return { ...state, authLoading: false }
     }
 
     case types.SET_AUTH_TO_STORE: {
-      // console.log('success: ', action.payload)
       return {
         ...state,
         isAuthenticated: action.payload.isAuthenticated,
@@ -42,7 +37,6 @@ export default function(state = initialState, action) {
     }
 
     case types.SET_AUTH_TO_LOCAL_STORAGE: {
-      // console.log('success: ', action.payload)
       if (action.payload.access_token) {
         localStorage.setItem('access_token', action.payload.access_token);
         localStorage.setItem('authUser', JSON.stringify(action.payload.user));

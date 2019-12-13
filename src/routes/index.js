@@ -23,7 +23,7 @@ import Profile from "../pages/pages/Profile";
 
 // Dashboards
 const Default = async(() => import("../pages/dashboards/Default"));
-const Users = async(() => import("../pages/dashboards/Users"));
+const Users = async(() => import("../pages/dashboards/Users/Users"));
 
 
 

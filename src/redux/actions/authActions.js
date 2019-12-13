@@ -12,44 +12,6 @@ export const types = {
 	SET_AUTH_TO_LOCAL_STORAGE: "SET_AUTH_TO_LOCAL_STORAGE",
 }
 
-/*export function authRequest() {
-	// console.log('request')
-  return { type: types.AUTH_REQUEST };
-}
-
-
-export function authFailure(error) {
-  return { 
-  	type: types.AUTH_FAILURE,
-  	payload: error
-  };
-}*/
-
-export function initAuthStore() {
-	return (dispatch) => { 
-    dispatch({ type: types.AUTH_REQUEST });
-
-		let token = localStorage.getItem('access_token');
-
-		if (!!token && token !== 'undefined') {
-			const user = JSON.parse( localStorage.getItem('authUser') )
-			
-    	dispatch({
-    		type: types.SET_AUTH_TO_STORE,
-    		payload: {
-    			isAuthenticated: true,
-    			user: user,
-    			access_token: user.token,
-    		}
-    	});
-		} else {
-			dispatch({type: types.AUTH_CLEAR }) 
-		}
-
-		dispatch({ type: types.AUTH_SUCCESS });
-	}
-}
-
 export function signIn(payload) {
   return (dispatch) => { 
     dispatch({ type: types.AUTH_REQUEST });

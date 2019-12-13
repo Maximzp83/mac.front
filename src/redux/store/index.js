@@ -3,10 +3,9 @@ import { routerMiddleware } from 'react-router-redux'
 import rootReducer from "../reducers/index";
 import thunk from "redux-thunk";
 import {browserHistory} from 'services/history';
-// import { saveAuthData } from 'services/authService';
 
 
-const middlewares = [ thunk, routerMiddleware(browserHistory), /*saveAuthData*/ ]
+const middlewares = [ thunk, routerMiddleware(browserHistory) ]
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 

@@ -12,7 +12,8 @@
     "watch:css": "chokidar \"src/assets/scss/**/*\" -c \"npm run build:css\"",
     "watch:js": "react-scripts start",
     "start": "npm-run-all -p build:css watch:*",
-    "build": "npm-run-all -p build:*"
+    "build": "npm-run-all -p build:*",
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -70,5 +71,11 @@
     "redux": "4.0.1",
     "redux-thunk": "^2.3.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "prettier": "^1.19.1"
+  }
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { enableClassicTheme } from "../../redux/actions/themeActions";
+// import { enableClassicTheme } from "../../redux/actions/themeActions";
 // import { authInit } from "../../redux/actions/authActions";
 
 
@@ -49,8 +49,8 @@ const Intro = () => (
 
 class HomePage extends React.Component {
   componentWillMount() {
-    const { dispatch } = this.props;
-    dispatch(enableClassicTheme());
+    // const { dispatch } = this.props;
+    // dispatch(enableClassicTheme());
     // dispatch(authInit());
   }
 

@@ -1,29 +1,28 @@
-import axios from 'axios';
 import { toUrl } from './api_helpers';
+import axios from './axiosService';
 
-// import VueAxios from 'vue-axios';
 
 
 export const standardResponse = (options) => {
-		var getParams;
-		try {
-			if (!!options.getParams) {
-				if (!!options.getParams.itemId) {
-					options.url = options.url + '/' + options.getParams.itemId;
-				} else {
-	    		getParams = toUrl(options.getParams);
-	    		// console.log(getParams)
-	      	options.url = getParams ? options.url + '?' + getParams : options.url;
-				}
+	var getParams;
+	try {
+		if (!!options.getParams) {
+			if (!!options.getParams.itemId) {
+				options.url = options.url + '/' + options.getParams.itemId;
+			} else {
+    		getParams = toUrl(options.getParams);
+    		// console.log(getParams)
+      	options.url = getParams ? options.url + '?' + getParams : options.url;
 			}
-			console.log(options.url)
-			return axios({
-				url: options.url,
-				method: options.method,
-				data: options.data || null,
-		  })
-		} catch(error) {console.log(error)}
-	}
+		}
+		console.log(options.url)
+		return axios({
+			url: options.url,
+			method: options.method,
+			data: options.data || null,
+	  })
+	} catch(error) {console.log(error)}
+}
 
 /*	export const standardResponseWithFile = (options) => {
 		var headers, formData = null;

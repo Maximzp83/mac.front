@@ -5,16 +5,11 @@ import ReduxToastr from "react-redux-toastr";
 import store from "./redux/store/index";
 import Routes from "./routes/Routes";
 
-// import {BrowserRouter as browserHistory} from "react-router-dom";
-import { initAuthStore } from "redux/actions/authActions";
 
 import {browserHistory} from 'services/history';
 import { syncHistoryWithStore } from 'react-router-redux';
 const history = syncHistoryWithStore(browserHistory, store);
 
-
-
-store.dispatch(initAuthStore())
 
 const App = () => (
   <Provider store={store}>

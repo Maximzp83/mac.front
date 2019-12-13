@@ -6,7 +6,10 @@ const initialState = {
   usersStatus: 'ready',
   usersFilter: {
     isClient: null,
-    isActive: null
+    isActive: null,
+  },
+  usersMeta: {
+    maxItems: 10
   }
 };
 
@@ -32,6 +35,10 @@ export default function(state = initialState, action) {
 
     case types.SET_FILTER: {
       return { ...state, usersFilter: action.payload }
+    }
+
+    case types.SET_META: {
+      return { ...state, usersMeta: action.payload }
     }
 
     default:
