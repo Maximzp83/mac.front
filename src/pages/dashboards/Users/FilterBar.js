@@ -9,8 +9,8 @@ import {
 
 const FilterBar = ({changeItemsFilter, changeItemsMeta, currentFilter, itemsMeta}) => {
 
-	const [maxItemsOpen, setMaxItems] = useState(false);
-	const maxToggle = () => {setMaxItems(!maxItemsOpen); console.log(maxItemsOpen)}
+	const [maxItemsOpen, setMaxItems] = useState(false)
+	const maxToggle = () => {setMaxItems(!maxItemsOpen)}
 
 	const handleFilterSelect = (value) => {
 	  const { name, val } = value;

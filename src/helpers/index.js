@@ -9,10 +9,10 @@ export const setHttpToken = (token) => {
 }
 
 export const getErrorMessage = (originalError) => {
-	var notifyText = '';
+	let notifyText = '';
 
 	// console.log(originalError.data)
-	var error = !!originalError.data ? originalError.data : originalError.response;
+	let error = !!originalError.data ? originalError.data : originalError.response;
 	if (!!error ) {
 	  if (error.message) {
 	  	notifyText += '<p>'+error.message+'</p>';
@@ -40,7 +40,7 @@ export const getSuccessMessage = (response, settings) => {
 	let notifyText = '';
 	// console.log(response)
 	// message: 'User '+response.data.data.user_name+' succesfuly saved'
-
+	
 	if (!!response.data && !!response.data.data) {
 		if ( !isEmpty(settings.metaData) && !!settings.metaData.name) {
 			notifyText += settings.metaData.name +' <b>'+ response.data.data[settings.metaData.propertyName] + '</b> succesfuly '+settings.operation+'d';
@@ -67,7 +67,7 @@ export const getSuccessMessage = (response, settings) => {
 /*export const isValidFile = (file, customSize) => {
 	// const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'];
 	// console.log(file)
-	var size = customSize || 6291456;
+	let size = customSize || 6291456;
 
 	return file && file.size <= size 
 	// let isFileImage = file && acceptedImageTypes.includes(file['type'])
@@ -93,16 +93,16 @@ export const findItemBy = (property, value, itemsList) => {
 }
 
 /*export const getIds = (itemsList, options) => {
-	var ids = [];
+	let ids = [];
 	
 	if (options && options.string) {
-		for (var i = 0; i < itemsList.length; i++) {
+		for (let i = 0; i < itemsList.length; i++) {
 			itemsList[i].id ? ids.push( itemsList[i].id + '') : null;
 		}
 		return ids;		
 	}
 
-	for (var i = 0; i < itemsList.length; i++) {
+	for (let i = 0; i < itemsList.length; i++) {
 		itemsList[i].id ? ids.push( itemsList[i].id ) : null;
 	}
 
@@ -137,7 +137,7 @@ export const findItemBy = (property, value, itemsList) => {
 	    let dateArr = date.split('-');
 	    let resultDateArr = []
 
-	    for (var i = dateArr.length - 1 ; i >= 0 ; i--) {
+	    for (let i = dateArr.length - 1 ; i >= 0 ; i--) {
 	      resultDateArr.push(dateArr[i])
 	    }
 

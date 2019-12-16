@@ -1,4 +1,4 @@
-/*function getMeta(metaName) {
+/* function getMeta(metaName) {
 	try {
 	  const metas = document.getElementsByTagName('meta');
 
@@ -9,26 +9,24 @@
 	  }
 	  return '';
 	} catch (e) {}
-}*/
+} */
 
-import axios from "axios";
+import axios from 'axios';
 
-const headers = {
+const headersOptions = {
 	'X-Requested-With': 'XMLHttpRequest',
 	'Accept': 'application/json',
-	'Content-Type': 'application/json;charset=UTF-8',
-}
+	'Content-Type': 'application/json;charset=UTF-8'
+};
 
 export default axios.create({
-  baseURL: 'http://5dee1252b3d17b00146a2178.mockapi.io/api',
-  headers: headers
+	baseURL: 'http://5dee1252b3d17b00146a2178.mockapi.io/api',
+	headers: headersOptions
 });
-
 
 // console.log(document.hea)
 // const baseURL = process.env.NODE_ENV === 'development' ? 'http://ticket.back/api' : '';
 // const baseURL = getMeta('base-url') + '/api'
-
 
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
@@ -38,8 +36,8 @@ export default axios.create({
 
 // let token = document.head.querySelector('meta[name="csrf-token"]');
 
-/*if (token) {
+/* if (token) {
   window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
   console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-}*/
+} */
