@@ -26,6 +26,8 @@ export const standardResponse = optionsData => {
 	});
 };
 
+// export { standardResponse }
+
 /* export const standardResponseWithFile = (options) => {
 	let headers, formData = null;
 	try {

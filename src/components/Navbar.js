@@ -1,56 +1,53 @@
-import React from "react";
+import React from 'react';
 // import { connect } from "react-redux";
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 // import {push as routerPush} from 'react-router-redux';
 
-import { toggleSidebar } from "../redux/actions/sidebarActions";
-
-import {toastr} from 'react-redux-toastr'
+import { toastr } from 'react-redux-toastr';
 
 import {
-  // Row,
-  // Col,
-  Collapse,
-  Navbar,
-  Nav,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  // ListGroup,
-  // ListGroupItem,
-  Form,
-  Input,
-  Spinner,
-  
-} from "reactstrap";
+	// Row,
+	// Col,
+	Collapse,
+	Navbar,
+	Nav,
+	UncontrolledDropdown,
+	DropdownToggle,
+	DropdownMenu,
+	DropdownItem,
+	// ListGroup,
+	// ListGroupItem,
+	Form,
+	Input,
+	Spinner
+} from 'reactstrap';
 
 import {
-  // AlertCircle,
-  // Bell,
-  // BellOff,
-  // Home,
-  // MessageCircle,
-  // PieChart,
-  Settings,
-  User,
-  // UserPlus
-} from "react-feather";
+	// AlertCircle,
+	// Bell,
+	// BellOff,
+	// Home,
+	// MessageCircle,
+	// PieChart,
+	Settings,
+	User
+	// UserPlus
+} from 'react-feather';
 
-/*import usFlag from "../assets/img/flags/us.png";
+/* import usFlag from "../assets/img/flags/us.png";
 import esFlag from "../assets/img/flags/es.png";
 import deFlag from "../assets/img/flags/de.png";
-import nlFlag from "../assets/img/flags/nl.png";*/
+import nlFlag from "../assets/img/flags/nl.png"; */
 
-/*import avatar1 from "../assets/img/avatars/avatar.jpg";
+/* import avatar1 from "../assets/img/avatars/avatar.jpg";
 import avatar3 from "../assets/img/avatars/avatar-3.jpg";
 import avatar4 from "../assets/img/avatars/avatar-4.jpg";
-import avatar5 from "../assets/img/avatars/avatar-5.jpg";*/
+import avatar5 from "../assets/img/avatars/avatar-5.jpg"; */
 
-import { signOut } from "redux/actions/authActions";
+import { signOut } from 'redux/actions/authActions';
+import { toggleSidebar } from '../redux/actions/sidebarActions';
 
-
-/*const notifications = [
+/* const notifications = [
   {
     type: "important",
     title: "Update completed",
@@ -75,9 +72,9 @@ import { signOut } from "redux/actions/authActions";
     description: "Anna accepted your request.",
     time: "12h ago"
   }
-];*/
+]; */
 
-/*const messages = [
+/* const messages = [
   {
     name: "Ashley Briggs",
     avatar: avatar5,
@@ -102,9 +99,9 @@ import { signOut } from "redux/actions/authActions";
     description: "Aenean tellus metus, bibendum sed, posuere ac, mattis non.",
     time: "5h ago"
   }
-];*/
+]; */
 
-/*const NavbarDropdown = ({
+/* const NavbarDropdown = ({
   children,
   count,
   showBadge,
@@ -129,9 +126,9 @@ import { signOut } from "redux/actions/authActions";
       </DropdownItem>
     </DropdownMenu>
   </UncontrolledDropdown>
-);*/
+); */
 
-/*const NavbarDropdownItem = ({ icon, title, description, time, spacing }) => (
+/* const NavbarDropdownItem = ({ icon, title, description, time, spacing }) => (
   <ListGroupItem>
     <Row noGutters className="align-items-center">
       <Col xs={2}>{icon}</Col>
@@ -142,43 +139,50 @@ import { signOut } from "redux/actions/authActions";
       </Col>
     </Row>
   </ListGroupItem>
-);*/
+); */
 
 const NavbarComponent = () => {
-  const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
-  const {authLoading, isAuthenticated, authUser} = useSelector(state => state.auth);
+	const { authLoading, isAuthenticated, authUser } = useSelector(
+		state => state.auth
+	);
 
-  const handleLogout = () => {
-    // console.log('ok')
-    dispatch(signOut())
-      .then(response => { 
-        // dispatch(routerPush('/auth/sign-in'))
-        toastr.success('', response.message)
-      })
-      .catch(error => { toastr.error('Ошибка', error.message) })
-  }
+	const handleLogout = () => {
+		// console.log('ok')
+		dispatch(signOut())
+			.then(response => {
+				// dispatch(routerPush('/auth/sign-in'))
+				toastr.success('', response.message);
+			})
+			.catch(error => {
+				toastr.error('Ошибка', error.message);
+			});
+	};
 
-  return (
-    <Navbar color="white" light expand>
-      <span
-        className="sidebar-toggle d-flex mr-2"
-        onClick={ () => {dispatch(toggleSidebar());} }>
-        <i className="hamburger align-self-center" />
-      </span>
+	return (
+		<Navbar color="white" light expand>
+			<span
+				className="sidebar-toggle d-flex mr-2"
+				onClick={() => {
+					dispatch(toggleSidebar());
+				}}
+			>
+				<i className="hamburger align-self-center" />
+			</span>
 
-      <Form inline>
-        <Input
-          type="text"
-          placeholder="Search projects..."
-          aria-label="Search"
-          className="form-control-no-border mr-sm-2"
-        />
-      </Form>
+			<Form inline>
+				<Input
+					type="text"
+					placeholder="Search projects..."
+					aria-label="Search"
+					className="form-control-no-border mr-sm-2"
+				/>
+			</Form>
 
-      <Collapse navbar>
-        <Nav className="ml-auto" navbar>
-          {/*<NavbarDropdown
+			<Collapse navbar>
+				<Nav className="ml-auto" navbar>
+					{/* <NavbarDropdown
             header="New Messages"
             footer="Show all messages"
             icon={MessageCircle}
@@ -202,9 +206,9 @@ const NavbarComponent = () => {
                 />
               );
             })}
-          </NavbarDropdown>*/}
+          </NavbarDropdown> */}
 
-          {/*<NavbarDropdown
+					{/* <NavbarDropdown
             header="New Notifications"
             footer="Show all notifications"
             icon={BellOff}
@@ -234,9 +238,9 @@ const NavbarComponent = () => {
                 />
               );
             })}
-          </NavbarDropdown>*/}
+          </NavbarDropdown> */}
 
-          {/*<UncontrolledDropdown nav inNavbar className="mr-2">
+					{/* <UncontrolledDropdown nav inNavbar className="mr-2">
             <DropdownToggle nav caret className="nav-flag">
               <img src={usFlag} alt="English" />
             </DropdownToggle>
@@ -278,50 +282,50 @@ const NavbarComponent = () => {
                 <span className="align-middle">Dutch</span>
               </DropdownItem>
             </DropdownMenu>
-          </UncontrolledDropdown>*/}
+          </UncontrolledDropdown> */}
 
-          { isAuthenticated && (
-            <UncontrolledDropdown nav inNavbar>
-              <span className="d-inline-block d-sm-none">
-                <DropdownToggle nav caret>
-                  <Settings size={18} className="align-middle" />
-                </DropdownToggle>
-              </span>
-              <span className="d-none d-sm-inline-block">
-                <DropdownToggle nav caret>
-                  <img
-                    src={authUser.avatar}
-                    className="avatar img-fluid rounded-circle mr-1"
-                    alt={authUser.first_name}
-                  />
-                  <span className="text-dark">{authUser.first_name}</span>
-                </DropdownToggle>
-              </span>
-              <DropdownMenu right>
-                <DropdownItem>
-                  <User size={18} className="align-middle mr-2" />
-                  Profile
-                </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>
-                { authLoading ? 
-                  <Spinner size="sm" color="#fff" /> : 
-                  <span onClick={handleLogout}>Sign out</span> }
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-          )}
-
-          
-        </Nav>
-      </Collapse>
-    </Navbar>
-  );
+					{isAuthenticated && (
+						<UncontrolledDropdown nav inNavbar>
+							<span className="d-inline-block d-sm-none">
+								<DropdownToggle nav caret>
+									<Settings size={18} className="align-middle" />
+								</DropdownToggle>
+							</span>
+							<span className="d-none d-sm-inline-block">
+								<DropdownToggle nav caret>
+									<img
+										src={authUser.avatar}
+										className="avatar img-fluid rounded-circle mr-1"
+										alt={authUser.first_name}
+									/>
+									<span className="text-dark">{authUser.first_name}</span>
+								</DropdownToggle>
+							</span>
+							<DropdownMenu right>
+								<DropdownItem>
+									<User size={18} className="align-middle mr-2" />
+									Profile
+								</DropdownItem>
+								<DropdownItem divider />
+								<DropdownItem>
+									{authLoading ? (
+										<Spinner size="sm" color="#fff" />
+									) : (
+										<span onClick={handleLogout}>Sign out</span>
+									)}
+								</DropdownItem>
+							</DropdownMenu>
+						</UncontrolledDropdown>
+					)}
+				</Nav>
+			</Collapse>
+		</Navbar>
+	);
 };
 
-export default NavbarComponent
+export default NavbarComponent;
 
-/*export default connect(store => ({
+/* export default connect(store => ({
   app: store.app
 }))(NavbarComponent);
 */

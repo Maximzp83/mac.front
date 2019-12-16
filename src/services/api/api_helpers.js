@@ -20,6 +20,8 @@ export const toUrl = obj => {
 	return str.join('&');
 };
 
+export { toUrl as default };
+
 /* export const requestResolveCallback = (
 		response,
 		{ resolve, reject, mutations, dispatches }

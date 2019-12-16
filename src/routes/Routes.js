@@ -1,9 +1,7 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
-import { useSelector /* useDispatch */ } from 'react-redux';
-import { /* actions as toastrActions */ toastr } from 'react-redux-toastr';
-import PropTypes from 'prop-types';
-// import {push as routerPush} from 'react-router-redux';
+import { useSelector } from 'react-redux';
+import { toastr } from 'react-redux-toastr';
 
 import {
 	home as homeRoutes,
@@ -20,7 +18,7 @@ import ScrollToTop from '../components/ScrollToTop';
 function routeMiddleware(childrenComponents) {
 	const { isAuthenticated, authLoading } = useSelector(state => state.auth);
 	if (isAuthenticated) {
-		return <Fragment>{childrenComponents}</Fragment>;
+		return childrenComponents;
 	}
 
 	if (!authLoading) {
@@ -28,7 +26,7 @@ function routeMiddleware(childrenComponents) {
 			toastr.warning('Acess denined', 'to view this page login first');
 		}, 100);
 	}
-	return <Redirect to="/auth/sign-in"/>;
+	return <Redirect to="/auth/sign-in" />;
 }
 
 const PrivateRoute = ({ children }) => {

@@ -1,12 +1,10 @@
-import React from "react";
-import { connect } from "react-redux";
+import React from 'react';
+import { connect } from 'react-redux';
 
 const Wrapper = ({ layout, children }) => (
-  <div className={"wrapper"}>
-    {children}
-  </div>
+	<div className="wrapper">{children}</div>
 );
 
 export default connect(store => ({
-  layout: store.layout
+	layout: store.layout
 }))(Wrapper);

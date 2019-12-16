@@ -1,81 +1,80 @@
-import isEmpty from 'lodash.isempty'
+import isEmpty from 'lodash.isempty';
 
-export const setHttpToken = (token) => {
-    if (isEmpty(token)) {
-        window.axios.defaults.headers.common['Authorization'] = null
-    }
+export const setHttpToken = token => {
+	if (isEmpty(token)) {
+		window.axios.defaults.headers.common.Authorization = null;
+	}
 
-    window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-}
+	window.axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+};
 
-export const getErrorMessage = (originalError) => {
+export const getErrorMessage = originalError => {
 	let notifyText = '';
 
 	// console.log(originalError.data)
-	let error = !!originalError.data ? originalError.data : originalError.response;
-	if (!!error ) {
-	  if (error.message) {
-	  	notifyText += '<p>'+error.message+'</p>';
-	  } else if (error.data.message) {
-	  	notifyText += '<p>'+error.data.message+'</p>';
-	  }
+	const error = originalError.data || originalError.response;
 
-	  if (error.errors && !isEmpty(error.errors) ) {
-		  let errors = error.errors;
-	  // console.log(errors)
-		  for (let errorMessages in errors) {
-		    notifyText += '<p><b>'+errorMessages+':</b></p>';
-		    // console.log(errors[errorMessages])
-		    for (let i = 0; i < errors[errorMessages].length; i++) {
-		      notifyText += '<p>'+errors[errorMessages][i]+'</p>';
-		    }
-		  }
+	if (error) {
+		
+		notifyText = error.message ? '<p>'+error.message+'</p>' : '<p>'+error.data.message+'</p>';
+
+		if (error.errors && !isEmpty(error.errors)) {
+			const errors = error.errors;
+			// console.log(errors)
+			for (const errorMessages in errors) {
+				notifyText += `<p><b>${errorMessages}:</b></p>`;
+				// console.log(errors[errorMessages])
+				for (let i = 0; i < errors[errorMessages].length; i++) {
+					notifyText += `<p>${errors[errorMessages][i]}</p>`;
+				}
+			}
 		}
 	}
 
-	return notifyText
-}
+	return notifyText;
+};
 
 export const getSuccessMessage = (response, settings) => {
 	let notifyText = '';
 	// console.log(response)
 	// message: 'User '+response.data.data.user_name+' succesfuly saved'
-	
+
 	if (!!response.data && !!response.data.data) {
-		if ( !isEmpty(settings.metaData) && !!settings.metaData.name) {
-			notifyText += settings.metaData.name +' <b>'+ response.data.data[settings.metaData.propertyName] + '</b> succesfuly '+settings.operation+'d';
-		} 
-	} else if (response.data.message) {
-			notifyText += response.data.message;
+		if (!isEmpty(settings.metaData) && !!settings.metaData.name) {
+			notifyText += `${settings.metaData.name} <b>${
+				response.data.data[settings.metaData.propertyName]
+			}</b> succesfuly ${settings.operation}d`;
 		}
+	} else if (response.data.message) {
+		notifyText += response.data.message;
+	}
 
+	// console.log(notifyText)
 
-  // console.log(notifyText)
-	
-	return notifyText
-}
+	return notifyText;
+};
 
-/*export const isValidImage = (file, size) => {
+/* export const isValidImage = (file, size) => {
 	const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'];
 
 	let isFileImage = file && acceptedImageTypes.includes(file['type'])
 	let acceptedImageSize = file && file.size < (size || 6291456) //2097152
 	// console.log(isFileImage, acceptedImageSize)
 	return !!isFileImage && !!acceptedImageSize	
-}*/
+} */
 
-/*export const isValidFile = (file, customSize) => {
+/* export const isValidFile = (file, customSize) => {
 	// const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'];
 	// console.log(file)
 	let size = customSize || 6291456;
 
 	return file && file.size <= size 
 	// let isFileImage = file && acceptedImageTypes.includes(file['type'])
-}*/
+} */
 
-export const isImage = (fileObj) => {
-	return (/\.(gif|jpg|jpeg|tiff|png)$/gmi).test(fileObj.path)
-}
+export const isImage = fileObj => {
+	return /\.(gif|jpg|jpeg|tiff|png)$/gim.test(fileObj.path);
+};
 
 export const findItemBy = (property, value, itemsList) => {
 	let result = null;
@@ -90,9 +89,9 @@ export const findItemBy = (property, value, itemsList) => {
 		}
 		return result;
 	}
-}
+};
 
-/*export const getIds = (itemsList, options) => {
+/* export const getIds = (itemsList, options) => {
 	let ids = [];
 	
 	if (options && options.string) {
@@ -107,16 +106,16 @@ export const findItemBy = (property, value, itemsList) => {
 	}
 
 	return ids;
-}*/
+} */
 
-/*export const bs64toFile = (url, filename, mimeType) => {
+/* export const bs64toFile = (url, filename, mimeType) => {
   return (fetch(url)
       .then(function(res){return res.arrayBuffer();})
       .then(function(buf){return new File([buf], filename, {type:mimeType});})
   )
-}*/
+} */
 
-/*export const hasRightsTo = (userRole, item) => {
+/* export const hasRightsTo = (userRole, item) => {
 	if (item.meta && item.meta.roles && item.meta.roles.length) {
 		if (userRole) {
 			return item.meta.roles.some((role) => {
@@ -125,9 +124,9 @@ export const findItemBy = (property, value, itemsList) => {
 		}
 	}
 	return true
-}*/
+} */
 
-/*export const defaultDateTimeFormat = (dateStr) => {
+/* export const defaultDateTimeFormat = (dateStr) => {
 	if (dateStr) {
 	  let arr = dateStr.split(' ');
 	  let resultDate;
@@ -150,4 +149,4 @@ export const findItemBy = (property, value, itemsList) => {
 	  return dateStr
 	}
 	return 'date not set'
-}*/
+} */

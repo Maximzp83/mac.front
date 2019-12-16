@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import Main from "../components/Main";
+import Main from '../components/Main';
 
 const Home = ({ children }) => <Main>{children}</Main>;
 
