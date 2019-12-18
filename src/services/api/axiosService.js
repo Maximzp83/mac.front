@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 /* function getMeta(metaName) {
 	try {
 	  const metas = document.getElementsByTagName('meta');
@@ -11,18 +13,27 @@
 	} catch (e) {}
 } */
 
-import axios from 'axios';
-
-const headersOptions = {
+/*let headersOptions = {
 	'X-Requested-With': 'XMLHttpRequest',
 	'Accept': 'application/json',
 	'Content-Type': 'application/json;charset=UTF-8'
-};
+};*/
 
-export default axios.create({
-	baseURL: 'http://5dee1252b3d17b00146a2178.mockapi.io/api',
-	headers: headersOptions
-});
+axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.headers['Accept'] = 'application/json';
+axios.defaults.headers['Content-Type'] = 'application/json;charset=UTF-8';
+axios.defaults.baseURL = 'http://mac.loc:8089/api';
+
+/*const axios = () => {
+	axios.create({
+		// baseURL: 'http://5dee1252b3d17b00146a2178.mockapi.io/api',
+		baseURL: 'http://mac.loc:8089/api',
+		headers: headersOptions
+	})
+}*/
+
+export default axios
+	
 
 // console.log(document.hea)
 // const baseURL = process.env.NODE_ENV === 'development' ? 'http://ticket.back/api' : '';

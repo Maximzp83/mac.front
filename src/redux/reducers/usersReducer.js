@@ -17,12 +17,19 @@ export default function(state = initialState, action) {
 	// console.log(action)
 
 	switch (action.type) {
-		case types.ITEMS_STATUS: {
+		/*case types.ITEMS_STATUS: {
 			return {
 				...state,
 				usersLoading: action.payload.isLoading,
 				usersStatus: action.payload.status
 			};
+		}*/
+		case types.REQUEST_START: {
+			return { ...state, usersLoading: true };
+		}
+
+		case types.REQUEST_END: {
+			return { ...state, usersLoading: false };
 		}
 
 		case types.SET_ITEMS: {

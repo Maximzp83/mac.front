@@ -9,7 +9,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faCircle } from "@fortawesome/free-solid-svg-icons";
 
-import routes from '../routes/index';
+import routes from '../routes';
 // import avatar from "../assets/img/avatars/avatar.jpg";
 import logoImg from '../assets/img/logo.png';
 
@@ -21,7 +21,7 @@ const SidebarCategory = withRouter(
 		icon: Icon,
 		isOpen,
 		children,
-		onClick,
+		handleClick,
 		location,
 		to
 	}) => {
@@ -37,7 +37,7 @@ const SidebarCategory = withRouter(
 				<span
 					data-toggle="collapse"
 					className={`sidebar-link ${!isOpen ? 'collapsed' : ''}`}
-					onClick={onClick}
+					onClick={handleClick}
 					aria-expanded={isOpen ? 'true' : 'false'}
 				>
 					<Icon size={18} className="align-middle mr-3" />
@@ -86,7 +86,7 @@ class Sidebar extends React.Component {
 		this.state = {};
 	}
 
-	toggle = index => {
+	toggleSideBarCategory = index => {
 		this.setState(state => ({
 			[index]: !state[index]
 		}));
@@ -148,7 +148,7 @@ class Sidebar extends React.Component {
 												icon={category.icon}
 												to={category.path}
 												isOpen={this.state[index]}
-												onClick={() => this.toggle(index)}
+												handleClick={() => this.toggleSideBarCategory(index)}
 											>
 												{category.children.map((route, index) => (
 													<SidebarItem

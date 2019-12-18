@@ -1,14 +1,24 @@
-import isEmpty from 'lodash.isempty';
+// import isEmpty from 'lodash.isempty';
 
-export const setHttpToken = token => {
-	if (isEmpty(token)) {
-		window.axios.defaults.headers.common.Authorization = null;
+const getResponseMessage = originalResponse => {
+	let message = '';
+	// console.log(error.data)
+	const response = !!originalResponse.data ? originalResponse.data : originalResponse.response;
+	const messages = response.data.messages;
+
+	if (messages instanceof Array) {
+		for (let i = 0; i < messages.length; i++) {
+			for (let j = 0; j < messages[i].length; j++) {
+				let comma = j === messages[i].length-1 ? '.' : ', ';
+			 	message += `${messages[i][j]}${comma}`; 
+			}
+		}
 	}
 
-	window.axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+	return message;
 };
 
-export const getErrorMessage = originalError => {
+/*const getErrorMessage = originalError => {
 	let notifyText = '';
 
 	// console.log(originalError.data)
@@ -32,9 +42,9 @@ export const getErrorMessage = originalError => {
 	}
 
 	return notifyText;
-};
+};*/
 
-export const getSuccessMessage = (response, settings) => {
+/*const getSuccessMessage = (response, settings) => {
 	let notifyText = '';
 	// console.log(response)
 	// message: 'User '+response.data.data.user_name+' succesfuly saved'
@@ -53,8 +63,8 @@ export const getSuccessMessage = (response, settings) => {
 
 	return notifyText;
 };
-
-/* export const isValidImage = (file, size) => {
+*/
+/* const isValidImage = (file, size) => {
 	const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'];
 
 	let isFileImage = file && acceptedImageTypes.includes(file['type'])
@@ -63,7 +73,7 @@ export const getSuccessMessage = (response, settings) => {
 	return !!isFileImage && !!acceptedImageSize	
 } */
 
-/* export const isValidFile = (file, customSize) => {
+/* const isValidFile = (file, customSize) => {
 	// const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'];
 	// console.log(file)
 	let size = customSize || 6291456;
@@ -72,11 +82,11 @@ export const getSuccessMessage = (response, settings) => {
 	// let isFileImage = file && acceptedImageTypes.includes(file['type'])
 } */
 
-export const isImage = fileObj => {
+const isImage = fileObj => {
 	return /\.(gif|jpg|jpeg|tiff|png)$/gim.test(fileObj.path);
 };
 
-export const findItemBy = (property, value, itemsList) => {
+const findItemBy = (property, value, itemsList) => {
 	let result = null;
 	if (itemsList.length) {
 		for (let i = 0; i < itemsList.length; i++) {
@@ -91,7 +101,7 @@ export const findItemBy = (property, value, itemsList) => {
 	}
 };
 
-/* export const getIds = (itemsList, options) => {
+/* const getIds = (itemsList, options) => {
 	let ids = [];
 	
 	if (options && options.string) {
@@ -108,14 +118,14 @@ export const findItemBy = (property, value, itemsList) => {
 	return ids;
 } */
 
-/* export const bs64toFile = (url, filename, mimeType) => {
+/* const bs64toFile = (url, filename, mimeType) => {
   return (fetch(url)
       .then(function(res){return res.arrayBuffer();})
       .then(function(buf){return new File([buf], filename, {type:mimeType});})
   )
 } */
 
-/* export const hasRightsTo = (userRole, item) => {
+/* const hasRightsTo = (userRole, item) => {
 	if (item.meta && item.meta.roles && item.meta.roles.length) {
 		if (userRole) {
 			return item.meta.roles.some((role) => {
@@ -126,7 +136,7 @@ export const findItemBy = (property, value, itemsList) => {
 	return true
 } */
 
-/* export const defaultDateTimeFormat = (dateStr) => {
+/* const defaultDateTimeFormat = (dateStr) => {
 	if (dateStr) {
 	  let arr = dateStr.split(' ');
 	  let resultDate;
@@ -150,3 +160,9 @@ export const findItemBy = (property, value, itemsList) => {
 	}
 	return 'date not set'
 } */
+
+export {
+	getResponseMessage,
+	isImage,
+	findItemBy
+}

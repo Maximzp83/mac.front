@@ -18,8 +18,14 @@ const ItemsTable = ({
 }) => {
 	// =====getters====
 	const getUserClient = user => (user.isClient ? user.company : '');
-	const getUserGroup = user =>
-		user.isAdmin ? 'Администраторы' : 'Пользователи';
+	/*const userRoles = user => {
+		let roles = [];
+		for (let i = 0; i < user.roles.length; i++) {
+			roles.push(user.roles[i].display_name);
+		}
+		return roles;
+		// user.isAdmin ? 'Администраторы' : 'Пользователи';
+	}*/
 	// =================
 
 	return (
@@ -62,13 +68,13 @@ const ItemsTable = ({
 							{itemsList.map((user, userIndex) => (
 								<tr key={`user_item-${userIndex}`}>
 									<td>{user.id}</td>
-									<td>{user.login}</td>
+									<td>{user.email}</td>
 									<td>{user.last_name}</td>
 									<td>{user.first_name}</td>
 									<td>{user.second_name}</td>
 									<td>{getUserClient(user)}</td>
 									<td>{user.phone}</td>
-									<td>{getUserGroup(user)}</td>
+									<td>{ user.roles.map((role, roleInd) => (<div key={'role-'+roleInd}>{role.display_name}</div>) ) }</td>
 									<td>
 										{user.isActive && (
 											<Check size={20} className="text-success" />

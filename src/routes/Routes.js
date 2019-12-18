@@ -6,7 +6,8 @@ import { toastr } from 'react-redux-toastr';
 import {
 	home as homeRoutes,
 	dashboard as dashboardRoutes,
-	page as pageRoutes
+	page as pageRoutes,
+	error as errorRoutes
 } from './index';
 
 import DashboardLayout from '../layouts/Dashboard';
@@ -15,23 +16,30 @@ import AuthLayout from '../layouts/Auth';
 
 import ScrollToTop from '../components/ScrollToTop';
 
-function routeMiddleware(childrenComponents) {
-	const { isAuthenticated, authLoading } = useSelector(state => state.auth);
-	if (isAuthenticated) {
-		return childrenComponents;
-	}
-
-	if (!authLoading) {
+const hasAccess = (isAuthenticated, authLoading) => {
+	if (!isAuthenticated && !authLoading) {
 		setTimeout(() => {
-			toastr.warning('Acess denined', 'to view this page login first');
+			toastr.warning('Доступ закрыт', 'авторизуйтесь чтобы увидеть эту страницу');
 		}, 100);
 	}
-	return <Redirect to="/auth/sign-in" />;
+
+	return isAuthenticated
 }
 
-const PrivateRoute = ({ children }) => {
-	return routeMiddleware(children);
-};
+const PrivateRoute = ({ component: Component, ...rest }) => {
+	const { isAuthenticated, authLoading } = useSelector(state => state.auth);
+
+	return (
+	  <Route {...rest} render={(props) => (
+	    hasAccess(isAuthenticated, authLoading)
+	      ? <Component {...props} />
+	      : <Redirect to={{
+	          pathname: '/auth/sign-in',
+	          state: { from: props.location }
+	        }} />
+	  )} />
+	)
+}
 
 const ChildRoutes = ({ layout: Layout, routes }) => (
 	<Layout>
@@ -45,6 +53,7 @@ const ChildRoutes = ({ layout: Layout, routes }) => (
 							path={route.path}
 							exact
 							component={route.component}
+							error={route.error}
 						/>
 					))
 				) : (
@@ -53,7 +62,11 @@ const ChildRoutes = ({ layout: Layout, routes }) => (
 						key={`route-${routeIndex}`}
 						path={category.path}
 						exact
-						component={category.component}
+						// component={category.component}
+						render={() => {
+							const Component = category.component;
+							return <Component error={category.error} />}
+						}
 					/>
 				)
 			)}
@@ -84,15 +97,31 @@ const Routes = ({ history }) => (
 				/>
 
 				{/* Dashboard routes */}
-				<PrivateRoute>
-					<Route
-						path="/dashboard/*"
-						exact
-						component={() => (
-							<ChildRoutes layout={DashboardLayout} routes={dashboardRoutes} />
-						)}
-					/>
-				</PrivateRoute>
+
+				<Route
+					path="/dashboard"
+					exact
+					component={() => (
+						<Redirect to="/dashboard/default" />
+					)}
+				/>
+				
+				<PrivateRoute
+					path="/dashboard/*"
+					exact
+					component={() => (
+						<ChildRoutes layout={DashboardLayout} routes={dashboardRoutes} />
+					)}
+				/>
+
+				{/* Error Routes */}
+				<Route
+					path="/*"
+					exact
+					component={() => (
+						<ChildRoutes layout={HomeLayout} routes={errorRoutes} />
+					)}
+				/>
 			</Switch>
 		</ScrollToTop>
 	</Router>

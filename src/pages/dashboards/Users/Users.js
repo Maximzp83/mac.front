@@ -38,33 +38,28 @@ const Users = () => {
 		dispatch(setUsersFilter(newFilters));
 	};
 
-	const changeItemsMeta = meta => {
-		dispatch(setUsersMeta(meta));
+	const changeItemsMeta = ({filterName, val}) => {
+		const newMeta = { ...usersMeta, [filterName]: val };
+		dispatch(setUsersMeta(newMeta));
 	};
-
-	// ===== Component Mount ======
-	useEffect(() => {
-		// console.log('container: ', isInitialMount);
-
-		if (isInitialMount && usersList.length < 1) {
-			const payload = { getParams: usersFilter };
-			dispatch(fetchUsers(payload)).catch(error => {
-				// console.log(error);
-			});
-		}
-
-		setInitialMount(false);
-	}, []);
 
 	// ===== Watch =======
 	useEffect(() => {
 		// console.log('usersFilter: ', isInitialMount);
-		if (!isInitialMount) {
-			const payload = { getParams: { ...usersFilter, ...usersMeta } };
 
-			dispatch(fetchUsers(payload)).catch(error => {
-				// console.log(error);
-			});
+		if (isInitialMount) {
+			// ------ Component Mount -------
+			if (usersList.length < 1) {
+				const payload = { getParams: usersFilter };
+				dispatch(fetchUsers(payload))
+			}
+			setInitialMount(false);
+			// -----------------------------
+		} else {
+			// ------ Component Update -----
+			const payload = { getParams: { ...usersFilter, ...usersMeta } };
+			dispatch(fetchUsers(payload))
+			// -----------------------------
 		}
 	}, [usersFilter, usersMeta]);
 
@@ -77,7 +72,6 @@ const Users = () => {
 
 	return (
 		<Container fluid className="p-0">
-			{/* <p>Store isActive Filter: {usersFilter.isActive}</p> */}
 			<h1 className="h3 mb-3">{itemsNames.itemsNameMult1}</h1>
 
 			<FilterBar
@@ -93,7 +87,7 @@ const Users = () => {
 				itemsList={usersList}
 			/>
 
-			<div className="" />
+			{/*<div className="" />*/}
 		</Container>
 	);
 };

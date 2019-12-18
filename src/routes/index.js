@@ -12,6 +12,8 @@ import HomePage from '../pages/home/HomePage';
 // Auth
 import SignIn from '../pages/auth/SignIn';
 import SignUp from '../pages/auth/SignUp';
+import ErrorPage from "../pages/auth/ErrorPage";
+
 // import ResetPassword from "../pages/auth/ResetPassword";
 
 // Layouts
@@ -38,6 +40,7 @@ const dashboardRoutes = {
 	header: 'Main',
 	icon: SlidersIcon,
 	containsHome: true,
+	redirect: '/dashboard/default',
 	children: [
 		{
 			path: '/dashboard/default',
@@ -87,6 +90,17 @@ const authRoutes = {
 	]
 };
 
+const errorRoutes = {
+	path: '*',
+	name: 'NotFound',
+	component: ErrorPage,
+	error: {
+		title: 'Page not found.',
+		message: 'The page you are looking for might have been removed.',
+		status: '404'
+	}
+}
+
 // Dashboard specific routes
 export const dashboard = [
 	dashboardRoutes,
@@ -100,10 +114,13 @@ export const home = [homeRoutes];
 // Auth specific routes
 export const page = [authRoutes];
 
+export const error = [errorRoutes];
+
 // All routes
 export default [
 	dashboardRoutes,
-	pageRoutes
+	pageRoutes,
+	errorRoutes
 	// authRoutes,
 	// layoutRoutes
 ];

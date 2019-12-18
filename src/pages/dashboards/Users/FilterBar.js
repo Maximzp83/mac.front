@@ -14,28 +14,24 @@ const FilterBar = ({
 	changeItemsFilter,
 	changeItemsMeta,
 	currentFilter: {isClient},
-	itemsMeta
+	itemsMeta: {maxItems}
 }) => {
 	const [maxItemsOpen, setMaxItems] = useState(false);
-	const maxToggle = () => {
-		setMaxItems(!maxItemsOpen);
-	};
+	const maxToggle = () => setMaxItems(!maxItemsOpen);
 
 	const handleFilter = value => {
 		// const { name, val } = value;
 		// if (currentFilter[name] !== val) {
 		if (isClient !== value) {
 			// const newFilters = { ...currentFilter, [name]: val };
-			const payload = { filterName: 'isClient', val: value };
-			changeItemsFilter(payload);
+			// const payload = { filterName: 'isClient', val: value };
+			changeItemsFilter({ filterName: 'isClient', val: value });
 		}		
 	};
 
-	const handleItemsMetaChange = meta => {
-		const { name, val } = meta;
-		if (itemsMeta[name] !== val) {
-			const newMeta = { ...itemsMeta, [name]: val };
-			changeItemsMeta(newMeta);
+	const handleItemsMetaChange = value => {
+		if (maxItems !== value) {
+			changeItemsMeta({ filterName: 'maxItems', val: value });
 		}
 	};
 
@@ -69,17 +65,17 @@ const FilterBar = ({
 			</ButtonGroup>
 
 			<ButtonDropdown isOpen={maxItemsOpen} toggle={maxToggle}>
-				<DropdownToggle caret>{itemsMeta.maxItems}</DropdownToggle>
+				<DropdownToggle caret>{maxItems}</DropdownToggle>
 				<DropdownMenu>
 					<DropdownItem
-						active={itemsMeta.maxItems === 10}
-						onClick={() => handleItemsMetaChange({ name: 'maxItems', val: 10 })}
+						active={maxItems === 10}
+						onClick={() => handleItemsMetaChange(10)}
 					>
 						10
 					</DropdownItem>
 					<DropdownItem
-						active={itemsMeta.maxItems === 20}
-						onClick={() => handleItemsMetaChange({ name: 'maxItems', val: 20 })}
+						active={maxItems === 20}
+						onClick={() => handleItemsMetaChange(20)}
 					>
 						20
 					</DropdownItem>

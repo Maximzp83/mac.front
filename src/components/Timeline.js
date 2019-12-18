@@ -1,16 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
 
-const defaultProps = {
-	tag: 'ul'
-};
-
 const Timeline = ({ children, className, tag: Tag, ...rest }) => (
 	<Tag className={classNames('timeline', className)} {...rest}>
 		{children}
 	</Tag>
 );
 
-Timeline.defaultProps = defaultProps;
+Timeline.defaultProps = {
+	tag: 'ul'
+};
 
 export default Timeline;

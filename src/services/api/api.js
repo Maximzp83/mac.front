@@ -1,7 +1,19 @@
 import { toUrl } from './api_helpers';
 import axios from './axiosService';
+import store from 'redux/store'
+
+const setHttpToken = token => {
+	if (!!token) {
+		axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+	} else {
+		axios.defaults.headers.common.Authorization = null;		
+	}
+};
 
 export const standardResponse = optionsData => {
+	const token = store.getState().auth.access_token;
+	setHttpToken(token)
+	
 	const options = optionsData;
 	let getParams;
 

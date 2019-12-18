@@ -1,9 +1,12 @@
 import { standardResponse } from 'services/api/api';
 // import { requestResolveCallback, requestRejectCallback } from '../../services/api/api_helpers';
-// import {findItemBy} from 'helpers';
+import {getResponseMessage} from 'helpers';
+import { toastr } from 'react-redux-toastr';
+
 
 export const types = {
-	ITEMS_STATUS: 'ITEMS_STATUS',
+	REQUEST_START: 'REQUEST_START',
+	REQUEST_END: 'REQUEST_END',
 	SET_ITEMS: 'SET_ITEMS',
 	SET_FILTER: 'SET_FILTER',
 	SET_META: 'SET_META'
@@ -14,51 +17,36 @@ export const types = {
 
 export function fetchUsers(payload) {
 	return dispatch => {
-		dispatch({
-			type: types.ITEMS_STATUS,
-			payload: { status: 'loading', isLoading: true }
-		});
+		dispatch({ type: types.REQUEST_START });
 
-		return new Promise((resolve, reject) => {
-			const options = {
-				url: '/users',
-				method: 'get'
-			};
+		const options = {
+			url: '/users',
+			method: 'get'
+		};
 
-			if (payload) {
-				if (payload.getParams) options.getParams = payload.getParams;
-			}
+		if (payload) {
+			if (payload.getParams) options.getParams = payload.getParams;
+		}
 
-			standardResponse(options)
-				.then(response => {
-					if (response.data) {
-						// console.log(response.data)
-						dispatch({
-							type: types.SET_ITEMS,
-							payload: response.data
-						});
-
-						dispatch({
-							type: types.ITEMS_STATUS,
-							payload: { status: 'ready', isLoading: false }
-						});
-						resolve(response.data);
-					} else {
-						dispatch({
-							type: types.ITEMS_STATUS,
-							payload: { status: 'error', isLoading: false }
-						});
-						reject(new Error('ошибка, ответ не содержит данных'));
-					}
-				})
-				.catch(error => {
+		standardResponse(options)
+			.then(response => {
+				if (response.data && response.data.data) {
+					console.log(response.data)
 					dispatch({
-						type: types.ITEMS_STATUS,
-						payload: { status: 'error', isLoading: false }
+						type: types.SET_ITEMS,
+						payload: response.data.data
 					});
-					reject(new Error(error));
-				});
-		});
+				} else {
+					let error = new Error('ответ не содержит данных');
+					toastr.error('Ошибка', error.message, {timeOut: 0});
+				}
+				dispatch({ type: types.REQUEST_END });
+			})
+			.catch(error => {
+				let message = getResponseMessage(error)
+				dispatch({ type: types.REQUEST_END });
+				toastr.error('Ошибка', message || error.message, {timeOut: 0});
+			});
 	};
 }
 

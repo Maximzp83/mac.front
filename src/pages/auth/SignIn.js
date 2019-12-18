@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { push as routerPush } from 'react-router-redux';
-
+// import { push as routerPush } from 'react-router-redux';
 // import { Link } from "react-router-dom";
-
-import { toastr } from 'react-redux-toastr';
+// import { toastr } from 'react-redux-toastr';
 
 import {
 	Button,
@@ -26,33 +24,28 @@ import { signIn } from '../../redux/actions/authActions';
 const SignIn = () => {
 	// console.log('ok')
 	const dispatch = useDispatch();
+	
+	const defaultUserData = { email: 'admin@gmail.com', password: '12345678' };
+	const [userData, setUserData] = useState(defaultUserData);
 
-	const [email, setEmail] = useState('Keeley50@yahoo.com');
-	const [password, setPass] = useState('');
+	// const [email, setEmail] = useState('test@gmail.com');
+	// const [password, setPass] = useState('12345678');
 
 	const { authLoading, isAuthenticated, authUser } = useSelector(state => {
 		// console.log(state);
 		return state.auth;
 	});
 
-	function handleEmailChange(e) {
-		setEmail(e.target.value);
+	const handleEmailChange = (e) => { 
+		setUserData( (prevState) => ({...prevState, email: e.target.value }) )
 	}
-	function handlePassChange(e) {
-		setPass(e.target.value);
+	const handlePassChange = (e) => { 
+		setUserData( (prevState) => ({...prevState, password: e.target.value }) )
 	}
 
 	const handleSubmit = () => {
-		// console.log('ok')
-		dispatch(signIn({ email, password }))
-			.then(response => {
-				// console.log('ok ', response)
-				toastr.success('', `Вы вошли как ${response.user.name}`);
-				dispatch(routerPush('/dashboard/default'));
-			})
-			.catch(error => {
-				toastr.error('Ошибка', error.message);
-			});
+		// console.log('ok:', userData )
+		dispatch(signIn(userData))
 	};
 
 	return (
@@ -86,7 +79,7 @@ const SignIn = () => {
 									bsSize="lg"
 									type="email"
 									placeholder="Enter your email"
-									value={email}
+									value={userData.email}
 									onChange={handleEmailChange}
 								/>
 							</FormGroup>
@@ -98,7 +91,7 @@ const SignIn = () => {
 									bsSize="lg"
 									type="password"
 									placeholder="Enter your password"
-									value={password}
+									value={userData.password}
 									onChange={handlePassChange}
 								/>
 								{/* <small>
