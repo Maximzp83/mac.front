@@ -1,5 +1,4 @@
 import { types } from '../actions/authActions';
-// import { setHttpToken } from 'services/api/axiosService';
 
 const token = localStorage.getItem('access_token');
 const user = JSON.parse(localStorage.getItem('authUser'));
@@ -61,7 +60,6 @@ export default function(state = initialState, action) {
 				isAuthenticated: false,
 				authUser: null,
 				access_token: null,
-				authLoading: false
 			};
 		}
 

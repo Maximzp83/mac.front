@@ -1,21 +1,15 @@
-import { standardResponse } from 'services/api/api';
-// import { requestResolveCallback, requestRejectCallback } from '../../services/api/api_helpers';
-import { getResponseMessage } from 'helpers';
+/*import { 
+	handleSetItemsResponse,
+	handleError,
+} from 'services/api/api_helpers';*/
+import { api } from 'services/api';
+import { getResponseMessage, isSuccessStatus } from 'services/api/api_helpers';
 import { push as routerPush } from 'react-router-redux';
 import { toastr } from 'react-redux-toastr';
-
-function isSuccessStatus(code) {
-	if (code) {
-		let str = code+'';
-		return str[0] === '2' ? true : false;		
-	}
-	return false;
-}
 
 export const types = {
 	AUTH_REQUEST_START: 'AUTH_REQUEST_START',
 	AUTH_SUCCESS: 'AUTH_SUCCESS',
-	// AUTH_FAILURE: 'AUTH_FAILURE',
 	AUTH_REQUEST_END: 'AUTH_REQUEST_END',
 	AUTH_CLEAR: 'AUTH_CLEAR',
 	// SET_AUTH_TOKEN_TO_STORE: 'SET_AUTH_TOKEN_TO_STORE',
@@ -25,12 +19,12 @@ export const types = {
 
 export const fetchAuthUser = () => {
 	return dispatch => {
-		const options = {
+		/*const options = {
 			url: '/auth/user',
 			method: 'get',
-		};
+		};*/
 		
-			standardResponse(options)
+			/*standardResponse(options)
 				.then( response => {
 					// console.log(response)
 					if ( isSuccessStatus(response.status) && response.data) {
@@ -38,25 +32,16 @@ export const fetchAuthUser = () => {
 					} else {
 						// reject(new Error(response));
 					}
-				})
-				.catch( error => {/*reject(new Error(error));*/})
+				})*/
+				// .catch( error => {/*reject(new Error(error));*/})
 	}
 }
-
 
 export const signIn = payload => {
 	return dispatch => {
 		dispatch({ type: types.AUTH_REQUEST_START });
 
-		const options = {
-			url: '/auth/login',
-			method: 'post',
-			data: payload
-		};
-
-		// console.log('actions payload: ', payload)
-
-		standardResponse(options)
+		api.post('/auth/login', payload)
 			.then( response => {
 				if (isSuccessStatus(response.status)) {
 					if (response.data && response.data.data && response.data.data.access_token) {
@@ -81,9 +66,12 @@ export const signIn = payload => {
 						dispatch({ type: types.AUTH_CLEAR });
 						dispatch({ type: types.AUTH_REQUEST_END });
 
-						let error = new Error('ответ не содержит данных');
-						toastr.error('Ошибка', error.message, {timeOut: 0});			
+						let message = getResponseMessage(response);
+						toastr.error('Ошибка', message || 'ответ не содержит данных', {timeOut: 0});			
 					}
+				} else {
+					let message = getResponseMessage(response);
+					toastr.error('Ошибка', message || 'неправильный статус ответа', {timeOut: 0});		
 				}
 			})
 			.catch(error => {
@@ -92,33 +80,21 @@ export const signIn = payload => {
 				let message = getResponseMessage(error)
 				toastr.error('Ошибка', message || error.message);
 			});
+
 	};
 }
 
-export function signOut() {
+export const signOut = () => {
 	return dispatch => {
 		dispatch({ type: types.AUTH_REQUEST_START });
-
-		/*const options = {
-			url: '/auth/',
-			method: 'get'
-		}*/
-
 		dispatch({ type: types.AUTH_CLEAR });
-		dispatch({ type: types.AUTH_REQUEST_END });
+		setTimeout(() => {
+			dispatch({ type: types.AUTH_REQUEST_END });			
+		}, 100);
 		toastr.success('', 'Вы успешно вышли из аккаунта');
-
-		/*standardResponse(options)
-			.then( response => {
-			})
-			.catch(error => {
-				dispatch({ type: types.AUTH_REQUEST_END });
-				toastr.error('Ошибка', error.message);							
-			});*/
-
-			// console.log('ok')
-			
-
-			// console.log('actions payload: ', payload)
 	};
+}
+
+export const clearAuth = () => {
+	return { type: types.AUTH_CLEAR };
 }

@@ -50,7 +50,7 @@ const Users = () => {
 		if (isInitialMount) {
 			// ------ Component Mount -------
 			if (usersList.length < 1) {
-				const payload = { getParams: usersFilter };
+				const payload = { getParams: { ...usersFilter, ...usersMeta } };				
 				dispatch(fetchUsers(payload))
 			}
 			setInitialMount(false);

@@ -1,49 +1,5 @@
 // import isEmpty from 'lodash.isempty';
 
-const getResponseMessage = originalResponse => {
-	let message = '';
-	// console.log(error.data)
-	const response = !!originalResponse.data ? originalResponse.data : originalResponse.response;
-	const messages = response.data.messages;
-
-	if (messages instanceof Array) {
-		for (let i = 0; i < messages.length; i++) {
-			for (let j = 0; j < messages[i].length; j++) {
-				let comma = j === messages[i].length-1 ? '.' : ', ';
-			 	message += `${messages[i][j]}${comma}`; 
-			}
-		}
-	}
-
-	return message;
-};
-
-/*const getErrorMessage = originalError => {
-	let notifyText = '';
-
-	// console.log(originalError.data)
-	const error = originalError.data || originalError.response;
-
-	if (error) {
-		
-		notifyText = error.message ? '<p>'+error.message+'</p>' : '<p>'+error.data.message+'</p>';
-
-		if (error.errors && !isEmpty(error.errors)) {
-			const errors = error.errors;
-			// console.log(errors)
-			for (const errorMessages in errors) {
-				notifyText += `<p><b>${errorMessages}:</b></p>`;
-				// console.log(errors[errorMessages])
-				for (let i = 0; i < errors[errorMessages].length; i++) {
-					notifyText += `<p>${errors[errorMessages][i]}</p>`;
-				}
-			}
-		}
-	}
-
-	return notifyText;
-};*/
-
 /*const getSuccessMessage = (response, settings) => {
 	let notifyText = '';
 	// console.log(response)
@@ -162,7 +118,6 @@ const findItemBy = (property, value, itemsList) => {
 } */
 
 export {
-	getResponseMessage,
 	isImage,
-	findItemBy
+	findItemBy,
 }

@@ -1,10 +1,37 @@
-// import Vue from 'vue';
-// import store from '@src/vuex'
-// import router from '@src/router/'
+import axios from './axiosService';
+import store from 'redux/store';
+import isEmpty from 'lodash.isempty';
+import { push as routerPush } from 'react-router-redux';
+import { clearAuth } from "redux/actions/authActions";
+import { toastr } from 'react-redux-toastr';
 
-// import { Notification } from 'element-ui';
+const combineHeaders = (headers) => {
+  if (headers) return headers;
 
-export const toUrl = obj => {
+  return headers;
+      // headers = {'Content-Type': 'multipart/form-data'}  
+};
+
+const checkAuthorizationHeaders = () => {
+  // console.log('1: ',axios.defaults.headers.common.Authorization)
+  if (!!axios.defaults.headers.common && 
+  		!!axios.defaults.headers.common.Authorization) {
+  } else {
+	  const token = store.getState().auth.access_token;    
+	  setHttpToken(token);
+  }
+};
+
+const setHttpToken = token => {
+	if (!!token) {
+		axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+	} else {
+		axios.defaults.headers.common.Authorization = null;		
+	}
+  // console.log('2: ',axios.defaults.headers.common.Authorization)
+};
+
+const toUrl = obj => {
 	const str = [];
 	// console.log('obj:', obj)
 	for (const p in obj) {
@@ -20,39 +47,94 @@ export const toUrl = obj => {
 	return str.join('&');
 };
 
-export { toUrl as default };
+const parsePayload = (payloadData) => {
+  let result = {};
+  if (payloadData) {
+    let payload = Object.assign({}, payloadData);
 
-/* export const requestResolveCallback = (
-		response,
-		{ resolve, reject, mutations, dispatches }
-) => {
-	try {
-		if (
-			response.status &&
-			(response.status === 200 || response.status === 201)
-		) {	
-			if (dispatches) {
-					// console.log(dispatches)
-				for (let prop in dispatches) {
-					dispatch(prop, dispatches[prop])
-				}
-			}
+    if ( !isEmpty(payload) ) {
+      if (payload.getParams) result.params = payload.getParams;
+      if (payload.data) result.data = payload.data;
+    }
+  }
+  return result;
+};
 
-			if (mutations) {
-				mutations.list ? commit(mutations.list, response.data.data) : null
-				mutations.meta ? commit(mutations.meta, response.data) : null
+const combineUrl = (initialUrl, params) => {
+  try {
+    let url = initialUrl;
+    if (params) {
+      // if (params.itemId) url = `${url}/${params.itemId}`;
+        const getParams = toUrl(params);
+        url = getParams ? `${url}?${getParams}` : url;
+    }
+    // console.log(url)
+    return url;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const isSuccessStatus = (code) => {
+	if (code) {
+		return code >= 200 && code < 300 ? true : false;		
+	}
+	return false;
+}
+
+const getResponseMessage = originalResponse => {
+	let message = '';
+	// console.log(error.data)
+	const response = !!originalResponse.data ? originalResponse.data : originalResponse.response;
+	const messages = response.data.messages;
+
+	if (messages instanceof Array) {
+		for (let i = 0; i < messages.length; i++) {
+			for (let j = 0; j < messages[i].length; j++) {
+				let comma = j === messages[i].length-1 ? '.' : ', ';
+			 	message += `${messages[i][j]}${comma}`; 
 			}
-			resolve(response)
-		} else {
-			if (mutations) {
-				mutations.list ? commit(mutations.list, null) : null
-				mutations.meta ? commit(mutations.meta, null) : null
-			}
-			reject(response)
 		}
-		// mutations.status ? commit(mutations.status, 'ready') : null
-	} catch(e) {console.log(e)}
-} */
+	}
+
+	return message;
+};
+
+const handleSetItemsResponse = (response, {dispatch, types}) => {
+	// console.log('handleResponse',response)
+	if ( isSuccessStatus(response.status) ) {
+		if (response.data && response.data.data) {
+			// console.log(response.data)
+			dispatch({
+				type: types.SET_ITEMS,
+				payload: response.data.data
+			});
+		} else {
+			let message = getResponseMessage(response);
+			toastr.error('Ошибка', message || 'ответ не содержит данных', {timeOut: 0});
+		}
+	} else {
+		let message = getResponseMessage(response);
+		toastr.error('Ошибка', message || 'неправильный статус ответа', {timeOut: 0});		
+	}
+	dispatch({ type: types.REQUEST_END });
+}
+
+const handleError = (error, {dispatch, types}) => {
+	let message = getResponseMessage(error)
+
+	if (error.response) {
+		if (error.response.status === 401) {
+			dispatch(clearAuth())
+			dispatch(routerPush('/auth/sign-in'));
+			dispatch({ type: types.REQUEST_END });			
+			toastr.error(message || 'Ваша сессия устарела', 'пожалуйста авторизуйтесь', {timeOut: 0});
+			return;
+		}
+	}
+	dispatch({ type: types.REQUEST_END });
+	toastr.error('Ошибка', message || error.message, {timeOut: 0});
+}
 
 /* export const requestRejectCallback = (error, {commit, reject, mutations}) => {
 	try {
@@ -78,3 +160,16 @@ export { toUrl as default };
 		reject(error)
 	} catch(e) {console.log(e)}
 } */
+
+export {
+	checkAuthorizationHeaders,
+	combineHeaders,
+	setHttpToken,
+	toUrl,
+	parsePayload,
+	combineUrl,
+	handleError,
+	handleSetItemsResponse,
+	getResponseMessage,
+	isSuccessStatus
+}

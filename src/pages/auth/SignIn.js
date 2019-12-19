@@ -45,7 +45,7 @@ const SignIn = () => {
 
 	const handleSubmit = () => {
 		// console.log('ok:', userData )
-		dispatch(signIn(userData))
+		dispatch(signIn({data:userData}))
 	};
 
 	return (
