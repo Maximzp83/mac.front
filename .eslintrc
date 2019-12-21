@@ -16,10 +16,12 @@
     "react/prop-types": 0,
     "semi": 1,
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "allowForLoopAfterthoughts": true,
     "prettier/prettier": [
       "error", {
         "semi": true,
         "tabWidth": 2,
+        "printWidth": 120,
         "useTabs": true,
         singleQuote: true,
         quoteProps: consistent

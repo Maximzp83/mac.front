@@ -1,15 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import {
-	Button,
-	Card,
-	CardBody,
-	Form,
-	FormGroup,
-	Label,
-	Input
-} from 'reactstrap';
+import { Button, Card, CardBody, Form, FormGroup, Label, Input } from 'reactstrap';
 
 const ResetPassword = () => (
 	<>
@@ -24,12 +16,7 @@ const ResetPassword = () => (
 					<Form>
 						<FormGroup>
 							<Label>Email</Label>
-							<Input
-								bsSize="lg"
-								type="email"
-								name="email"
-								placeholder="Enter your email"
-							/>
+							<Input bsSize="lg" type="email" name="email" placeholder="Enter your email" />
 						</FormGroup>
 						<div className="text-center mt-3">
 							<Link to="/dashboard/default">

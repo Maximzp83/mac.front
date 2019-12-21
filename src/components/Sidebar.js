@@ -14,20 +14,9 @@ import routes from '../routes';
 import logoImg from '../assets/img/logo.png';
 
 const SidebarCategory = withRouter(
-	({
-		name,
-		badgeColor,
-		badgeText,
-		icon: Icon,
-		isOpen,
-		children,
-		handleClick,
-		location,
-		to
-	}) => {
+	({ name, badgeColor, badgeText, icon: Icon, isOpen, children, handleClick, location, to }) => {
 		const getSidebarItemClass = path => {
-			return location.pathname.indexOf(path) !== -1 ||
-				(location.pathname === '/' && path === '/dashboard')
+			return location.pathname.indexOf(path) !== -1 || (location.pathname === '/' && path === '/dashboard')
 				? 'active'
 				: '';
 		};
@@ -58,27 +47,25 @@ const SidebarCategory = withRouter(
 	}
 );
 
-const SidebarItem = withRouter(
-	({ name, badgeColor, badgeText, icon: Icon, location, to }) => {
-		const getSidebarItemClass = path => {
-			return location.pathname === path ? 'active' : '';
-		};
+const SidebarItem = withRouter(({ name, badgeColor, badgeText, icon: Icon, location, to }) => {
+	const getSidebarItemClass = path => {
+		return location.pathname === path ? 'active' : '';
+	};
 
-		return (
-			<li className={`sidebar-item ${getSidebarItemClass(to)}`}>
-				<NavLink to={to} className="sidebar-link" activeClassName="active">
-					{Icon ? <Icon size={18} className="align-middle mr-3" /> : null}
-					{name}
-					{badgeColor && badgeText ? (
-						<Badge color={badgeColor} size={18} className="sidebar-badge">
-							{badgeText}
-						</Badge>
-					) : null}
-				</NavLink>
-			</li>
-		);
-	}
-);
+	return (
+		<li className={`sidebar-item ${getSidebarItemClass(to)}`}>
+			<NavLink to={to} className="sidebar-link" activeClassName="active">
+				{Icon ? <Icon size={18} className="align-middle mr-3" /> : null}
+				{name}
+				{badgeColor && badgeText ? (
+					<Badge color={badgeColor} size={18} className="sidebar-badge">
+						{badgeText}
+					</Badge>
+				) : null}
+			</NavLink>
+		</li>
+	);
+});
 
 class Sidebar extends React.Component {
 	constructor(props) {
@@ -111,22 +98,12 @@ class Sidebar extends React.Component {
 		const { sidebar /* layout */ } = this.props;
 
 		return (
-			<nav
-				className={`sidebar${!sidebar.isOpen ? ' toggled' : ''}${
-					sidebar.isSticky ? ' sidebar-sticky' : ''
-				}`}
-			>
+			<nav className={`sidebar${!sidebar.isOpen ? ' toggled' : ''}${sidebar.isSticky ? ' sidebar-sticky' : ''}`}>
 				<div className="sidebar-content">
 					<PerfectScrollbar>
 						<a className="sidebar-brand" href="/">
 							{/* <Box className="align-middle text-primary mr-2" size={24} />{" "} */}
-							<img
-								src={logoImg}
-								alt="logo"
-								width="40"
-								height="40"
-								className="align-middle"
-							/>
+							<img src={logoImg} alt="logo" width="40" height="40" className="align-middle" />
 							<span className="align-middle ml-3">
 								<b>WebSpot</b>
 							</span>
@@ -136,9 +113,7 @@ class Sidebar extends React.Component {
 							{routes.map((category, index) => {
 								return (
 									<React.Fragment key={index}>
-										{category.header ? (
-											<li className="sidebar-header">{category.header}</li>
-										) : null}
+										{category.header ? <li className="sidebar-header">{category.header}</li> : null}
 
 										{category.children ? (
 											<SidebarCategory

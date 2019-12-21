@@ -2,14 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
-	// Card,
-	// CardHeader,
-	// CardTitle,
 	Spinner,
 	Table
 } from 'reactstrap';
 
-import { Edit2,	Trash, Check } from 'react-feather';
+import { Edit2,	Trash } from 'react-feather';
 
 const ItemsTable = ({ 
 	itemsLoading,
@@ -17,20 +14,12 @@ const ItemsTable = ({
 	itemsNames: { itemsNameMult2 },
 	toggleItemEdit,
 	toggleItemDelete,
+	ruleTypes 
 }) => {
 	// =====getters====
-	const getUserClient = user => (user.isClient ? user.company : '');
-	/* const userRoles = user => {
-		let roles = [];
-		for (let i = 0; i < user.roles.length; i++) {
-			roles.push(user.roles[i].display_name);
-		}
-		return roles;
-		// user.isAdmin ? 'Администраторы' : 'Пользователи';
-	} */
 	// =================
-	const handleItemEdit = user => {toggleItemEdit(user)}
-	const handleItemDelete = id => {toggleItemDelete(id)}
+	const handleItemEdit = (role) => {toggleItemEdit(role)}
+	const handleItemDelete = (id) => {toggleItemDelete(id)}
 
 	return (
 		// <Card>
@@ -54,39 +43,31 @@ const ItemsTable = ({
 						<thead>
 							<tr>
 								<th className="id">ID</th>
-								<th className="name">Логин</th>
-								<th>Фамилия</th>
-								<th>Имя</th>
-								<th>Отчество</th>
-								<th>Клиент</th>
-								<th>Телефон</th>
-								{/*<th>Группа пользователей</th>*/}
-								<th>Статус</th>
+								<th className="name">Название</th>
+								<th>Отображаемое название</th>
+								<th>Описание</th>
+								{/*<th>Права</th>*/}
 								<th>Действия</th>
 							</tr>
 						</thead>
 						<tbody>
-							{itemsList.map((user, userIndex) => (
-								<tr key={`user_item-${userIndex}`}>
-									<td>{user.id}</td>
-									<td>{user.email}</td>
-									<td>{user.last_name || 'нет'}</td>
-									<td>{user.first_name || 'нет'}</td>
-									<td>{user.second_name || 'нет'}</td>
-									<td>{getUserClient(user) || 'нет'}</td>
-									<td>{user.phone || 'нет'}</td>
+							{itemsList.map((role, roleIndex) => (
+								<tr key={`role_item-${roleIndex}`}>
+									<td>{role.id}</td>
+									<td>{role.name}</td>
+									<td>{role.dispaly_name}</td>
+									<td>{role.description}</td>
 									{/*<td>
-										{user.roles.map((role, roleInd) => (
-											<div key={`role-${roleInd}`}>{role.display_name}</div>
+										{role.rules.map((rule, roleInd) => (
+											<div key={`rule-${roleInd}`}>{rule.display_name}</div>
 										))}
 									</td>*/}
-									<td>{user.isActive && <Check size={20} className="text-success" />}</td>
 									<td className="table-action">
 										<Edit2 className="align-middle mr-1 pointer" size={18}
-											onClick={() => handleItemEdit(user)}
+											onClick={() => handleItemEdit(role)}
 										/>
 										<Trash className="align-middle pointer" size={18}
-											onClick={() => handleItemDelete(user.id)}
+											onClick={() => handleItemDelete(role.id)}
 										/>
 									</td>
 								</tr>
@@ -112,7 +93,9 @@ ItemsTable.propTypes = {
 		itemsNameMult2: PropTypes.string
 	}),
 	itemsLoading: PropTypes.bool,
-	itemsList: PropTypes.array.isRequired
+	itemsList: PropTypes.array.isRequired,
+	toggleItemEdit: PropTypes.func.isRequired,
+	toggleItemDelete: PropTypes.func.isRequired
 };
 
 export { ItemsTable };

@@ -1,5 +1,5 @@
 import { types } from '../actions/authActions';
-
+import { setHttpToken } from 'services/api/api_helpers';
 const token = localStorage.getItem('access_token');
 const user = JSON.parse(localStorage.getItem('authUser'));
 
@@ -24,15 +24,15 @@ export default function(state = initialState, action) {
 			localStorage.setItem('access_token', action.payload.access_token);
 			localStorage.setItem('authUser', JSON.stringify(action.payload.user));
 			// setHttpToken(action.payload);
-			return { 
+			return {
 				...state,
 				isAuthenticated: true,
 				authUser: action.payload.user,
-				access_token: action.payload.access_token,
+				access_token: action.payload.access_token
 			};
 		}
 
-		/*case types.SET_AUTH_TOKEN_TO_STORE: {
+		/* case types.SET_AUTH_TOKEN_TO_STORE: {
 			localStorage.setItem('access_token', action.payload);
 			// setHttpToken(action.payload);
 			return { ...state, access_token: action.payload };
@@ -45,7 +45,8 @@ export default function(state = initialState, action) {
 				isAuthenticated: action.payload.isAuthenticated,
 				authUser: action.payload.user,
 			};
-		}*/
+		} */
+
 		case types.AUTH_REQUEST_END: {
 			return { ...state, authLoading: false };
 		}
@@ -53,13 +54,13 @@ export default function(state = initialState, action) {
 		case types.AUTH_CLEAR: {
 			localStorage.removeItem('authUser');
 			localStorage.removeItem('access_token');
-			// setHttpToken(null);
-	
+			setHttpToken(null);
+
 			return {
 				...state,
 				isAuthenticated: false,
 				authUser: null,
-				access_token: null,
+				access_token: null
 			};
 		}
 

@@ -22,36 +22,26 @@ import {
 	Spinner
 } from 'reactstrap';
 
-import {
-	Settings,
-	User
-} from 'react-feather';
-
+import { Settings, User } from 'react-feather';
 
 import { signOut } from 'redux/actions/authActions';
 import { toggleSidebar } from '../redux/actions/sidebarActions';
 
-
 const NavbarComponent = () => {
 	const dispatch = useDispatch();
 
-	const { authLoading, isAuthenticated, authUser } = useSelector(
-		state => state.auth
-	);
+	const { authLoading, isAuthenticated, authUser } = useSelector(state => state.auth);
 
 	const handleLogout = () => {
 		// console.log('ok')
-		dispatch(signOut())
+		dispatch(signOut());
 	};
 
-  const handleToggleSidebar = () => dispatch(toggleSidebar());
+	const handleToggleSidebar = () => dispatch(toggleSidebar());
 
 	return (
 		<Navbar color="white" light expand>
-			<span
-				className="sidebar-toggle d-flex mr-2"
-        onClick={handleToggleSidebar}
-			>
+			<span className="sidebar-toggle d-flex mr-2" onClick={handleToggleSidebar}>
 				<i className="hamburger align-self-center" />
 			</span>
 
@@ -192,11 +182,7 @@ const NavbarComponent = () => {
 								</DropdownItem>
 								<DropdownItem divider />
 								<DropdownItem>
-									{authLoading ? (
-										<Spinner size="sm" color="#fff" />
-									) : (
-										<span onClick={handleLogout}>Sign out</span>
-									)}
+									{authLoading ? <Spinner size="sm" color="#fff" /> : <span onClick={handleLogout}>Sign out</span>}
 								</DropdownItem>
 							</DropdownMenu>
 						</UncontrolledDropdown>

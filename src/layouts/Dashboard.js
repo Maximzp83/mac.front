@@ -1,12 +1,12 @@
 import React from 'react';
 
-/*import {
+/* import {
   Wrapper,
   Sidebar,
   Main,
   Navbar,
   Content
-} from '../components';*/
+} from '../components'; */
 import Wrapper from '../components/Wrapper';
 import Sidebar from '../components/Sidebar';
 import Main from '../components/Main';

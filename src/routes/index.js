@@ -12,7 +12,7 @@ import HomePage from '../pages/home/HomePage';
 // Auth
 import SignIn from '../pages/auth/SignIn';
 import SignUp from '../pages/auth/SignUp';
-import ErrorPage from "../pages/auth/ErrorPage";
+import ErrorPage from '../pages/auth/ErrorPage';
 
 // import ResetPassword from "../pages/auth/ResetPassword";
 
@@ -25,6 +25,7 @@ import Profile from '../pages/pages/Profile';
 // Dashboards
 const Default = async(() => import('../pages/dashboards/Default'));
 const Users = async(() => import('../pages/dashboards/Users/Users'));
+const Roles = async(() => import('../pages/dashboards/Roles/Roles'));
 
 // Routes
 const homeRoutes = {
@@ -53,6 +54,11 @@ const dashboardRoutes = {
 			path: '/dashboard/users',
 			name: 'Пользователи',
 			component: Users
+		},
+		{
+			path: '/dashboard/roles',
+			name: 'Настройка прав',
+			component: Roles
 		}
 	]
 };
@@ -99,7 +105,7 @@ const errorRoutes = {
 		message: 'The page you are looking for might have been removed.',
 		status: '404'
 	}
-}
+};
 
 // Dashboard specific routes
 export const dashboard = [

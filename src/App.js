@@ -4,7 +4,7 @@ import ReduxToastr from 'react-redux-toastr';
 
 import browserHistory from 'services/browserHistory';
 import { syncHistoryWithStore } from 'react-router-redux';
-import store from './redux/store/index';
+import store from './redux/store';
 import Routes from './routes/Routes';
 
 const history = syncHistoryWithStore(browserHistory, store);

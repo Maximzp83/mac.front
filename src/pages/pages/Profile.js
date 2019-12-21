@@ -18,23 +18,12 @@ import {
 	UncontrolledDropdown
 } from 'reactstrap';
 
-import {
-	Briefcase,
-	Home,
-	MapPin,
-	MessageSquare,
-	MoreHorizontal
-} from 'react-feather';
+import { Briefcase, Home, MapPin, MessageSquare, MoreHorizontal } from 'react-feather';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
-import {
-	faFacebook,
-	faInstagram,
-	faLinkedin,
-	faTwitter
-} from '@fortawesome/free-brands-svg-icons';
+import { faFacebook, faInstagram, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
 
 import avatar1 from '../../assets/img/avatars/avatar.jpg';
 import avatar2 from '../../assets/img/avatars/avatar-2.jpg';
@@ -52,13 +41,7 @@ const ProfileDetails = () => (
 			</CardTitle>
 		</CardHeader>
 		<CardBody className="text-center">
-			<img
-				src={avatar4}
-				alt="Stacie Hall"
-				className="img-fluid rounded-circle mb-2"
-				width="128"
-				height="128"
-			/>
+			<img src={avatar4} alt="Stacie Hall" className="img-fluid rounded-circle mb-2" width="128" height="128" />
 			<CardTitle tag="h5" className="mb-0">
 				Stacie Hall
 			</CardTitle>
@@ -117,12 +100,10 @@ const ProfileDetails = () => (
 				</li>
 
 				<li className="mb-1">
-					<Briefcase width={14} height={14} className="mr-1" /> Works at{' '}
-					<Link to="/dashboard/default">GitHub</Link>
+					<Briefcase width={14} height={14} className="mr-1" /> Works at <Link to="/dashboard/default">GitHub</Link>
 				</li>
 				<li className="mb-1">
-					<MapPin width={14} height={14} className="mr-1" /> From{' '}
-					<Link to="/dashboard/default">Boston</Link>
+					<MapPin width={14} height={14} className="mr-1" /> From <Link to="/dashboard/default">Boston</Link>
 				</li>
 			</ul>
 		</CardBody>
@@ -177,17 +158,10 @@ const Activities = () => (
 		</CardHeader>
 		<CardBody>
 			<Media>
-				<img
-					src={avatar5}
-					width="36"
-					height="36"
-					className="rounded-circle mr-2"
-					alt="Ashley Briggs"
-				/>
+				<img src={avatar5} width="36" height="36" className="rounded-circle mr-2" alt="Ashley Briggs" />
 				<Media body>
 					<small className="float-right text-navy">5m ago</small>
-					<strong>Ashley Briggs</strong> started following{' '}
-					<strong>Stacie Hall</strong>
+					<strong>Ashley Briggs</strong> started following <strong>Stacie Hall</strong>
 					<br />
 					<small className="text-muted">Today 7:51 pm</small>
 					<br />
@@ -196,13 +170,7 @@ const Activities = () => (
 
 			<hr />
 			<Media>
-				<img
-					src={avatar1}
-					width="36"
-					height="36"
-					className="rounded-circle mr-2"
-					alt="Chris Wood"
-				/>
+				<img src={avatar1} width="36" height="36" className="rounded-circle mr-2" alt="Chris Wood" />
 				<Media body>
 					<small className="float-right text-navy">30m ago</small>
 					<strong>Chris Wood</strong> posted something on
@@ -210,11 +178,9 @@ const Activities = () => (
 					<br />
 					<small className="text-muted">Today 7:21 pm</small>
 					<div className="border text-sm text-muted p-2 mt-1">
-						Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem
-						quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam
-						quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem.
-						Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut
-						libero venenatis faucibus. Nullam quis ante.
+						Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing
+						sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et
+						ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante.
 					</div>
 					<Button size="sm" color="danger" className="mt-1">
 						<FontAwesomeIcon icon={faHeart} fixedWidth /> Like
@@ -224,13 +190,7 @@ const Activities = () => (
 
 			<hr />
 			<Media>
-				<img
-					src={avatar4}
-					width="36"
-					height="36"
-					className="rounded-circle mr-2"
-					alt="Stacie Hall"
-				/>
+				<img src={avatar4} width="36" height="36" className="rounded-circle mr-2" alt="Stacie Hall" />
 				<Media body>
 					<small className="float-right text-navy">1h ago</small>
 					<strong>Stacie Hall</strong> posted a new blog
@@ -241,13 +201,7 @@ const Activities = () => (
 
 			<hr />
 			<Media>
-				<img
-					src={avatar2}
-					width="36"
-					height="36"
-					className="rounded-circle mr-2"
-					alt="Carl Jenkins"
-				/>
+				<img src={avatar2} width="36" height="36" className="rounded-circle mr-2" alt="Carl Jenkins" />
 				<Media body>
 					<small className="float-right text-navy">3h ago</small>
 					<strong>Carl Jenkins</strong> posted two photos on
@@ -270,31 +224,18 @@ const Activities = () => (
 
 			<hr />
 			<Media>
-				<img
-					src={avatar2}
-					width="36"
-					height="36"
-					className="rounded-circle mr-2"
-					alt="Carl Jenkins"
-				/>
+				<img src={avatar2} width="36" height="36" className="rounded-circle mr-2" alt="Carl Jenkins" />
 				<Media body>
 					<small className="float-right text-navy">1d ago</small>
-					<strong>Carl Jenkins</strong> started following{' '}
-					<strong>Stacie Hall</strong>
+					<strong>Carl Jenkins</strong> started following <strong>Stacie Hall</strong>
 					<br />
 					<small className="text-muted">Yesterday 3:12 pm</small>
 					<Media className="mt-1">
-						<img
-							src={avatar4}
-							width="36"
-							height="36"
-							className="rounded-circle mr-2"
-							alt="Stacie Hall"
-						/>
+						<img src={avatar4} width="36" height="36" className="rounded-circle mr-2" alt="Stacie Hall" />
 						<Media body className="pl-3">
 							<div className="border text-sm text-muted p-2 mt-1">
-								Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id,
-								lorem. Maecenas nec odio et ante tincidunt tempus.
+								Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt
+								tempus.
 							</div>
 						</Media>
 					</Media>
@@ -303,13 +244,7 @@ const Activities = () => (
 
 			<hr />
 			<Media>
-				<img
-					src={avatar4}
-					width="36"
-					height="36"
-					className="rounded-circle mr-2"
-					alt="Stacie Hall"
-				/>
+				<img src={avatar4} width="36" height="36" className="rounded-circle mr-2" alt="Stacie Hall" />
 				<Media body>
 					<small className="float-right text-navy">1d ago</small>
 					<strong>Stacie Hall</strong> posted a new blog
@@ -320,17 +255,10 @@ const Activities = () => (
 
 			<hr />
 			<Media>
-				<img
-					src={avatar1}
-					width="36"
-					height="36"
-					className="rounded-circle mr-2"
-					alt="Chris Wood"
-				/>
+				<img src={avatar1} width="36" height="36" className="rounded-circle mr-2" alt="Chris Wood" />
 				<Media body>
 					<small className="float-right text-navy">1d ago</small>
-					<strong>Chris Wood</strong> started following{' '}
-					<strong>Stacie Hall</strong>
+					<strong>Chris Wood</strong> started following <strong>Stacie Hall</strong>
 					<br />
 					<small className="text-muted">Yesterdag 1:51 pm</small>
 				</Media>

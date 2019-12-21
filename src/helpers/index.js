@@ -1,25 +1,5 @@
 // import isEmpty from 'lodash.isempty';
 
-/*const getSuccessMessage = (response, settings) => {
-	let notifyText = '';
-	// console.log(response)
-	// message: 'User '+response.data.data.user_name+' succesfuly saved'
-
-	if (!!response.data && !!response.data.data) {
-		if (!isEmpty(settings.metaData) && !!settings.metaData.name) {
-			notifyText += `${settings.metaData.name} <b>${
-				response.data.data[settings.metaData.propertyName]
-			}</b> succesfuly ${settings.operation}d`;
-		}
-	} else if (response.data.message) {
-		notifyText += response.data.message;
-	}
-
-	// console.log(notifyText)
-
-	return notifyText;
-};
-*/
 /* const isValidImage = (file, size) => {
 	const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'];
 
@@ -42,19 +22,20 @@ const isImage = fileObj => {
 	return /\.(gif|jpg|jpeg|tiff|png)$/gim.test(fileObj.path);
 };
 
-const findItemBy = (property, value, itemsList) => {
-	let result = null;
+const findItemBy = (property, value, itemsList, returnIndex=false) => {
+	let result = null; let index;
 	if (itemsList.length) {
 		for (let i = 0; i < itemsList.length; i++) {
 			if (itemsList[i][property]) {
 				if (itemsList[i][property] === value) {
 					result = itemsList[i];
+					index = i;
 					break;
 				}
 			}
 		}
-		return result;
 	}
+	return returnIndex ? {item: result, index: index} : result;
 };
 
 /* const getIds = (itemsList, options) => {
@@ -117,7 +98,4 @@ const findItemBy = (property, value, itemsList) => {
 	return 'date not set'
 } */
 
-export {
-	isImage,
-	findItemBy,
-}
+export { isImage, findItemBy };

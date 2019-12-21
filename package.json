@@ -69,7 +69,8 @@
     "react-select": "2.4.2",
     "react-transition-group": "2.8.0",
     "reactstrap": "7.1.0",
-    "redux": "4.0.1",
+    "redux": "^4.0.1",
+    "redux-subspace": "^6.1.0",
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {

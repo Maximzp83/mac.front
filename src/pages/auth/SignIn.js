@@ -24,7 +24,7 @@ import { signIn } from '../../redux/actions/authActions';
 const SignIn = () => {
 	// console.log('ok')
 	const dispatch = useDispatch();
-	
+
 	const defaultUserData = { email: 'admin@gmail.com', password: '12345678' };
 	const [userData, setUserData] = useState(defaultUserData);
 
@@ -36,16 +36,16 @@ const SignIn = () => {
 		return state.auth;
 	});
 
-	const handleEmailChange = (e) => { 
-		setUserData( (prevState) => ({...prevState, email: e.target.value }) )
-	}
-	const handlePassChange = (e) => { 
-		setUserData( (prevState) => ({...prevState, password: e.target.value }) )
-	}
+	const handleEmailChange = e => {
+		setUserData(prevState => ({ ...prevState, email: e.target.value }));
+	};
+	const handlePassChange = e => {
+		setUserData(prevState => ({ ...prevState, password: e.target.value }));
+	};
 
 	const handleSubmit = () => {
 		// console.log('ok:', userData )
-		dispatch(signIn({data:userData}))
+		dispatch(signIn({ data: userData }));
 	};
 
 	return (
@@ -112,12 +112,7 @@ const SignIn = () => {
 									{/* <Button>submit</Button>
                     onClick={() => dispatch(signIn({name, password}))}> */}
 
-									<Button
-										color="primary"
-										size="lg"
-										disabled={authLoading}
-										type="submit"
-									>
+									<Button color="primary" size="lg" disabled={authLoading} type="submit">
 										{authLoading && <Spinner size="sm" color="#fff" />}
 										{!authLoading && <span>Sign in</span>}
 									</Button>

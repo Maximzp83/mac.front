@@ -1,7 +1,7 @@
-/*import { 
+/* import { 
 	handleSetItemsResponse,
 	handleError,
-} from 'services/api/api_helpers';*/
+} from 'services/api/api_helpers'; */
 import { api } from 'services/api';
 import { getResponseMessage, isSuccessStatus } from 'services/api/api_helpers';
 import { push as routerPush } from 'react-router-redux';
@@ -11,90 +11,88 @@ export const types = {
 	AUTH_REQUEST_START: 'AUTH_REQUEST_START',
 	AUTH_SUCCESS: 'AUTH_SUCCESS',
 	AUTH_REQUEST_END: 'AUTH_REQUEST_END',
-	AUTH_CLEAR: 'AUTH_CLEAR',
+	AUTH_CLEAR: 'AUTH_CLEAR'
 	// SET_AUTH_TOKEN_TO_STORE: 'SET_AUTH_TOKEN_TO_STORE',
 	// SET_AUTH_USER_TO_STORE: 'SET_AUTH_USER_TO_STORE',
 };
 
-
-export const fetchAuthUser = () => {
+/* export const fetchAuthUser = () => {
 	return dispatch => {
-		/*const options = {
+		 const options = {
 			url: '/auth/user',
 			method: 'get',
-		};*/
-		
-			/*standardResponse(options)
+		}; 
+		 standardResponse(options)
 				.then( response => {
 					// console.log(response)
-					if ( isSuccessStatus(response.status) && response.data) {
+					if ( isSuccessStatus(response) && response.data) {
 						// resolve(response.data)
 					} else {
 						// reject(new Error(response));
 					}
-				})*/
-				// .catch( error => {/*reject(new Error(error));*/})
-	}
-}
+				}) 
+		.catch( error => {reject(new Error(error));})
+	};
+}; */
 
 export const signIn = payload => {
 	return dispatch => {
 		dispatch({ type: types.AUTH_REQUEST_START });
 
-		api.post('/auth/login', payload)
-			.then( response => {
-				if (isSuccessStatus(response.status)) {
+		api
+			.post('/auth/login', payload)
+			.then(response => {
+				if (isSuccessStatus(response)) {
 					if (response.data && response.data.data && response.data.data.access_token) {
 						const responseData = response.data.data;
 						// console.log('response: ', response)
-						let user = responseData.user;
-						user.avatar = "https://s3.amazonaws.com/uifaces/faces/twitter/snowshade/128.jpg"
+						const { user } = responseData;
+						user.avatar = 'https://s3.amazonaws.com/uifaces/faces/twitter/snowshade/128.jpg';
 
 						dispatch({
 							type: types.AUTH_SUCCESS,
 							payload: {
 								access_token: responseData.access_token,
-								user: responseData.user,
+								user: responseData.user
 							}
 						});
 
 						dispatch({ type: types.AUTH_REQUEST_END });
 
 						dispatch(routerPush('/dashboard/default'));
-						toastr.success('', `Вы вошли как ${responseData.user.fullName}`);						
+						toastr.success('', `Вы вошли как ${responseData.user.fullName}`);
 					} else {
 						dispatch({ type: types.AUTH_CLEAR });
 						dispatch({ type: types.AUTH_REQUEST_END });
 
-						let message = getResponseMessage(response);
-						toastr.error('Ошибка', message || 'ответ не содержит данных', {timeOut: 0});			
+						const message = getResponseMessage(response);
+						toastr.error('Ошибка', message || 'ответ не содержит данных', { timeOut: 0 });
 					}
 				} else {
-					let message = getResponseMessage(response);
-					toastr.error('Ошибка', message || 'неправильный статус ответа', {timeOut: 0});		
+					const message = getResponseMessage(response);
+					toastr.error('Ошибка', message || 'неправильный статус ответа', { timeOut: 0 });
 				}
 			})
 			.catch(error => {
 				dispatch({ type: types.AUTH_CLEAR });
-				dispatch({ type: types.AUTH_REQUEST_END });				
-				let message = getResponseMessage(error)
+				dispatch({ type: types.AUTH_REQUEST_END });
+				const message = getResponseMessage(error);
 				toastr.error('Ошибка', message || error.message);
 			});
-
 	};
-}
+};
 
 export const signOut = () => {
 	return dispatch => {
 		dispatch({ type: types.AUTH_REQUEST_START });
 		dispatch({ type: types.AUTH_CLEAR });
 		setTimeout(() => {
-			dispatch({ type: types.AUTH_REQUEST_END });			
+			dispatch({ type: types.AUTH_REQUEST_END });
 		}, 100);
 		toastr.success('', 'Вы успешно вышли из аккаунта');
 	};
-}
+};
 
 export const clearAuth = () => {
 	return { type: types.AUTH_CLEAR };
-}
+};
