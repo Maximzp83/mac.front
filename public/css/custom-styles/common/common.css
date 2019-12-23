@@ -7,6 +7,10 @@
 .pointer {
   cursor: pointer; }
 
+.maxItemsMenu {
+  min-width: 70px;
+  max-width: 70px; }
+
 input::placeholder,
 select::placeholder,
 textarea::placeholder {

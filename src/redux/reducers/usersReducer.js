@@ -11,7 +11,11 @@ const initialState = {
 	},
 	usersMeta: {
 		max: 10
-	}
+	},
+	userTypesList: [
+		{ id: 1, name: 'Внутренний' },
+		{ id: 2, name: 'Внешний' },
+	]
 };
 
 export default function(state = initialState, action) {

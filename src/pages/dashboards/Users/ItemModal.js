@@ -26,13 +26,14 @@ const ItemModal = ({
 	itemsSaving,
 	itemData,
 	isInitialMount,
-	rolesList
+	rolesList,
+	userTypesList
 }) => {
 
-	const userTypesList = [
+/*	const userTypesList = [
 		{ id: 1, name: 'Внутренний' },
 		{ id: 2, name: 'Внешний' },
-	]
+	]*/
 
 	const initialItemFormData = {
 		id: null,
@@ -181,7 +182,6 @@ const ItemModal = ({
 						<Col sm={7}>
 							<AvField 
 								name="user_password"
-								required
 								bsSize="lg"
 								type="password"
 								placeholder="Пароль"

@@ -17,9 +17,13 @@ const ItemsTable = ({
 	itemsNames: { itemsNameMult2 },
 	toggleItemEdit,
 	toggleItemDelete,
+	userTypesList
 }) => {
+	
 	// =====getters====
-	const getUserClient = user => (user.isClient ? user.company : '');
+	// const getUserClient = user => (user.isClient ? user.company : '');
+	const getUserClient = user => (user.role && user.role.id === 1 ? '' : 'да');
+
 	/* const userRoles = user => {
 		let roles = [];
 		for (let i = 0; i < user.roles.length; i++) {
@@ -60,7 +64,7 @@ const ItemsTable = ({
 								<th>Отчество</th>
 								<th>Клиент</th>
 								<th>Телефон</th>
-								{/*<th>Группа пользователей</th>*/}
+								<th>Группа пользователей</th>
 								<th>Статус</th>
 								<th>Действия</th>
 							</tr>
@@ -69,12 +73,13 @@ const ItemsTable = ({
 							{itemsList.map((user, userIndex) => (
 								<tr key={`user_item-${userIndex}`}>
 									<td>{user.id}</td>
-									<td>{user.email}</td>
-									<td>{user.last_name || 'нет'}</td>
-									<td>{user.first_name || 'нет'}</td>
-									<td>{user.second_name || 'нет'}</td>
-									<td>{getUserClient(user) || 'нет'}</td>
-									<td>{user.phone || 'нет'}</td>
+									<td>{user.login}</td>
+									<td>{user.last_name}</td>
+									<td>{user.first_name}</td>
+									<td>{user.second_name}</td>
+									<td>{getUserClient(user)}</td>
+									<td>{user.phone}</td>
+									<td>{user.role ? user.role.display_name : ''}</td>
 									{/*<td>
 										{user.roles.map((role, roleInd) => (
 											<div key={`role-${roleInd}`}>{role.display_name}</div>

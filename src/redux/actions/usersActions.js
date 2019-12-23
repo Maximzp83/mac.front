@@ -104,7 +104,7 @@ export const deleteUser = id => {
 			types: { itemsAction: types.USERS_DELETE_ITEM, statusEnd: types.USERS_SAVE_STATUS },
 		};
 
-		api('DELETE', `/roles/${id}`)
+		api('DELETE', `/users/${id}`)
 			.then(response => {	handleRemoveItemsResponse(response, settings);	})
 			.catch(error => {	handleError(error, settings);	});
 	}
