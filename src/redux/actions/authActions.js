@@ -39,8 +39,7 @@ export const signIn = payload => {
 	return dispatch => {
 		dispatch({ type: types.AUTH_REQUEST_START });
 
-		api
-			.post('/auth/login', payload)
+		api('POST', '/auth/login', payload)
 			.then(response => {
 				if (isSuccessStatus(response)) {
 					if (response.data && response.data.data && response.data.data.access_token) {

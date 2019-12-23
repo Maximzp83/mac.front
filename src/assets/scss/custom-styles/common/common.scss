@@ -1,6 +1,12 @@
 .preloader-text {font-size: 18px;}
 .uppercase {text-transform: uppercase;}
 .pointer {cursor: pointer;}
+
+input,
+select,
+textarea {
+	&::placeholder {color: #acacac !important;}
+}
 // ---table----
 .table-wrapper {
 	background-color: #fff;

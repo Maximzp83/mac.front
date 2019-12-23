@@ -30,7 +30,7 @@ const ItemsTable = ({
 	} */
 	// =================
 	const handleItemEdit = user => {toggleItemEdit(user)}
-	const handleItemDelete = id => {toggleItemDelete(id)}
+	const handleItemDelete = user => {toggleItemDelete(user)}
 
 	return (
 		// <Card>
@@ -86,7 +86,7 @@ const ItemsTable = ({
 											onClick={() => handleItemEdit(user)}
 										/>
 										<Trash className="align-middle pointer" size={18}
-											onClick={() => handleItemDelete(user.id)}
+											onClick={() => handleItemDelete(user)}
 										/>
 									</td>
 								</tr>

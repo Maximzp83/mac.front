@@ -17,12 +17,12 @@ import {
 	DropdownItem,
 	// ListGroup,
 	// ListGroupItem,
-	Form,
-	Input,
+	// Form,
+	// Input,
 	Spinner
 } from 'reactstrap';
 
-import { Settings, User } from 'react-feather';
+import { Settings/*, User*/ } from 'react-feather';
 
 import { signOut } from 'redux/actions/authActions';
 import { toggleSidebar } from '../redux/actions/sidebarActions';
@@ -45,14 +45,14 @@ const NavbarComponent = () => {
 				<i className="hamburger align-self-center" />
 			</span>
 
-			<Form inline>
+			{/*<Form inline>
 				<Input
 					type="text"
 					placeholder="Search projects..."
 					aria-label="Search"
 					className="form-control-no-border mr-sm-2"
 				/>
-			</Form>
+			</Form>*/}
 
 			<Collapse navbar>
 				<Nav className="ml-auto" navbar>
@@ -176,11 +176,11 @@ const NavbarComponent = () => {
 								</DropdownToggle>
 							</span>
 							<DropdownMenu right>
-								<DropdownItem>
+								{/*<DropdownItem>
 									<User size={18} className="align-middle mr-2" />
 									Profile
-								</DropdownItem>
-								<DropdownItem divider />
+								</DropdownItem>*/}
+								{/*<DropdownItem divider />*/}
 								<DropdownItem>
 									{authLoading ? <Spinner size="sm" color="#fff" /> : <span onClick={handleLogout}>Sign out</span>}
 								</DropdownItem>

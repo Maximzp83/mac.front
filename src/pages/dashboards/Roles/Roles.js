@@ -7,8 +7,7 @@ import { Container, Button } from 'reactstrap';
 import { fetchRoles, saveRole, deleteRole } from 'redux/actions/rolesActions';
 import { ItemsTable } from './ItemsTable';
 import { ItemModal } from './ItemModal';
-import { ConfirmModal } from 'components/ConfirmModal';
-
+import swal from 'sweetalert'
 // import Loader from "components/Loader";
 // import isEqual from 'lodash.isequal'
 
@@ -19,7 +18,6 @@ const Roles = () => {
 	// ---- local State -----
 	const [isInitialMount, setInitialMount] = useState(true);
 	const [itemModalOpen, setItemModalOpen] = useState(false);
-	const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
 	const [itemData, setItemData] = useState({});
 
@@ -31,34 +29,24 @@ const Roles = () => {
 	};
 
 	const itemModalToggle = () => setItemModalOpen(!itemModalOpen);
-	
-	/*const handleConfirmModalOpen = () => {
-		setConfirmModalOpen(true);
-
-			return new Promise((resolve, reject) => {
-				answer ? resolve() : reject();
-				setConfirmModalOpen(false);
-			})
-	}*/
-	const handleConfirmModalClose = answer => {
-		// return new Promise((resolve, reject) => {
-			// if (answer) dispatch( deleteRole(id) )
-		// })
-			// setConfirmModalOpen(false);
-	}
 
 	// ----- Methods ---------
 	const toggleItemEdit = (role) => {
 		setItemData(role)
 		setItemModalOpen(true);
 	};
-	const toggleItemDelete = (id) => {
-		// setConfirmModalOpen(true);
-		// confirmModalToggle()
-			// .then(() => {console.log('ok')})
-			// .catch(() => {console.log('cancel')})
-		
-		dispatch( deleteRole(id) )
+
+	const toggleItemDelete = (role) => {			
+		swal({
+		  title: "Вы уверены?",
+		  text: `Удалить безвозвратно ${role.name}?`,
+		  icon: "warning",
+		  buttons: true,
+		  dangerMode: true,
+		})
+		.then(answer => {
+			if (answer) { dispatch( deleteRole(role.id) ) };
+		});		
 	};
 
 	/*const changeItemsMeta = ({ filterName, val }) => {
@@ -126,10 +114,12 @@ const Roles = () => {
 				itemData={itemData}
 			/>
 
-			<ConfirmModal
+			
+
+			{/*<ConfirmModal
 				isOpen={confirmModalOpen}
 				onClose={handleConfirmModalClose}
-			/>
+			/>*/}
 
 			{/* <div className="" /> */}
 		</Container>

@@ -7,6 +7,11 @@
 .pointer {
   cursor: pointer; }
 
+input::placeholder,
+select::placeholder,
+textarea::placeholder {
+  color: #acacac !important; }
+
 .table-wrapper {
   background-color: #fff; }
 

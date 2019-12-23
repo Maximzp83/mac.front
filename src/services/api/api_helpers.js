@@ -123,8 +123,9 @@ const handleSetItemsResponse = (response, { dispatch, types, payload, resolve=nu
 
 const handleRemoveItemsResponse = (response, { dispatch, types, payload, resolve=null, id }) => {
 	if (isSuccessStatus(response)) {
-		console.log('handleResponse',types.itemsAction, id)
-		dispatch({ type: types.itemsAction, payload: id	});		
+		// console.log('handleResponse',types.itemsAction, id)
+		dispatch({ type: types.itemsAction, payload: id	});
+		toastr.success('', 'Элемент успешно удален');
 	} else {
 		const message = getResponseMessage(response);
 		toastr.error('Ошибка', message || 'неправильный формат данных ответа', {

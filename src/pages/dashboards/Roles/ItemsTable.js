@@ -18,8 +18,8 @@ const ItemsTable = ({
 }) => {
 	// =====getters====
 	// =================
-	const handleItemEdit = (role) => {toggleItemEdit(role)}
-	const handleItemDelete = (id) => {toggleItemDelete(id)}
+	const handleItemEdit = role => {toggleItemEdit(role)}
+	const handleItemDelete = role => {toggleItemDelete(role)}
 
 	return (
 		// <Card>
@@ -67,7 +67,7 @@ const ItemsTable = ({
 											onClick={() => handleItemEdit(role)}
 										/>
 										<Trash className="align-middle pointer" size={18}
-											onClick={() => handleItemDelete(role.id)}
+											onClick={() => handleItemDelete(role)}
 										/>
 									</td>
 								</tr>

@@ -71,7 +71,8 @@
     "reactstrap": "7.1.0",
     "redux": "^4.0.1",
     "redux-subspace": "^6.1.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "sweetalert": "^2.1.2"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^18.0.1",
