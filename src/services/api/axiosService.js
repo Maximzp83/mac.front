@@ -22,7 +22,7 @@ import axios from 'axios';
 axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.Accept = 'application/json';
 axios.defaults.headers['Content-Type'] = 'application/json;charset=UTF-8';
-axios.defaults.baseURL = 'http://mac.loc:8089/api';
+axios.defaults.baseURL = process.env.NODE_ENV === 'development' ? 'http://mac.loc:8089/api' : 'https://api.mac.zengineers.company/api';
 
 /* const axios = () => {
 	axios.create({
