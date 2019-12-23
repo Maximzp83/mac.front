@@ -11,6 +11,7 @@
     "build:js": "react-scripts build",
     "watch:css": "chokidar \"src/assets/scss/**/*\" -c \"npm run build:css\"",
     "watch:js": "react-scripts start",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "npm-run-all -p build:css watch:*",
     "build": "npm-run-all -p build:*",
     "lint": "eslint ."
@@ -72,6 +73,7 @@
     "redux": "^4.0.1",
     "redux-subspace": "^6.1.0",
     "redux-thunk": "^2.3.0",
+    "source-map-explorer": "^2.1.2",
     "sweetalert": "^2.1.2"
   },
   "devDependencies": {

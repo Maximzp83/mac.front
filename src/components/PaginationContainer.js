@@ -30,15 +30,19 @@ const PaginationContainer = ({
 		current_page: 1,
 		per_page: 1,
 		total: 1,
-		defaultPagesToDisplay: 5
+		defaultPagesToDisplay: 10
 	}
 	const [meta, setMeta] = useState(initialMeta);
 	const [totalPages, setTotalPages] = useState(0);
+	const [pagesToDisplay, setPagesToDisplay] = useState(0);
+	const [minPage, setMinPage] = useState(0);
+	const [maxPage, setMaxPage] = useState(0);
+	const [range, setRange] = useState([]);
 	
-per_page: this.metaData.meta.per_page,
+	/*per_page: this.metaData.meta.per_page,
 	total: this.metaData.meta.total,
 	current_page: this.metaData.meta.current_page,
-	defaultPagesToDisplay: 5
+	defaultPagesToDisplay: 5*/
 
 	// const handleItemEdit = user => {toggleItemEdit(user)}
 	// const handleItemDelete = user => {toggleItemDelete(user)}
@@ -46,41 +50,61 @@ per_page: this.metaData.meta.per_page,
 	const calcTotalPages = () => {
 		let result = meta.total > 0 ? 
 			Math.ceil(meta.total / meta.per_page) : 1;
+			console.log(result)
     setTotalPages(result)
 	  // if (pageCount > 0) return pageCount
 	}
 
 	const calcPagesToDisplay = () => {
-	  if (totalPages > 0 && totalPages < defaultPagesToDisplay) {
-	    return totalPages
-	  }
-	  return defaultPagesToDisplay
+		let result;
+			console.log(totalPages)
+		
+		if (totalPages > 0 && totalPages < meta.defaultPagesToDisplay) {
+			result = totalPages;
+		} else {
+			result = meta.defaultPagesToDisplay;			
+		}
+			console.log(result)
+
+    setPagesToDisplay(result)
 	}
 
-	minPage() {
-	  if (this.current_page >= this.pagesToDisplay) {
-	    const pagesToAdd = Math.floor(this.pagesToDisplay / 2)
-	    const newMaxPage = pagesToAdd + this.current_page
-	    if (newMaxPage > this.totalPages) {
-	      return this.totalPages - this.pagesToDisplay + 1
-	    }
-	    return this.current_page - pagesToAdd
-	  } else {
-	    return 1
-	  }
-	},
-	maxPage() {
-	  if (this.current_page >= this.pagesToDisplay) {
-	    const pagesToAdd = Math.floor(this.pagesToDisplay / 2)
-	    const newMaxPage = pagesToAdd + this.current_page
-	    if (newMaxPage < this.totalPages) {
-	      return newMaxPage
+	const calcMinPage = () => {
+		let result;
+	  if (meta.current_page >= pagesToDisplay) {
+	    const pagesToAdd = Math.floor(pagesToDisplay / 2);
+	    const newMaxPage = pagesToAdd + meta.current_page;
+	    if (newMaxPage > totalPages) {
+	      result = totalPages - pagesToDisplay + 1;
 	    } else {
-	      return this.totalPages
+	    	result = meta.current_page - pagesToAdd;	    	
 	    }
 	  } else {
-	    return this.pagesToDisplay
+	    result = 1;
 	  }
+			console.log(result)
+
+    setMinPage(result);
+	}
+
+	const calcMaxPage = () => {
+		let result;
+
+	  if (meta.current_page >= pagesToDisplay) {
+	  	let result;
+	    const pagesToAdd = Math.floor(pagesToDisplay / 2);
+	    const newMaxPage = pagesToAdd + meta.current_page;
+	    if (newMaxPage < totalPages) {
+	      result = newMaxPage;
+	    } else {
+	      result = totalPages;
+	    }
+	  } else {
+	    result = pagesToDisplay;
+	  }
+			console.log(result)
+
+    setMaxPage(result);
 	}
 	
 	const calculateRange = (min, max) => {
@@ -88,6 +112,7 @@ per_page: this.metaData.meta.per_page,
 		for (let i = min; i <= max; i++) {
 		  range.push(i)
 		}
+
 		setRange(range)
 	}
 
@@ -95,9 +120,15 @@ per_page: this.metaData.meta.per_page,
 	useEffect(() => {
 		if (!isInitialMount) {
 			console.log('Paginaton Update: ', itemsMeta);
+			calcTotalPages();
+			calcPagesToDisplay();
+			calcMinPage();
+			calcMaxPage();
+			calculateRange(minPage, maxPage)
 			// calculateRange(itemsMeta.from, itemsMeta.total)
 			// setRange()
 			// setFormData(data);
+			console.log(minPage)
 		}
 	}, [itemsMeta]);
 
@@ -111,11 +142,12 @@ per_page: this.metaData.meta.per_page,
 				    <PaginationLink previous href="#" />
 				  </PaginationItem>
 				  
-				  {range.map((page, pageIndex) => (
+				  {range.map((item, itemIndex) => (
 					  <PaginationItem 
 					  	active={false}
+					  	key={'page-'+item}
 					  >
-					    <PaginationLink href="#">2</PaginationLink>
+					    <PaginationLink href="#">{item}</PaginationLink>
 					  </PaginationItem>
 					 	)
 					)}
