@@ -59,9 +59,12 @@ const ItemModal = ({
 		const { prop, val } = data;
 		setFormData( prevState => ({ ...prevState, [prop]: val }) );
 	};
+	const handleIntFieldChange = data => {
+		data.val = +data.val;
+		handleFieldChange(data);
+	};
 	const handleTypeFieldChange = event => {
-		const val = event.target.value;
-
+		const val = +event.target.value;
 		setFormData( prevState => 
 			({ ...prevState, type: val, role_id: '' }) 
 		);
@@ -204,27 +207,29 @@ const ItemModal = ({
 							/>
 						</Col>
 					</Row>
-
-					<Row>
-						<Label sm={3} className="text-sm-right uppercase">Роль</Label>
-						<Col sm={7}>
-							<AvField disabled={!rolesList.length || itemFormData.type !== 1}
-							  type="select"
-							  name="user_company"
-								bsSize="lg"
-							  placeholder="Выберите компанию"
-							  value={itemFormData.role_id}
-							  onChange={(e) => {handleFieldChange({prop:'role_id', val:e.target.value})} }
-							  // helpMessage="Idk, this is an example. Deal with it!"
-							>	
-								<option value="" disabled>Выберите роль</option>
-								{ rolesList.map((role, roleIx) =>
-								  (<option key={'role-'+role.id} value={role.id}>{role.name}</option>)
-								)}
-							</AvField>
-						</Col>
-					</Row>
-
+					
+					{rolesList.length && itemFormData.type === 1 ? (
+						<Row>
+							<Label sm={3} className="text-sm-right uppercase">Роль</Label>
+							<Col sm={7}>
+								<AvField
+								  type="select"
+								  name="user_company"
+									bsSize="lg"
+								  placeholder="Выберите компанию"
+								  value={itemFormData.role_id}
+								  onChange={(e) => {handleIntFieldChange({prop:'role_id', val:e.target.value})} }
+								  // helpMessage="Idk, this is an example. Deal with it!"
+								>	
+									<option value="" disabled>Выберите роль</option>
+									{ rolesList.map((role, roleIx) =>
+									  (<option key={'role-'+role.id} value={role.id}>{role.name}</option>)
+									)}
+								</AvField>
+							</Col>
+						</Row>
+					) : null}
+					
 					<FormGroup row>
 						{/*<Col sm={{ size: 10, offset: 2 }} className=>*/}
 						<Col sm={10} className="d-flex">
