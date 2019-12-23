@@ -7,10 +7,17 @@ const initialState = {
 	usersStatus: 'ready',
 	usersFilter: {
 		isClient: null,
-		isActive: null
+		isActive: null,
+		max: 5
 	},
 	usersMeta: {
-		max: 10
+		current_page: 1,
+		from: 1,
+		last_page: 1,
+		path: '',
+		per_page: 0,
+		to: 0,
+		total: 0,
 	}
 };
 

@@ -105,13 +105,20 @@ const getResponseMessage = originalResponse => {
 	return message;
 };
 
-const handleSetItemsResponse = (response, { dispatch, types, payload, resolve=null }) => {
+const handleGetItemsResponse = (response, { dispatch, types, payload, resolve=null }) => {
 	// console.log('handleResponse',response)
 	if (isSuccessStatus(response)) {
 		dispatch({
 			type: types.itemsAction,
 			payload: response.data.data
-		});		
+		});
+
+		if (response.data.meta) {
+			dispatch({
+				type: types.setMeta,
+				payload: response.data.meta
+			});
+		}	
 	} else {
 		const message = getResponseMessage(response);
 		toastr.error('Ошибка', message || 'неправильный формат данных ответа', {
@@ -185,7 +192,7 @@ export {
 	parsePayload,
 	combineUrl,
 	handleError,
-	handleSetItemsResponse,
+	handleGetItemsResponse,
 	getResponseMessage,
 	isSuccessStatus,
 	handleRemoveItemsResponse

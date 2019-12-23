@@ -1,5 +1,5 @@
 import {
-	handleSetItemsResponse,
+	handleGetItemsResponse,
 	handleError,
 	isSuccessStatus,
 	getResponseMessage,
@@ -29,12 +29,16 @@ export const fetchUsers = payload => {
 
 		const settings = { 
 			dispatch,
-			types: { itemsAction: types.USERS_SET_ITEMS, statusEnd: types.USERS_REQUEST_END }			
+			types: {
+				itemsAction: types.USERS_SET_ITEMS,
+				statusEnd: types.USERS_REQUEST_END,
+				setMeta: types.USERS_SET_META
+			}
 		};
 		// console.log(payload)
 		api('GET','/users', payload)
 			.then(response => {
-				handleSetItemsResponse(response, settings);
+				handleGetItemsResponse(response, settings);
 			})
 			.catch(error => {
 				handleError(error, settings);

@@ -12,7 +12,7 @@ import {
 	Row
 } from 'reactstrap';
 
-const FilterBar = ({ changeItemsFilter, changeItemsMeta, currentFilter: { isClient }, itemsMeta: { max } }) => {
+const FilterBar = ({ changeItemsFilter, changeItemsMeta, currentFilter: { max }, itemsMeta }) => {
 	const [maxItemsOpen, setMaxItems] = useState(false);
 	const maxToggle = () => setMaxItems(!maxItemsOpen);
 
@@ -28,7 +28,7 @@ const FilterBar = ({ changeItemsFilter, changeItemsMeta, currentFilter: { isClie
 
 	const handleItemsMetaChange = value => {
 		if (max !== value) {
-			changeItemsMeta({ filterName: 'max', val: value });
+			changeItemsFilter({ filterName: 'max', val: value });
 		}
 	};
 
@@ -51,7 +51,10 @@ const FilterBar = ({ changeItemsFilter, changeItemsMeta, currentFilter: { isClie
 			<Col xs="12" md="4" className="ml-auto d-flex">
 				<ButtonDropdown isOpen={maxItemsOpen} toggle={maxToggle} className="ml-auto">
 					<DropdownToggle caret>{max}</DropdownToggle>
-					<DropdownMenu>
+					<DropdownMenu right>
+						<DropdownItem active={max === 5} onClick={() => handleItemsMetaChange(5)}>
+							5
+						</DropdownItem>
 						<DropdownItem active={max === 10} onClick={() => handleItemsMetaChange(10)}>
 							10
 						</DropdownItem>

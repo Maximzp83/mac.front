@@ -66,18 +66,18 @@ const Roles = () => {
 		if (isInitialMount) {
 			// ------ Component Mount -------
 			if (rolesList.length < 1) {
-				const payload = { getParams: { ...rolesFilter, ...rolesMeta } };
+				const payload = { getParams: { ...rolesFilter } };
 				dispatch(fetchRoles(payload));
 			}
 			setInitialMount(false);
 			// -----------------------------
 		} else {
 			// ------ Component Update -----
-			const payload = { getParams: { ...rolesFilter, ...rolesMeta } };
+			const payload = { getParams: { ...rolesFilter } };
 			dispatch(fetchRoles(payload));
 			// -----------------------------
 		}
-	}, [rolesFilter, rolesMeta]);
+	}, [rolesFilter]);
 
 	// ===== Component Will Unmount ======
 	useEffect(() => {

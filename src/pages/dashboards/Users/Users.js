@@ -4,13 +4,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Container, Button } from 'reactstrap';
 import swal from 'sweetalert'
 
-import { fetchUsers, setUsersFilter, setUsersMeta, setUsers, saveUser, deleteUser } from 'redux/actions/usersActions';
+// ------Actions-----------
+import { 
+	fetchUsers,
+	setUsersFilter,
+	setUsersMeta,
+	setUsers,
+	saveUser,
+	deleteUser
+} from 'redux/actions/usersActions';
 import { fetchRoles } from 'redux/actions/rolesActions';
 
+// -----Components-----
 import { ItemsTable } from './ItemsTable';
 import { ItemModal } from './ItemModal';
-
 import { FilterBar } from './FilterBar';
+import { PaginationContainer } from 'components/PaginationContainer';
 
 // import Loader from "components/Loader";
 // import isEqual from 'lodash.isequal'
@@ -93,7 +102,7 @@ const Users = () => {
 		if (isInitialMount) {
 			// ------ Component Mount -------
 			if (usersList.length < 1) {
-				const payload = { getParams: {...usersFilter, ...usersMeta} };
+				const payload = { getParams: {...usersFilter} };
 				dispatch(fetchUsers(payload));
 			}
 
@@ -102,11 +111,11 @@ const Users = () => {
 			// -----------------------------
 		} else {
 			// ------ Component Update -----
-			const payload = { getParams: {...usersFilter, ...usersMeta} };
+			const payload = { getParams: {...usersFilter} };
 			dispatch(fetchUsers(payload));
 			// -----------------------------
 		}
-	}, [usersFilter, usersMeta]);
+	}, [usersFilter]);
 
 	// ===== Component Will Unmount ======
 	useEffect(() => {
@@ -148,6 +157,29 @@ const Users = () => {
 				itemData={itemData}
 				rolesList={rolesList}
 			/>
+
+			<PaginationContainer
+				itemsLoading={usersLoading}
+				itemsMeta={usersMeta}
+				isInitialMount={isInitialMount}
+
+			/>
+
+			{
+
+				// usersMeta
+				// current_page: 1
+				// last_page: 2
+				// per_page: 5
+
+				// from: 1
+				// to: 5
+				// total: 6
+
+
+			}
+
+
 
 			{/* <div className="" /> */}
 		</Container>

@@ -1,5 +1,5 @@
 import {
-	handleSetItemsResponse,
+	handleGetItemsResponse,
 	handleError,
 	isSuccessStatus,
 	getResponseMessage,
@@ -27,12 +27,16 @@ export const fetchRoles = payload => {
 
 		const settings = { 
 			dispatch,
-			types: { itemsAction: types.ROLES_SET_ITEMS, statusEnd: types.ROLES_REQUEST_END }			
+			types: {
+				itemsAction: types.ROLES_SET_ITEMS,
+				statusEnd: types.ROLES_REQUEST_END,
+				setMeta: types.ROLES_SET_META
+			}			
 		};
 		// console.log(payload)
 		api('GET', '/roles', payload)
 			.then(response => {
-				handleSetItemsResponse(response, settings);
+				handleGetItemsResponse(response, settings);
 			})
 			.catch(error => {
 				handleError(error, settings);
@@ -71,7 +75,7 @@ export const saveRole = payload => {
 		return new Promise((resolve, reject) => {
 			api(method, url, payload)
 				.then(response => {
-					// handleSetItemsResponse(response, settings);
+					// handleGetItemsResponse(response, settings);
 					if (isSuccessStatus(response)) {
 						dispatch({
 							type: actionType,
