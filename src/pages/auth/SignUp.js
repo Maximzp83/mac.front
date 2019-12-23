@@ -31,7 +31,7 @@ const SignUp = () => (
 							<Input bsSize="lg" type="password" name="password" placeholder="Enter password" />
 						</FormGroup>
 						<div className="text-center mt-3">
-							<Link to="/dashboard/default">
+							<Link to="/dashboard">
 								<Button color="primary" size="lg">
 									Sign up
 								</Button>

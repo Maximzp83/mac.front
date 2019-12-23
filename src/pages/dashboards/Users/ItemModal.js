@@ -81,11 +81,11 @@ const ItemModal = ({
 	// ===== Watch =======
 	useEffect(() => {
 		if (!isInitialMount) {
-			const role_id = itemData.role ? itemData.role.id : null;
-			const data = { ...itemData, role_id:role_id, role:null }
-			console.log('Modal Update: ', itemData);
+			const role_id = itemData.role ? itemData.role.id : '';
+			const data = { ...itemData, role_id:role_id, role:null, password: '' }
+			console.log('Modal Update: ', data);
 
-			setFormData(itemData);
+			setFormData(data);
 		}
 	}, [itemData]);
 

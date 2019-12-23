@@ -88,7 +88,7 @@ const Routes = ({ history }) => (
 
 				{/* Dashboard routes */}
 
-				<Route path="/dashboard" exact component={() => <Redirect to="/dashboard/default" />} />
+				<Route path="/dashboard" exact component={() => <Redirect to="/dashboard/users" />} />
 
 				<PrivateRoute
 					path="/dashboard/*"

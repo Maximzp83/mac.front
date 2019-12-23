@@ -1,5 +1,5 @@
 import {
-	Layout as LayoutIcon,
+	// Layout as LayoutIcon,
 	// Monitor as MonitorIcon,
 	Sliders as SlidersIcon,
 	Users as UsersIcon
@@ -20,10 +20,10 @@ import ErrorPage from '../pages/auth/ErrorPage';
 // import SidebarCollapsed from "../pages/layouts/SidebarCollapsed";
 
 // Pages
-import Profile from '../pages/pages/Profile';
+// import Profile from '../pages/pages/Profile';
 
 // Dashboards
-const Default = async(() => import('../pages/dashboards/Default'));
+// const Default = async(() => import('../pages/dashboards/Default'));
 const Users = async(() => import('../pages/dashboards/Users/Users'));
 const Roles = async(() => import('../pages/dashboards/Roles/Roles'));
 
@@ -41,15 +41,15 @@ const dashboardRoutes = {
 	header: 'Main',
 	icon: SlidersIcon,
 	containsHome: true,
-	redirect: '/dashboard/default',
+	redirect: '/dashboard/users',
 	children: [
-		{
+		/*{
 			path: '/dashboard/default',
 			name: 'Default',
 			component: Default
 			// badgeColor: "primary",
 			// badgeText: "bage text"
-		},
+		},*/
 		{
 			path: '/dashboard/users',
 			name: 'Пользователи',
@@ -63,7 +63,7 @@ const dashboardRoutes = {
 	]
 };
 
-const pageRoutes = {
+/*const pageRoutes = {
 	path: '/pages',
 	name: 'Pages',
 	icon: LayoutIcon,
@@ -74,7 +74,7 @@ const pageRoutes = {
 			component: Profile
 		}
 	]
-};
+};*/
 
 const authRoutes = {
 	path: '/auth',
@@ -110,7 +110,7 @@ const errorRoutes = {
 // Dashboard specific routes
 export const dashboard = [
 	dashboardRoutes,
-	pageRoutes
+	// pageRoutes
 	// layoutRoutes,
 ];
 
@@ -125,8 +125,8 @@ export const error = [errorRoutes];
 // All routes
 export default [
 	dashboardRoutes,
-	pageRoutes,
-	errorRoutes
+	// pageRoutes,
+	// errorRoutes
 	// authRoutes,
 	// layoutRoutes
 ];

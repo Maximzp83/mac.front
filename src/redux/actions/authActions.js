@@ -58,7 +58,7 @@ export const signIn = payload => {
 
 						dispatch({ type: types.AUTH_REQUEST_END });
 
-						dispatch(routerPush('/dashboard/default'));
+						dispatch(routerPush('/dashboard'));
 						toastr.success('', `Вы вошли как ${responseData.user.fullName}`);
 					} else {
 						dispatch({ type: types.AUTH_CLEAR });

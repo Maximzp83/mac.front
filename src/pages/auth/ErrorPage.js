@@ -12,7 +12,7 @@ const ErrorPage = ({ error: { title, message, status } }) => (
 		{/* The server encountered something unexpected that didn't allow it to
 			complete the request. */}
 		<p className="h2 font-weight-normal mt-3 mb-4">{message}</p>
-		<Link to="/dashboard/default">
+		<Link to="/dashboard">
 			<Button color="primary" size="lg">
 				Вернуться на главную
 			</Button>
