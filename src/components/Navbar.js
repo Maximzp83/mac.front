@@ -167,12 +167,13 @@ const NavbarComponent = () => {
 							</span>
 							<span className="d-none d-sm-inline-block">
 								<DropdownToggle nav caret>
+                  <span className="text-dark mr-2">{authUser.first_name}</span>
+
 									<img
 										src={authUser.avatar}
 										className="avatar img-fluid rounded-circle mr-1"
 										alt={authUser.first_name}
 									/>
-									<span className="text-dark">{authUser.first_name}</span>
 								</DropdownToggle>
 							</span>
 							<DropdownMenu right>

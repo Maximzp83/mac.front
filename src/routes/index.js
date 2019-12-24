@@ -32,6 +32,7 @@ const homeRoutes = {
 	path: '/',
 	name: 'Home Page',
 	component: HomePage,
+	// redirect: '/dashboard/users',
 	children: null
 };
 

@@ -3,7 +3,7 @@ import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { toastr } from 'react-redux-toastr';
 
-import { home as homeRoutes, dashboard as dashboardRoutes, page as pageRoutes, error as errorRoutes } from './index';
+import { /*home as homeRoutes,*/ dashboard as dashboardRoutes, page as pageRoutes, error as errorRoutes } from './index';
 
 import DashboardLayout from '../layouts/Dashboard';
 import HomeLayout from '../layouts/Home';
@@ -81,7 +81,8 @@ const Routes = ({ history }) => (
 		<ScrollToTop>
 			<Switch>
 				{/* Landing routes */}
-				<Route path="/" exact component={() => <ChildRoutes layout={HomeLayout} routes={homeRoutes} />} />
+				{/*<Route path="/" exact component={() => <ChildRoutes layout={HomeLayout} routes={homeRoutes} />} />*/}
+				<Route path="/" exact component={() => <Redirect to="/dashboard/users" />} />
 
 				{/* Auth routes */}
 				<Route path="/auth/*" exact component={() => <ChildRoutes layout={AuthLayout} routes={pageRoutes} />} />

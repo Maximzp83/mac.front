@@ -33,6 +33,7 @@ const Users = () => {
 		usersFilter,
 		usersMeta,
 		usersSaving,
+		userTypesList
 	} = useSelector(state => state.users);
 	const { rolesList } = useSelector(state => state.roles);
 	// console.log(usersSaving)
@@ -154,6 +155,7 @@ const Users = () => {
 				toggleItemDelete={toggleItemDelete}
 				itemsNames={itemsNames}
 				itemsLoading={usersLoading}
+				userTypesList={userTypesList}
 				itemsList={usersList} />
 
 			<ItemModal 
@@ -165,6 +167,7 @@ const Users = () => {
 				itemsSaving={usersSaving}
 				itemData={itemData}
 				rolesList={rolesList}
+				userTypesList={userTypesList}
 			/>
 
 			<PaginationContainer
