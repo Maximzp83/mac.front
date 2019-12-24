@@ -19,7 +19,11 @@ const initialState = {
 		per_page: 0,
 		to: 0,
 		total: 0,
-	}
+	},
+	userTypesList: [
+		{ id: 1, name: 'Внутренний' },
+		{ id: 2, name: 'Внешний' },
+	]
 };
 
 export default function(state = initialState, action) {

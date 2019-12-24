@@ -121,7 +121,7 @@ const Roles = () => {
 		<Container fluid className="p-0">
 			<h1 className="h3 mb-3">Настройка прав доступа и управление ролями</h1>
 			
-			<Button color="tertiary" size="lg" onClick={()=>setItemModalOpen(true)}>
+			<Button color="tertiary" size="lg" onClick={() => toggleItemEdit()}>
 				<span>Создать группу пользователей</span>
 			</Button>
 

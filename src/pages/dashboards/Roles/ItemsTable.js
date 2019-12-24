@@ -44,7 +44,7 @@ const ItemsTable = ({
 							<tr>
 								<th className="id">ID</th>
 								<th className="name">Название</th>
-								<th>Отображаемое название</th>
+								{/*<th>Отображаемое название</th>*/}
 								<th>Описание</th>
 								{/*<th>Права</th>*/}
 								<th>Действия</th>
@@ -55,7 +55,7 @@ const ItemsTable = ({
 								<tr key={`role_item-${roleIndex}`}>
 									<td>{role.id}</td>
 									<td>{role.name}</td>
-									<td>{role.dispaly_name}</td>
+									{/*<td>{role.dispaly_name}</td>*/}
 									<td>{role.description}</td>
 									{/*<td>
 										{role.rules.map((rule, roleInd) => (

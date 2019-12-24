@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 // import { findItemBy } from 'helpers'
 import isEmpty from 'lodash.isempty';
 
-
 import { 
 	Button,
 	Col,
@@ -36,10 +35,10 @@ const ItemModal = ({
 	const initialItemFormData = {
 		id: null,
 		type: 1,
-		last_name: 'tttt1',
-		first_name: 'tttt1',
-		second_name: 'tttt1',
-		email: '1tttt@tttt.com',
+		last_name: '',
+		first_name: '',
+		second_name: '',
+		email: '',
 		password: '',
 		login: '',
 		role_id: 1,

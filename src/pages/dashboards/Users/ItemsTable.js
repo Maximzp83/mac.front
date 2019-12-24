@@ -9,7 +9,7 @@ import {
 	Table
 } from 'reactstrap';
 
-import { Edit2,	Trash, Check } from 'react-feather';
+import { Edit2,	Trash /*Check*/ } from 'react-feather';
 
 const ItemsTable = ({ 
 	itemsLoading,
@@ -63,9 +63,9 @@ const ItemsTable = ({
 								<th>Имя</th>
 								<th>Отчество</th>
 								<th>Клиент</th>
-								<th>Телефон</th>
+								{/*<th>Телефон</th>*/}
 								<th>Группа пользователей</th>
-								<th>Статус</th>
+								{/*<th>Статус</th>*/}
 								<th>Действия</th>
 							</tr>
 						</thead>
@@ -78,14 +78,14 @@ const ItemsTable = ({
 									<td>{user.first_name}</td>
 									<td>{user.second_name}</td>
 									<td>{getUserClient(user)}</td>
-									<td>{user.phone}</td>
+									{/*<td>{user.phone}</td>*/}
 									<td>{user.role ? user.role.display_name : ''}</td>
 									{/*<td>
 										{user.roles.map((role, roleInd) => (
 											<div key={`role-${roleInd}`}>{role.display_name}</div>
 										))}
 									</td>*/}
-									<td>{user.isActive && <Check size={20} className="text-success" />}</td>
+									{/*<td>{user.isActive && <Check size={20} className="text-success" />}</td>*/}
 									<td className="table-action">
 										<Edit2 className="align-middle mr-1 pointer" size={18}
 											onClick={() => handleItemEdit(user)}
