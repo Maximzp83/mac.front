@@ -12,7 +12,7 @@ import {
 	Row
 } from 'reactstrap';
 
-const FilterBar = ({ changeItemsFilter, changeItemsMeta, currentFilter: { max }, itemsMeta }) => {
+const FilterBar = ({ changeItemsFilter, currentFilter: { max }, itemsMeta }) => {
 	const [maxItemsOpen, setMaxItems] = useState(false);
 	const maxToggle = () => setMaxItems(!maxItemsOpen);
 
@@ -26,7 +26,7 @@ const FilterBar = ({ changeItemsFilter, changeItemsMeta, currentFilter: { max },
 		}
 	};*/
 
-	const handleItemsMetaChange = value => {
+	const handleFilterChange = value => {
 		if (max !== value) {
 			changeItemsFilter({ filterName: 'max', val: value });
 		}
@@ -52,16 +52,16 @@ const FilterBar = ({ changeItemsFilter, changeItemsMeta, currentFilter: { max },
 				<ButtonDropdown isOpen={maxItemsOpen} toggle={maxToggle} className="ml-auto">
 					<DropdownToggle caret>{max}</DropdownToggle>
 					<DropdownMenu right>
-						<DropdownItem active={max === 5} onClick={() => handleItemsMetaChange(5)}>
+						<DropdownItem active={max === 5} onClick={() => handleFilterChange(5)}>
 							5
 						</DropdownItem>
-						<DropdownItem active={max === 10} onClick={() => handleItemsMetaChange(10)}>
+						<DropdownItem active={max === 10} onClick={() => handleFilterChange(10)}>
 							10
 						</DropdownItem>
-						<DropdownItem active={max === 20} onClick={() => handleItemsMetaChange(20)}>
+						<DropdownItem active={max === 20} onClick={() => handleFilterChange(20)}>
 							20
 						</DropdownItem>
-						<DropdownItem active={max === -1} onClick={() => handleItemsMetaChange(-1)}>
+						<DropdownItem active={max === -1} onClick={() => handleFilterChange(-1)}>
 							Все
 						</DropdownItem>
 					</DropdownMenu>
@@ -72,8 +72,7 @@ const FilterBar = ({ changeItemsFilter, changeItemsMeta, currentFilter: { max },
 };
 
 FilterBar.defaultProps = {
-	currentFilter: { isClient: null },
-	itemsMeta: { max: null }
+	currentFilter: { isClient: null, max: 5 },
 };
 
 FilterBar.propTypes = {
@@ -84,7 +83,7 @@ FilterBar.propTypes = {
 		max: PropTypes.number
 	}),
 	changeItemsFilter: PropTypes.func.isRequired,
-	changeItemsMeta: PropTypes.func.isRequired
+	// changeItemsMeta: PropTypes.func.isRequired
 };
 
 export { FilterBar };

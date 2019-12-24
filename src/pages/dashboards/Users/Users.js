@@ -8,7 +8,7 @@ import swal from 'sweetalert'
 import { 
 	fetchUsers,
 	setUsersFilter,
-	setUsersMeta,
+	// setUsersMeta,
 	setUsers,
 	saveUser,
 	deleteUser
@@ -18,12 +18,13 @@ import { fetchRoles } from 'redux/actions/rolesActions';
 // -----Components-----
 import { ItemsTable } from './ItemsTable';
 import { ItemModal } from './ItemModal';
-import { FilterBar } from './FilterBar';
+import { FilterBar } from 'components/FilterBar';
 import { PaginationContainer } from 'components/PaginationContainer';
 
 // import Loader from "components/Loader";
 // import isEqual from 'lodash.isequal'
 
+// =========================
 const Users = () => {
 	const dispatch = useDispatch();
 	const {
@@ -47,10 +48,9 @@ const Users = () => {
 		itemsNameMult2: 'Пользователей'
 	};
 	const rolesFilter = {
-		isClient: null,
-		isActive: null
+		max: -1
 	}
-	const rolesMeta = {	maxItems: -1 }
+	// const rolesMeta = {	maxItems: -1 }
 
 	const itemModalToggle = () => setItemModalOpen(!itemModalOpen);
 
@@ -60,18 +60,19 @@ const Users = () => {
 		dispatch(setUsersFilter(newFilters));
 	};
 
-	const changeItemsMeta = ({ filterName, val }) => {
+	/*const changeItemsMeta = ({ filterName, val }) => {
 		const newMeta = { ...usersMeta, [filterName]: val };
 		dispatch(setUsersMeta(newMeta));
-	};
+	};*/
 
 	// ----- Methods ---------
-	const toggleItemEdit = (user) => {
+	const toggleItemEdit = user => {
+		// console.log(user)
 		setItemData(user)
 		setItemModalOpen(true);
 	};
 
-	const toggleItemDelete = (user) => {
+	const toggleItemDelete = user => {
 		swal({
 		  title: "Вы уверены?",
 		  text: `Удалить безвозвратно ${user.fullName}?`,
@@ -80,7 +81,12 @@ const Users = () => {
 		  dangerMode: true,
 		})
 		.then(answer => {
-			if (answer) { dispatch( deleteUser(user.id) ) };
+			if (answer) { 
+				dispatch( deleteUser(user.id) )
+					.then(() => {
+						dispatch( fetchUsers({ getParams: {...usersFilter} }) );
+					})
+			};
 		});	
 	};
 
@@ -89,10 +95,13 @@ const Users = () => {
 		dispatch(setRolesMeta(newMeta));
 	};*/
 
-	const saveItem = (data) => {
+	const saveItem = itemData => {
 		// console.log('ok:', userData )
-		dispatch(saveUser({ data: data }))
-			.then(() => setItemModalOpen(false))
+		dispatch(saveUser({ data: itemData }))
+			.then(() => {
+				setItemModalOpen(false);
+				dispatch( fetchUsers({ getParams: {...usersFilter} }) );
+			})
 	};
 
 	// ===== Watch =======
@@ -103,16 +112,16 @@ const Users = () => {
 			// ------ Component Mount -------
 			if (usersList.length < 1) {
 				const payload = { getParams: {...usersFilter} };
-				dispatch(fetchUsers(payload));
+				dispatch( fetchUsers(payload) );
 			}
 
-			dispatch(fetchRoles({ getParams: {...rolesFilter, ...rolesMeta} }));
+			dispatch(fetchRoles({ getParams: {...rolesFilter} }));
 			setInitialMount(false);
 			// -----------------------------
 		} else {
 			// ------ Component Update -----
 			const payload = { getParams: {...usersFilter} };
-			dispatch(fetchUsers(payload));
+			dispatch( fetchUsers(payload) );
 			// -----------------------------
 		}
 	}, [usersFilter]);
@@ -129,12 +138,12 @@ const Users = () => {
 		<Container fluid className="p-0">
 			<h1 className="h3 mb-3">{itemsNames.itemsNameMult1}</h1>
 			
-			<Button color="tertiary" size="lg" onClick={()=>setItemModalOpen(true)}>
+			<Button color="tertiary" size="lg" onClick={() => toggleItemEdit()}>
 				<span>Создать пользователя</span>
 			</Button>
 			
 			<FilterBar
-				changeItemsMeta={changeItemsMeta}
+				// changeItemsMeta={changeItemsMeta}
 				changeItemsFilter={changeItemsFilter}
 				currentFilter={usersFilter}
 				itemsMeta={usersMeta}
@@ -162,24 +171,8 @@ const Users = () => {
 				itemsLoading={usersLoading}
 				itemsMeta={usersMeta}
 				isInitialMount={isInitialMount}
-
+				changeItemsFilter={changeItemsFilter}
 			/>
-
-			{
-
-				// usersMeta
-				// current_page: 1
-				// last_page: 2
-				// per_page: 5
-
-				// from: 1
-				// to: 5
-				// total: 6
-
-
-			}
-
-
 
 			{/* <div className="" /> */}
 		</Container>

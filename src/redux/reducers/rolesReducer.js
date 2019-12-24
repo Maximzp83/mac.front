@@ -12,11 +12,19 @@ const initialState = {
 		{ ruleType: 5, name: 'Role' }
 	],
 	rolesFilter: {
-		isClient: null,
-		isActive: null
+		// isClient: null,
+		// isActive: null,
+		max: 5,
+		page: 1
 	},
 	rolesMeta: {
-		maxItems: 10
+		current_page: 1,
+		from: 1,
+		last_page: 1,
+		path: '',
+		per_page: 0,
+		to: 0,
+		total: 0,
 	}
 };
 

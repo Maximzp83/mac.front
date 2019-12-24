@@ -1,19 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import { subspace, namespaced } from 'redux-subspace';
-
 import { Container, Button } from 'reactstrap';
 
-import { fetchRoles, saveRole, deleteRole } from 'redux/actions/rolesActions';
+import {
+	fetchRoles,
+	saveRole,
+	deleteRole,
+	setRolesFilter
+} from 'redux/actions/rolesActions';
+
+// -----Components-----
 import { ItemsTable } from './ItemsTable';
 import { ItemModal } from './ItemModal';
+import { FilterBar } from 'components/FilterBar';
+import { PaginationContainer } from 'components/PaginationContainer';
+
 import swal from 'sweetalert'
 // import Loader from "components/Loader";
 // import isEqual from 'lodash.isequal'
 
+// ======================
 const Roles = () => {
 	const dispatch = useDispatch();
-	const { rolesLoading, rolesList, ruleTypes, rolesSaving, rolesFilter, rolesMeta } = useSelector(state => state.roles);
+	const {
+		rolesLoading,
+		rolesList,
+		ruleTypes,
+		rolesSaving,
+		rolesFilter,
+		rolesMeta
+	} = useSelector(state => state.roles);
 
 	// ---- local State -----
 	const [isInitialMount, setInitialMount] = useState(true);
@@ -31,12 +48,18 @@ const Roles = () => {
 	const itemModalToggle = () => setItemModalOpen(!itemModalOpen);
 
 	// ----- Methods ---------
-	const toggleItemEdit = (role) => {
+	const changeItemsFilter = ({ filterName, val }) => {
+		// console.log(filterName)
+		const newFilters = { ...rolesFilter, [filterName]: val };
+		dispatch(setRolesFilter(newFilters));
+	};
+
+	const toggleItemEdit = role => {
 		setItemData(role)
 		setItemModalOpen(true);
 	};
 
-	const toggleItemDelete = (role) => {			
+	const toggleItemDelete = role => {			
 		swal({
 		  title: "Вы уверены?",
 		  text: `Удалить безвозвратно ${role.name}?`,
@@ -45,7 +68,12 @@ const Roles = () => {
 		  dangerMode: true,
 		})
 		.then(answer => {
-			if (answer) { dispatch( deleteRole(role.id) ) };
+			if (answer) { 
+				dispatch( deleteRole(role.id) )
+				.then(() => {
+					dispatch( fetchRoles({ getParams: {...rolesFilter} }) );
+				})
+			};
 		});		
 	};
 
@@ -54,10 +82,13 @@ const Roles = () => {
 		dispatch(setRolesMeta(newMeta));
 	};*/
 
-	const saveItem = (data) => {
+	const saveItem = data => {
 		// console.log('ok:', userData )
 		dispatch(saveRole({ data: data }))
-			.then(() => setItemModalOpen(false))
+			.then(() => {
+				setItemModalOpen(false);
+				dispatch( fetchRoles({ getParams: {...rolesFilter} }) );
+			})
 	};
 
 	// ===== Watch =======
@@ -94,6 +125,13 @@ const Roles = () => {
 				<span>Создать группу пользователей</span>
 			</Button>
 
+			<FilterBar
+				// changeItemsMeta={changeItemsMeta}
+				changeItemsFilter={changeItemsFilter}
+				currentFilter={rolesFilter}
+				itemsMeta={rolesMeta}
+			/>
+
 			<ItemsTable 
 				toggleItemEdit={toggleItemEdit}
 				toggleItemDelete={toggleItemDelete}
@@ -114,7 +152,12 @@ const Roles = () => {
 				itemData={itemData}
 			/>
 
-			
+			<PaginationContainer
+				itemsLoading={rolesLoading}
+				itemsMeta={rolesMeta}
+				isInitialMount={isInitialMount}
+				changeItemsFilter={changeItemsFilter}
+			/>
 
 			{/*<ConfirmModal
 				isOpen={confirmModalOpen}

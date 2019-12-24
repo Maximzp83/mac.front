@@ -60,27 +60,34 @@ export const saveRole = payload => {
 				method: 'PUT',
 				url: `/roles/${payload.data.id}`,
 				resultMessage: 'сохранена',
-				actionType: types.ROLES_UPDATE_ITEM
+				// actionType: types.ROLES_UPDATE_ITEM
 			}
 		} else {
 			options = {
 				method: 'POST',
 				url: `/roles`,
 				resultMessage: 'создана',
-				actionType: types.ROLES_ADD_ITEM
+				// actionType: types.ROLES_ADD_ITEM
+				// actions: [{name:fetchRoles}]
 			}
 		}
-		const { method, url, resultMessage, actionType } = options;
+		const { method, url, resultMessage, actionType, actions } = options;
 
 		return new Promise((resolve, reject) => {
 			api(method, url, payload)
 				.then(response => {
 					// handleGetItemsResponse(response, settings);
 					if (isSuccessStatus(response)) {
-						dispatch({
-							type: actionType,
-							payload: response.data.data
-						});	
+						if (actionType) {
+							dispatch({ type: actionType, payload: response.data.data });							
+						}
+						if (actions && actions.length) {
+							for(let action of actions) {
+								const {payload} = action;
+								dispatch(action.name(payload || null));
+							}
+						} 
+						
 						dispatch({ type: types.ROLES_SAVE_STATUS, payload: false });
 						toastr.success('', `Группа пользователей ${resultMessage}`);
 						resolve()
@@ -103,12 +110,16 @@ export const deleteRole = id => {
 		
 		const settings = { 
 			dispatch, id,
-			types: { itemsAction: types.ROLES_DELETE_ITEM, statusEnd: types.ROLES_SAVE_STATUS },
+			types: { statusEnd: types.ROLES_SAVE_STATUS },
 		};
 
-		api('DELETE', `/roles/${id}`)
-			.then(response => {	handleRemoveItemsResponse(response, settings);	})
-			.catch(error => {	handleError(error, settings);	});
+		return new Promise((resolve, reject) => {
+			settings.resolve = resolve;
+			settings.reject = reject;
+			api('DELETE', `/roles/${id}`)
+				.then(response => {	handleRemoveItemsResponse(response, settings);	})
+				.catch(error => {	handleError(error, settings);	});
+		})
 	}
 }
 

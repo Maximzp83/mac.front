@@ -139,6 +139,7 @@ const handleRemoveItemsResponse = (response, { dispatch, types, payload, resolve
 			timeOut: 0
 		});
 	}
+	if (resolve) resolve()
 	dispatch({ type: types.statusEnd, payload: false });
 };
 
@@ -155,7 +156,7 @@ const handleError = (error, { dispatch, types, payload, reject=null }) => {
 		}
 	}
 	if (reject) reject()
-	dispatch({ type: types.statusEnd, payload: payload });
+	dispatch({ type: types.statusEnd, payload: false });
 	toastr.error('Ошибка', message || error.message, { timeOut: 0 });
 };
 

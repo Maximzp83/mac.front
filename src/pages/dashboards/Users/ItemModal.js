@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 // import { findItemBy } from 'helpers'
+import isEmpty from 'lodash.isempty';
+
 
 import { 
 	Button,
@@ -37,13 +39,13 @@ const ItemModal = ({
 	const initialItemFormData = {
 		id: null,
 		type: 1,
-		last_name: '',
-		first_name: '',
-		second_name: '',
-		email: '',
+		last_name: 'tttt1',
+		first_name: 'tttt1',
+		second_name: 'tttt1',
+		email: '1tttt@tttt.com',
 		password: '',
 		login: '',
-		role_id: ''
+		role_id: 1,
 	}
 
 	const [itemFormData, setFormData] = useState(initialItemFormData);
@@ -81,11 +83,14 @@ const ItemModal = ({
 	// ===== Watch =======
 	useEffect(() => {
 		if (!isInitialMount) {
-			const role_id = itemData.role ? itemData.role.id : '';
-			const data = { ...itemData, role_id:role_id, role:null, password: '' }
-			console.log('Modal Update: ', data);
-
-			setFormData(data);
+				// console.log('Modal Update: ', itemData);
+			if (!isEmpty(itemData)) {
+				const role_id = itemData.role ? itemData.role.id : '';
+				const data = { ...itemData, role_id:role_id, role:null, password: '' }
+				setFormData(data);
+			} else {
+				setFormData(initialItemFormData);
+			}
 		}
 	}, [itemData]);
 
@@ -181,7 +186,6 @@ const ItemModal = ({
 						<Col sm={7}>
 							<AvField 
 								name="user_password"
-								required
 								bsSize="lg"
 								type="password"
 								placeholder="Пароль"
@@ -212,7 +216,8 @@ const ItemModal = ({
 							  type="select"
 							  name="user_company"
 								bsSize="lg"
-							  placeholder="Выберите компанию"
+								required
+							  placeholder="Выберите роль"
 							  value={itemFormData.role_id}
 							  onChange={(e) => {handleFieldChange({prop:'role_id', val:e.target.value})} }
 							  // helpMessage="Idk, this is an example. Deal with it!"
@@ -247,7 +252,8 @@ const ItemModal = ({
 };
 
 ItemModal.defaultProps = {
-	itemsNames: { itemsNameMult2: 'Элементов' }
+	itemsNames: { itemsNameMult2: 'Элементов' },
+	itemData: {}
 };
 
 ItemModal.propTypes = {
@@ -258,7 +264,7 @@ ItemModal.propTypes = {
 	itemModalToggle: PropTypes.func.isRequired,
 	submitItem: PropTypes.func.isRequired,
 	itemsSaving: PropTypes.bool.isRequired,
-	itemData: PropTypes.object.isRequired,
+	itemData: PropTypes.object,
 	rolesList: PropTypes.array.isRequired
 };
 
