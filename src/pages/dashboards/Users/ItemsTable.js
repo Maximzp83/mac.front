@@ -22,7 +22,7 @@ const ItemsTable = ({
 	
 	// =====getters====
 	// const getUserClient = user => (user.isClient ? user.company : '');
-	const getUserClient = user => (user.role && user.role.id === 1 ? '' : 'да');
+	const getUserClient = user => (user.type === 1 ? '' : 'да');
 
 	/* const userRoles = user => {
 		let roles = [];

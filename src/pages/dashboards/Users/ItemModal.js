@@ -30,10 +30,6 @@ const ItemModal = ({
 	userTypesList
 }) => {
 
-/*	const userTypesList = [
-		{ id: 1, name: 'Внутренний' },
-		{ id: 2, name: 'Внешний' },
-	]*/
 
 	const initialItemFormData = {
 		id: null,
@@ -51,8 +47,6 @@ const ItemModal = ({
 	// const [userData, setUserData] = useState(defaultUserData);
 
 	
-	// const maxToggle = () => setMaxItems(!maxItemsOpen);
-
 	// -------Form Models--------
 
 	const handleFieldChange = data => {
@@ -61,6 +55,7 @@ const ItemModal = ({
 	};
 	const handleIntFieldChange = data => {
 		data.val = +data.val;
+
 		handleFieldChange(data);
 	};
 	const handleTypeFieldChange = event => {
@@ -68,13 +63,27 @@ const ItemModal = ({
 		setFormData( prevState => 
 			({ ...prevState, type: val, role_id: '' }) 
 		);
-	};	
+	};
+
+	/*const prepareFormData = data => {
+		let formData = Object.assign({}, data);
+		
+		for (let prop in formData) {
+			let value = formData[prop];
+			if (value) {
+				if (typeof value !== 'boolean' && !isNaN(+value) ) { formData[prop] = +formData[prop] }
+			} else {
+				if (typeof value !== 'boolean') { delete formData[prop] }
+			}
+		}
+		
+		return formData;
+	};*/
 
 	const handleSubmit = () => {
-		let formData = Object.assign({}, itemFormData); 
-		// let formData = { ...stateCopy, rules: rulesFormData }
+		// let formData = prepareFormData(itemFormData)		
 		// console.log(formData)
-		submitItem(formData);
+		submitItem(itemFormData);
 	};
 	/*const handleItemsMetaChange = value => {
 		if (maxItems !== value) {
@@ -87,7 +96,7 @@ const ItemModal = ({
 		if (!isInitialMount) {
 			const role_id = itemData.role ? itemData.role.id : '';
 			const data = { ...itemData, role_id:role_id, role:null, password: '' }
-			console.log('Modal Update: ', data);
+			// console.log('Modal Update: ', data);
 
 			setFormData(data);
 		}
@@ -216,7 +225,7 @@ const ItemModal = ({
 								  type="select"
 								  name="user_company"
 									bsSize="lg"
-								  placeholder="Выберите компанию"
+								  placeholder="Выберите роль"
 								  value={itemFormData.role_id}
 								  onChange={(e) => {handleIntFieldChange({prop:'role_id', val:e.target.value})} }
 								  // helpMessage="Idk, this is an example. Deal with it!"
@@ -244,9 +253,6 @@ const ItemModal = ({
 				</AvForm>
 			</ModalBody>
 
-			{/*<ModalFooter>
-				
-			</ModalFooter>*/}
 		</Modal>
 	);
 };

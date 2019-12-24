@@ -50,7 +50,7 @@ const FilterBar = ({ changeItemsFilter, changeItemsMeta, currentFilter: { isClie
 
 			<Col xs="12" md="4" className="ml-auto d-flex">
 				<ButtonDropdown isOpen={maxItemsOpen} toggle={maxToggle} className="ml-auto">
-					<DropdownToggle caret>{max}</DropdownToggle>
+					<DropdownToggle caret>{max === -1 ? 'Все' : max}</DropdownToggle>
 					<DropdownMenu right className="maxItemsMenu">
 						<DropdownItem active={max === 10} onClick={() => handleItemsMetaChange(10)}>
 							10
