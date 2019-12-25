@@ -21,15 +21,19 @@ export default function(state = initialState, action) {
 		}
 
 		case types.AUTH_SUCCESS: {
-			localStorage.setItem('access_token', action.payload.access_token);
-			localStorage.setItem('authUser', JSON.stringify(action.payload.user));
+			localStorage.setItem('access_token', action.payload);
 			// setHttpToken(action.payload);
 			return {
 				...state,
 				isAuthenticated: true,
-				authUser: action.payload.user,
-				access_token: action.payload.access_token
+				// authUser: action.payload.user,
+				access_token: action.payload
 			};
+		}
+
+		case types.AUTH_SET_USER: {
+			localStorage.setItem('authUser', JSON.stringify(action.payload));
+			return { ...state, authUser: action.payload };
 		}
 
 		/* case types.SET_AUTH_TOKEN_TO_STORE: {

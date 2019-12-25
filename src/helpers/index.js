@@ -17,6 +17,10 @@
 	return file && file.size <= size 
 	// let isFileImage = file && acceptedImageTypes.includes(file['type'])
 } */
+import store from 'redux/store';
+
+const initialUserRules = {create:false, update:false, delete:false, view:false};
+
 
 const isImage = fileObj => {
 	return /\.(gif|jpg|jpeg|tiff|png)$/gim.test(fileObj.path);
@@ -37,6 +41,15 @@ const findItemBy = (property, value, itemsList, returnIndex=false) => {
 	}
 	return returnIndex ? {item: result, index: index} : result;
 };
+
+const getUserRules = (ruleType) => {
+	const authUser = store.getState().auth.authUser;
+	let rules;
+	if (authUser.role && authUser.role.rules.length) {
+		rules = findItemBy('ruleType', ruleType, authUser.role.rules);
+	} 
+	return rules || initialUserRules;
+}
 
 /* const getIds = (itemsList, options) => {
 	let ids = [];
@@ -98,4 +111,4 @@ const findItemBy = (property, value, itemsList, returnIndex=false) => {
 	return 'date not set'
 } */
 
-export { isImage, findItemBy };
+export { isImage, findItemBy, getUserRules };

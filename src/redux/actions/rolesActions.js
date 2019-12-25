@@ -8,6 +8,8 @@ import {
 
 import { toastr } from 'react-redux-toastr';
 import { api } from 'services/api';
+import store from 'redux/store';
+import { setAuthUser } from './authActions';
 
 export const types = {
 	ROLES_REQUEST_START: 'ROLES_REQUEST_START',
@@ -24,7 +26,6 @@ export const types = {
 export const fetchRoles = payload => {
 	return dispatch => {
 		dispatch({ type: types.ROLES_REQUEST_START });
-
 		const settings = { 
 			dispatch,
 			types: {
@@ -78,16 +79,24 @@ export const saveRole = payload => {
 				.then(response => {
 					// handleGetItemsResponse(response, settings);
 					if (isSuccessStatus(response)) {
+						const savedRole = response.data.data;
 						if (actionType) {
-							dispatch({ type: actionType, payload: response.data.data });							
+							dispatch({ type: actionType, payload: savedRole });							
 						}
 						if (actions && actions.length) {
 							for(let action of actions) {
 								const {payload} = action;
 								dispatch(action.name(payload || null));
 							}
-						} 
-						
+						}
+						// ------Update AuthUser-----
+						let copyAuthUser = Object.assign({}, store.getState().auth.authUser);
+						if (savedRole.id === copyAuthUser.role.id) {
+							copyAuthUser.role.rules = savedRole.rules;
+							dispatch(setAuthUser(copyAuthUser));	
+						}
+						// ---------------------------
+
 						dispatch({ type: types.ROLES_SAVE_STATUS, payload: false });
 						toastr.success('', `Группа пользователей ${resultMessage}`);
 						resolve()

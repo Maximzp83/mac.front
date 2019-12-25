@@ -97,7 +97,7 @@ const ItemModal = ({
 	};
 
 	const handleSubmit = () => {
-		let stateCopy = Object.assign({}, itemFormData); 
+		let stateCopy = Object.assign({}, itemFormData);
 		let formData = { ...stateCopy, rules: rulesFormData }
 		// console.log(formData)
 		submitItem(formData);

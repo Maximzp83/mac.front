@@ -11,9 +11,8 @@ export const types = {
 	AUTH_REQUEST_START: 'AUTH_REQUEST_START',
 	AUTH_SUCCESS: 'AUTH_SUCCESS',
 	AUTH_REQUEST_END: 'AUTH_REQUEST_END',
-	AUTH_CLEAR: 'AUTH_CLEAR'
-	// SET_AUTH_TOKEN_TO_STORE: 'SET_AUTH_TOKEN_TO_STORE',
-	// SET_AUTH_USER_TO_STORE: 'SET_AUTH_USER_TO_STORE',
+	AUTH_CLEAR: 'AUTH_CLEAR',
+	AUTH_SET_USER: 'AUTH_SET_USER',
 };
 
 /* export const fetchAuthUser = () => {
@@ -44,19 +43,15 @@ export const signIn = payload => {
 				if (isSuccessStatus(response)) {
 					if (response.data && response.data.data && response.data.data.access_token) {
 						const responseData = response.data.data;
-						// console.log('response: ', response)
-						const { user } = responseData;
-						user.avatar = 'https://s3.amazonaws.com/uifaces/faces/twitter/snowshade/128.jpg';
-
-						dispatch({
-							type: types.AUTH_SUCCESS,
-							payload: {
-								access_token: responseData.access_token,
-								user: responseData.user
-							}
-						});
-
-						dispatch({ type: types.AUTH_REQUEST_END });
+						try {
+							// console.log('response: ', response)
+							const { user } = responseData;
+							user.avatar = 'https://s3.amazonaws.com/uifaces/faces/twitter/snowshade/128.jpg';
+					
+							dispatch({ type: types.AUTH_SET_USER, payload: user });
+							dispatch({ type: types.AUTH_SUCCESS, payload: responseData.access_token });
+							dispatch({ type: types.AUTH_REQUEST_END });
+						} catch(e) {console.log(e)}
 
 						dispatch(routerPush('/dashboard'));
 						toastr.success('', `Вы вошли как ${responseData.user.login}`);
@@ -92,6 +87,10 @@ export const signOut = () => {
 	};
 };
 
+export const setAuthUser = (user) => {
+	console.log(user)
+	return { type: types.AUTH_SET_USER, payload: user };
+};
 export const clearAuth = () => {
 	return { type: types.AUTH_CLEAR };
 };

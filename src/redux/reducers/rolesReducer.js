@@ -1,20 +1,22 @@
 import { types } from '../actions/rolesActions';
 
+import { SECTIONS } from 'constants/global'
+
 const initialState = {
 	rolesLoading: false,
 	rolesSaving: false,
 	rolesList: [],
 	ruleTypes: [
-		{ ruleType: 1, name: 'Company' },
-		{ ruleType: 2, name: 'Modem' },
-		{ ruleType: 3, name: 'Point sale' },
-		{ ruleType: 4, name: 'User' },
-		{ ruleType: 5, name: 'Role' }
+		{ ruleType: SECTIONS.COMPANY, 		name: 'Company' },
+		{ ruleType: SECTIONS.MODEM, 			name: 'Modem' },
+		{ ruleType: SECTIONS.POINT_SALE, 	name: 'Point sale' },
+		{ ruleType: SECTIONS.USER, 				name: 'User' },
+		{ ruleType: SECTIONS.ROLE, 				name: 'Role' }
 	],
 	rolesFilter: {
 		// isClient: null,
 		// isActive: null,
-		max: 5,
+		max: 10,
 		page: 1
 	},
 	rolesMeta: {

@@ -9,12 +9,13 @@ import {
 import { Edit2,	Trash } from 'react-feather';
 
 const ItemsTable = ({ 
+	rulesData, 
 	itemsLoading,
 	itemsList,
 	itemsNames: { itemsNameMult2 },
 	toggleItemEdit,
 	toggleItemDelete,
-	ruleTypes 
+	ruleTypes
 }) => {
 	// =====getters====
 	// =================
@@ -63,12 +64,16 @@ const ItemsTable = ({
 										))}
 									</td>*/}
 									<td className="table-action">
-										<Edit2 className="align-middle mr-1 pointer" size={18}
-											onClick={() => handleItemEdit(role)}
-										/>
-										<Trash className="align-middle pointer" size={18}
-											onClick={() => handleItemDelete(role)}
-										/>
+										{ rulesData.update && (
+											<Edit2 className="align-middle mr-1 pointer" size={18}
+												onClick={() => handleItemEdit(role)}
+											/>)
+										}
+										{ rulesData.delete && (
+											<Trash className="align-middle pointer" size={18}
+												onClick={() => handleItemDelete(role)}
+											/>
+										)}
 									</td>
 								</tr>
 							))}
@@ -93,6 +98,7 @@ ItemsTable.propTypes = {
 		itemsNameMult2: PropTypes.string
 	}),
 	itemsLoading: PropTypes.bool,
+	rulesData: PropTypes.object.isRequired,
 	itemsList: PropTypes.array.isRequired,
 	toggleItemEdit: PropTypes.func.isRequired,
 	toggleItemDelete: PropTypes.func.isRequired

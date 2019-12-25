@@ -11,7 +11,8 @@ import {
 
 import { Edit2,	Trash /*Check*/ } from 'react-feather';
 
-const ItemsTable = ({ 
+const ItemsTable = ({
+	rulesData,
 	itemsLoading,
 	itemsList,
 	itemsNames: { itemsNameMult2 },
@@ -87,12 +88,16 @@ const ItemsTable = ({
 									</td>*/}
 									{/*<td>{user.isActive && <Check size={20} className="text-success" />}</td>*/}
 									<td className="table-action">
+									{ rulesData.update && (
 										<Edit2 className="align-middle mr-1 pointer" size={18}
 											onClick={() => handleItemEdit(user)}
-										/>
+										/>)
+									}
+									{ rulesData.delete && (
 										<Trash className="align-middle pointer" size={18}
 											onClick={() => handleItemDelete(user)}
 										/>
+									)}
 									</td>
 								</tr>
 							))}
@@ -117,6 +122,7 @@ ItemsTable.propTypes = {
 		itemsNameMult2: PropTypes.string
 	}),
 	itemsLoading: PropTypes.bool,
+	rulesData: PropTypes.object.isRequired,
 	itemsList: PropTypes.array.isRequired
 };
 

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Container, Button } from 'reactstrap';
-import swal from 'sweetalert'
+import swal from 'sweetalert';
+import { SECTIONS } from 'constants/global';
+import { getUserRules } from 'helpers';
 
 // ------Actions-----------
 import { 
@@ -35,22 +37,24 @@ const Users = () => {
 		usersSaving,
 		userTypesList
 	} = useSelector(state => state.users);
-	const { rolesList } = useSelector(state => state.roles);
 	// console.log(usersSaving)
+	const { rolesList } = useSelector(state => state.roles);
+	const { authUser } = useSelector(state => state.auth);
 
-	// ---- local State -----
-	const [isInitialMount, setInitialMount] = useState(true);
-	const [itemModalOpen, setItemModalOpen] = useState(false);
-	const [itemData, setItemData] = useState({});
-
+	// ---- local Constants -----
 	const itemsNames = {
 		itemsName: 'Пользователь',
 		itemsNameMult1: 'Пользователи',
 		itemsNameMult2: 'Пользователей'
 	};
-	const rolesFilter = {
-		max: -1
-	}
+	const rolesFilter = {	max: -1 };
+
+	// ---- local State -----
+	const [rulesData, setRulesData] = useState({});
+	const [isInitialMount, setInitialMount] = useState(true);
+	const [itemModalOpen, setItemModalOpen] = useState(false);
+	const [itemData, setItemData] = useState({});
+	
 	// const rolesMeta = {	maxItems: -1 }
 
 	const itemModalToggle = () => setItemModalOpen(!itemModalOpen);
@@ -76,7 +80,7 @@ const Users = () => {
 	const toggleItemDelete = user => {
 		swal({
 		  title: "Вы уверены?",
-		  text: `Удалить безвозвратно ${user.fullName}?`,
+		  text: `Удалить ${user.login}?`,
 		  icon: "warning",
 		  buttons: true,
 		  dangerMode: true,
@@ -110,6 +114,8 @@ const Users = () => {
 		// console.log('usersFilter: ', isInitialMount);
 
 		if (isInitialMount) {
+			setRulesData( getUserRules(SECTIONS.USER) );
+
 			// ------ Component Mount -------
 			if (usersList.length < 1) {
 				const payload = { getParams: {...usersFilter} };
@@ -127,6 +133,10 @@ const Users = () => {
 		}
 	}, [usersFilter]);
 
+	useEffect(() => {
+		setRulesData( getUserRules(SECTIONS.USER) );
+	}, [authUser])
+
 	// ===== Component Will Unmount ======
 	useEffect(() => {
 		return () => {
@@ -139,10 +149,12 @@ const Users = () => {
 		<Container fluid className="p-0">
 			<h1 className="h3 mb-3">{itemsNames.itemsNameMult1}</h1>
 			
-			<Button color="tertiary" size="lg" onClick={() => toggleItemEdit()}>
-				<span>Создать пользователя</span>
-			</Button>
-			
+			{ rulesData.create && (
+				<Button color="tertiary" size="lg" onClick={() => toggleItemEdit()}>
+					<span>Создать пользователя</span>
+				</Button>
+			)}
+
 			<FilterBar
 				// changeItemsMeta={changeItemsMeta}
 				changeItemsFilter={changeItemsFilter}
@@ -151,6 +163,7 @@ const Users = () => {
 			/>
 
 			<ItemsTable
+				rulesData={rulesData}
 				toggleItemEdit={toggleItemEdit}
 				toggleItemDelete={toggleItemDelete}
 				itemsNames={itemsNames}
@@ -158,24 +171,26 @@ const Users = () => {
 				userTypesList={userTypesList}
 				itemsList={usersList} />
 
-			<ItemModal 
-				isInitialMount={isInitialMount}
-				isOpen={itemModalOpen}
-				itemModalToggle={itemModalToggle}
-				itemsNames={itemsNames}
-				submitItem={saveItem}
-				itemsSaving={usersSaving}
-				itemData={itemData}
-				rolesList={rolesList}
-				userTypesList={userTypesList}
-			/>
+			{ rulesData.update || rulesData.create ? (
+				<ItemModal 
+					isInitialMount={isInitialMount}
+					isOpen={itemModalOpen}
+					itemModalToggle={itemModalToggle}
+					itemsNames={itemsNames}
+					submitItem={saveItem}
+					itemsSaving={usersSaving}
+					itemData={itemData}
+					rolesList={rolesList}
+					userTypesList={userTypesList}
+				/>
+			) : null}
 
 			<PaginationContainer
 				itemsLoading={usersLoading}
 				itemsMeta={usersMeta}
 				isInitialMount={isInitialMount}
 				changeItemsFilter={changeItemsFilter}
-			/>
+			/>			
 
 			{/* <div className="" /> */}
 		</Container>

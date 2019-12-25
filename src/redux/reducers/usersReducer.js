@@ -8,7 +8,7 @@ const initialState = {
 	usersFilter: {
 		isClient: null,
 		isActive: null,
-		max: 5,
+		max: 10,
 		page: 1
 	},
 	usersMeta: {

@@ -2,6 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink, withRouter } from 'react-router-dom';
 
+// import { SECTIONS } from 'constants/global';
+import { findItemBy } from 'helpers';
+// import { toastr } from 'react-redux-toastr';
+
 import { Badge, Collapse } from 'reactstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
@@ -51,7 +55,7 @@ const SidebarItem = withRouter(({ name, badgeColor, badgeText, icon: Icon, locat
 	const getSidebarItemClass = path => {
 		return location.pathname === path ? 'active' : '';
 	};
-
+	// console.log(to)
 	return (
 		<li className={`sidebar-item ${getSidebarItemClass(to)}`}>
 			<NavLink to={to} className="sidebar-link" activeClassName="active">
@@ -70,7 +74,10 @@ const SidebarItem = withRouter(({ name, badgeColor, badgeText, icon: Icon, locat
 class Sidebar extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {};
+		// this.sidebarRef = React.createRef();
+		this.state = {
+			filteredRoutes: []
+		};
 	}
 
 	toggleSideBarCategory = index => {
@@ -79,24 +86,64 @@ class Sidebar extends React.Component {
 		}));
 	};
 
-	componentWillMount() {
-		/* Open collapse element that matches current url */
-		const pathName = this.props.location.pathname;
+	filterRoutesByRules = (routes, auth) => {
+		let rules;
+		let copyRoutes = Object.assign([], routes);
+		let filteredRoutes = [];
 
-		routes.forEach((route, index) => {
+		for (let category of copyRoutes) {
+			let copyCategory = Object.assign({}, category);
+			let filteredChildren = [];
+			if (copyCategory.children && copyCategory.children.length) {
+				for (let route of copyCategory.children) {
+					let hasAccess = true;
+					if (route.meta && route.meta.ruleType) {
+						rules = findItemBy('ruleType', route.meta.ruleType, auth.authUser.role.rules);
+						hasAccess = rules && rules.view;
+					}
+					if (hasAccess) filteredChildren.push(route);
+				}
+				copyCategory.children = filteredChildren;
+			}
+			if (copyCategory.children.length) {
+				filteredRoutes.push(copyCategory)
+			}
+
+		}
+
+		return filteredRoutes;		
+	};
+
+	setupRoutes = (routes, pathName) => {
+		const filteredRoutes = this.filterRoutesByRules(routes, this.props.auth)
+		// console.log('setupRoutes: ', filteredRoutes)
+		
+		filteredRoutes.forEach((route, index) => {
 			const isActive = pathName.indexOf(route.path) === 0;
 			const isOpen = route.open;
 			const isHome = !!(route.containsHome && pathName === '/');
 
-			this.setState(() => ({
+			this.setState( prevState => ({
 				[index]: isActive || isOpen || isHome
 			}));
 		});
+
+		this.setState({ filteredRoutes: filteredRoutes});
+	};	
+
+	componentWillMount() {
+		/* Open collapse element that matches current url */
+		const pathName = this.props.location.pathname;
+
+		this.setupRoutes(routes, pathName)
+		console.log(this.state.filteredRoutes, routes)
+		// console.log('componentWillMount: ', this.state.filteredRoutes)		
 	}
 
 	render() {
 		const { sidebar /* layout */ } = this.props;
-
+		// console.log('render: ', this.state.filteredRoutes, routes)
+		
 		return (
 			<nav className={`sidebar${!sidebar.isOpen ? ' toggled' : ''}${sidebar.isSticky ? ' sidebar-sticky' : ''}`}>
 				<div className="sidebar-content">
@@ -110,7 +157,7 @@ class Sidebar extends React.Component {
 						</a>
 
 						<ul className="sidebar-nav">
-							{routes.map((category, index) => {
+							{this.state.filteredRoutes.map((category, index) => {
 								return (
 									<React.Fragment key={index}>
 										{category.header ? <li className="sidebar-header">{category.header}</li> : null}
@@ -183,6 +230,7 @@ class Sidebar extends React.Component {
 export default withRouter(
 	connect(store => ({
 		sidebar: store.sidebar,
-		layout: store.layout
+		layout: store.layout,
+		auth: store.auth
 	}))(Sidebar)
 );

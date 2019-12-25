@@ -13,6 +13,7 @@ import HomePage from '../pages/home/HomePage';
 import SignIn from '../pages/auth/SignIn';
 import SignUp from '../pages/auth/SignUp';
 import ErrorPage from '../pages/auth/ErrorPage';
+import { SECTIONS } from 'constants/global'
 
 // import ResetPassword from "../pages/auth/ResetPassword";
 
@@ -54,12 +55,14 @@ const dashboardRoutes = {
 		{
 			path: '/dashboard/users',
 			name: 'Пользователи',
-			component: Users
+			component: Users,
+			meta: {	ruleType: SECTIONS.USER	}
 		},
 		{
 			path: '/dashboard/roles',
 			name: 'Настройка прав',
-			component: Roles
+			component: Roles,
+			meta: {	ruleType: SECTIONS.ROLE	}
 		}
 	]
 };

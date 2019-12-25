@@ -7,6 +7,8 @@ import {
 } from 'services/api/api_helpers';
 import { api } from 'services/api';
 import { toastr } from 'react-redux-toastr';
+import store from 'redux/store';
+import { setAuthUser } from './authActions';
 
 export const types = {
 	USERS_REQUEST_START: 'USERS_REQUEST_START',
@@ -79,10 +81,11 @@ export const saveUser = payload => {
 		return new Promise((resolve, reject) => {
 			api(method, url, payload)
 				.then(response => {
+					const savedUser = response.data.data;
 					// handleSetItemsResponse(response, settings);
 					if (isSuccessStatus(response)) {
 						if (actionType) {
-							dispatch({ type: actionType, payload: response.data.data });							
+							dispatch({ type: actionType, payload: savedUser });							
 						} 
 						if (actions && actions.length) {
 							for(let action of actions) {
@@ -90,6 +93,14 @@ export const saveUser = payload => {
 								dispatch(action.name(payload || null));
 							}
 						} 
+
+						// ------Update AuthUser-----
+						let copyAuthUser = Object.assign({}, store.getState().auth.authUser);
+						if (savedUser.id === copyAuthUser.id) {
+							dispatch(setAuthUser(savedUser));	
+						}
+						// ---------------------------
+
 						toastr.success('', `Пользователь ${resultMessage}`);
 						resolve()
 					} else {

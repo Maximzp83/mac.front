@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 // import { subspace, namespaced } from 'redux-subspace';
 import { Container, Button } from 'reactstrap';
 
+import { SECTIONS } from 'constants/global';
+import { getUserRules } from 'helpers';
+
 import {
 	fetchRoles,
 	saveRole,
@@ -16,7 +19,7 @@ import { ItemModal } from './ItemModal';
 import { FilterBar } from 'components/FilterBar';
 import { PaginationContainer } from 'components/PaginationContainer';
 
-import swal from 'sweetalert'
+import swal from 'sweetalert';
 // import Loader from "components/Loader";
 // import isEqual from 'lodash.isequal'
 
@@ -33,6 +36,8 @@ const Roles = () => {
 	} = useSelector(state => state.roles);
 
 	// ---- local State -----
+	const [rulesData, setRulesData] = useState({});
+	const { authUser } = useSelector(state => state.auth);
 	const [isInitialMount, setInitialMount] = useState(true);
 	const [itemModalOpen, setItemModalOpen] = useState(false);
 
@@ -93,7 +98,7 @@ const Roles = () => {
 
 	// ===== Watch =======
 	useEffect(() => {
-		// console.log('rolesFilter: ');
+		// console.log('Roles: ');
 		if (isInitialMount) {
 			// ------ Component Mount -------
 			if (rolesList.length < 1) {
@@ -110,6 +115,13 @@ const Roles = () => {
 		}
 	}, [rolesFilter]);
 
+	useEffect(() => {
+		let rules = getUserRules(SECTIONS.ROLE);
+		// rules.update = true;
+		setRulesData( rules );
+		// console.log('authUser: ', rules);
+	}, [authUser])
+
 	// ===== Component Will Unmount ======
 	useEffect(() => {
 		return () => {
@@ -121,9 +133,11 @@ const Roles = () => {
 		<Container fluid className="p-0">
 			<h1 className="h3 mb-3">Настройка прав доступа и управление ролями</h1>
 			
-			<Button color="tertiary" size="lg" onClick={() => toggleItemEdit()}>
-				<span>Создать группу пользователей</span>
-			</Button>
+			{ rulesData.create && (
+				<Button color="tertiary" size="lg" onClick={() => toggleItemEdit()}>
+					<span>Создать группу пользователей</span>
+				</Button>
+			)}
 
 			<FilterBar
 				// changeItemsMeta={changeItemsMeta}
@@ -131,8 +145,9 @@ const Roles = () => {
 				currentFilter={rolesFilter}
 				itemsMeta={rolesMeta}
 			/>
-
+			
 			<ItemsTable 
+				rulesData={rulesData}
 				toggleItemEdit={toggleItemEdit}
 				toggleItemDelete={toggleItemDelete}
 				itemsNames={itemsNames}
@@ -140,17 +155,19 @@ const Roles = () => {
 				itemsList={rolesList}
 				ruleTypes={ruleTypes}
 			/>
-
-			<ItemModal 
-				isInitialMount={isInitialMount}
-				isOpen={itemModalOpen}
-				itemModalToggle={itemModalToggle}
-				itemsNames={itemsNames}
-				submitItem={saveItem}
-				ruleTypes={ruleTypes}
-				itemsSaving={rolesSaving}
-				itemData={itemData}
-			/>
+			
+			{ rulesData.update || rulesData.create ? (
+				<ItemModal 
+					isInitialMount={isInitialMount}
+					isOpen={itemModalOpen}
+					itemModalToggle={itemModalToggle}
+					itemsNames={itemsNames}
+					submitItem={saveItem}
+					ruleTypes={ruleTypes}
+					itemsSaving={rolesSaving}
+					itemData={itemData}
+				/>
+			): null}
 
 			<PaginationContainer
 				itemsLoading={rolesLoading}
