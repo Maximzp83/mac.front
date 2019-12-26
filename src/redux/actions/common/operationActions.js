@@ -8,7 +8,7 @@ import {
   isSuccessStatus,
   getResponseMessage,
 }  from 'services/api/api_helpers';
-
+import { toastr } from 'react-redux-toastr';
 
 import { api } from 'services/api';
 import { setLoadingStatusFor, setSavingStatusFor } from './statusActions';
@@ -39,17 +39,14 @@ const fetchItemsFor = (prefix, url) => {
           console.log(response)
           
           if (isSuccessStatus(response)) {
-            dispatch({
-              type: types.itemsAction,
-              payload: response.data.data
-            });
+            dispatch(setItemsFor(prefix)(response.data.data));
 
-            if (response.data.meta) {
+            /*if (response.data.meta) {
               dispatch({
                 type: types.setMeta,
                 payload: response.data.meta
               });
-            }  
+            } */ 
           } else {
             const message = getResponseMessage(response);
             toastr.error('Ошибка', message || 'неправильный формат данных ответа', {

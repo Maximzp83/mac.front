@@ -1,14 +1,14 @@
 import { LOAD_STATUS, SAVE_STATUS } from '../../constants';
 
-const setLoadingStatusFor = prefix => {
-  const setLoadingStatus = isLoading => {
+const setMetaFor = prefix => {
+  const setMeta = isLoading => {
     // console.log(prefix, isLoading)
     return {
       type: prefix + LOAD_STATUS,
       payload: isLoading
     }
   };
-  return setLoadingStatus;
+  return setMeta;
 };
 
 const setSavingStatusFor = prefix => {
@@ -22,6 +22,6 @@ const setSavingStatusFor = prefix => {
 };
 
 export {
-  setLoadingStatusFor,
+  setMetaFor,
   setSavingStatusFor
 }
