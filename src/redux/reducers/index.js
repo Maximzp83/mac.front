@@ -5,16 +5,22 @@ import { routerReducer } from 'react-router-redux';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 import sidebar from './sidebarReducers';
 import auth from './authReducer';
-import users from './usersReducer';
+import usersDataReducer from './usersDataReducer';
 import roles from './rolesReducer';
+
+import statusReducerFor from './statusReducerFor';
+
+const usersReducer = combineReducers({
+  usersData: usersDataReducer,
+  usersStatus: statusReducerFor('USERS_'),
+});
 
 export default combineReducers({
 	routing: routerReducer,
 	toastr: toastrReducer,
 	sidebar,
 	auth,
-	users,
-	roles
-	// users: namespaced('users')(users),
-	// roles: namespaced('roles')(roles)
+	users: usersReducer,
+	roles,
+	// itemsStatus
 });

@@ -15,4 +15,5 @@ export const LAYOUT_BOXED_DISABLE = 'LAYOUT_BOXED_DISABLE';
 export const THEME_TOGGLE = 'THEME_TOGGLE';
 
 // Common Actions
+export const LOAD_STATUS = 'LOAD_STATUS';
 export const SAVE_STATUS = 'SAVE_STATUS';

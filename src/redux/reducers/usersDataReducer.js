@@ -4,7 +4,6 @@ const initialState = {
 	usersLoading: false,
 	usersSaving: false,
 	usersList: [],
-	usersStatus: 'ready',
 	usersFilter: {
 		isClient: null,
 		isActive: null,
@@ -23,7 +22,7 @@ const initialState = {
 
 };
 
-export default function(state = initialState, action) {
+const usersDataReducer = (state = initialState, action) => {
 	// console.log(action)
 
 	switch (action.type) {
@@ -79,3 +78,6 @@ export default function(state = initialState, action) {
 			return state;
 	}
 }
+
+export default usersDataReducer;
+

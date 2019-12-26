@@ -30,13 +30,16 @@ import { PaginationContainer } from 'components/PaginationContainer';
 const Users = () => {
 	const dispatch = useDispatch();
 	const {
-		usersLoading,
+		// usersLoading,
 		usersList,
 		usersFilter,
 		usersMeta,
 		usersSaving
-	} = useSelector(state => state.users);
+	} = useSelector(state => state.users.usersData);
 	// console.log(usersSaving)
+
+	const {	itemsLoading, itemsSaving } = useSelector(state => state.users.usersStatus);
+
 	const { rolesList } = useSelector(state => state.roles);
 	const { authUser } = useSelector(state => state.auth);
 
@@ -111,7 +114,7 @@ const Users = () => {
 	// ===== Watch =======
 	useEffect(() => {
 		// console.log('usersFilter: ', isInitialMount);
-
+		
 		if (isInitialMount) {
 			setRulesData( getUserRules(SECTIONS.USER) );
 
@@ -135,6 +138,11 @@ const Users = () => {
 	useEffect(() => {
 		setRulesData( getUserRules(SECTIONS.USER) );
 	}, [authUser])
+
+	useEffect(() => {
+		console.log(itemsLoading)
+		// setRulesData( getUserRules(SECTIONS.USER) );
+	}, [itemsLoading])
 
 	// ===== Component Will Unmount ======
 	useEffect(() => {
@@ -166,7 +174,7 @@ const Users = () => {
 				toggleItemEdit={toggleItemEdit}
 				toggleItemDelete={toggleItemDelete}
 				itemsNames={itemsNames}
-				itemsLoading={usersLoading}
+				itemsLoading={itemsLoading}
 				userTypesList={userTypesList}
 				itemsList={usersList} />
 
@@ -185,7 +193,7 @@ const Users = () => {
 			) : null}
 
 			<PaginationContainer
-				itemsLoading={usersLoading}
+				itemsLoading={itemsLoading}
 				itemsMeta={usersMeta}
 				isInitialMount={isInitialMount}
 				changeItemsFilter={changeItemsFilter}

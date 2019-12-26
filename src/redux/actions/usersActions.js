@@ -9,6 +9,9 @@ import { api } from 'services/api';
 import { toastr } from 'react-redux-toastr';
 import store from 'redux/store';
 import { setAuthUser } from './authActions';
+import { setLoadingStatusFor, setSavingStatusFor } from './statusActions';
+
+// import { LOAD_STATUS, SAVE_STATUS } from '../constants';
 
 export const types = {
 	USERS_REQUEST_START: 'USERS_REQUEST_START',
@@ -25,9 +28,16 @@ export const types = {
 	// SET_AUTH_TO_LOCAL_STORAGE: "SET_AUTH_TO_LOCAL_STORAGE",
 };
 
+const setUsersLoadStatus = setLoadingStatusFor('USERS_');
+const setUsersSaveStatus = setSavingStatusFor('USERS_');
+
 export const fetchUsers = payload => {
 	return dispatch => {
 		dispatch({ type: types.USERS_REQUEST_START });
+
+		dispatch(setUsersLoadStatus(true));	
+
+		// dispatch({ type: LOAD_STATUS, payload: true });
 
 		const settings = { 
 			dispatch,
@@ -51,6 +61,7 @@ export const fetchUsers = payload => {
 export const saveUser = payload => {
 	return dispatch => {
 		dispatch({ type: types.USERS_SAVE_STATUS, payload: true });
+		dispatch(setUsersSaveStatus(true));	
 
 		const settings = { 
 			dispatch,
