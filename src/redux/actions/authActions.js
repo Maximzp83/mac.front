@@ -88,7 +88,7 @@ export const signOut = () => {
 };
 
 export const setAuthUser = (user) => {
-	console.log(user)
+	// console.log(user)
 	return { type: types.AUTH_SET_USER, payload: user };
 };
 export const clearAuth = () => {

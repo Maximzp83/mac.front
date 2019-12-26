@@ -5,7 +5,7 @@ import { Container /* Row, Col */ } from 'reactstrap';
 
 const Default = () => (
 	<Container fluid className="p-0">
-		<p>Dashboard default page</p>
+		<p>Mac Dashboard start page</p>
 	</Container>
 );
 
