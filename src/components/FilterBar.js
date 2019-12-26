@@ -12,7 +12,7 @@ import {
 	Row
 } from 'reactstrap';
 
-const FilterBar = ({ changeItemsFilter, changeItemsMeta, currentFilter: { isClient }, itemsMeta: { max } }) => {
+const FilterBar = ({ changeItemsFilter, currentFilter: { max }, itemsMeta }) => {
 	const [maxItemsOpen, setMaxItems] = useState(false);
 	const maxToggle = () => setMaxItems(!maxItemsOpen);
 
@@ -26,9 +26,9 @@ const FilterBar = ({ changeItemsFilter, changeItemsMeta, currentFilter: { isClie
 		}
 	};*/
 
-	const handleItemsMetaChange = value => {
+	const handleFilterChange = value => {
 		if (max !== value) {
-			changeItemsMeta({ filterName: 'max', val: value });
+			changeItemsFilter({ filterName: 'max', val: value });
 		}
 	};
 
@@ -50,15 +50,15 @@ const FilterBar = ({ changeItemsFilter, changeItemsMeta, currentFilter: { isClie
 
 			<Col xs="12" md="4" className="ml-auto d-flex">
 				<ButtonDropdown isOpen={maxItemsOpen} toggle={maxToggle} className="ml-auto">
-					<DropdownToggle caret>{max}</DropdownToggle>
+					<DropdownToggle caret>{max === -1 ? 'Все' : max}</DropdownToggle>
 					<DropdownMenu right className="maxItemsMenu">
-						<DropdownItem active={max === 10} onClick={() => handleItemsMetaChange(10)}>
+						<DropdownItem active={max === 10} onClick={() => handleFilterChange(10)}>
 							10
 						</DropdownItem>
-						<DropdownItem active={max === 20} onClick={() => handleItemsMetaChange(20)}>
+						<DropdownItem active={max === 20} onClick={() => handleFilterChange(20)}>
 							20
 						</DropdownItem>
-						<DropdownItem active={max === -1} onClick={() => handleItemsMetaChange(-1)}>
+						<DropdownItem active={max === -1} onClick={() => handleFilterChange(-1)}>
 							Все
 						</DropdownItem>
 					</DropdownMenu>
@@ -69,8 +69,7 @@ const FilterBar = ({ changeItemsFilter, changeItemsMeta, currentFilter: { isClie
 };
 
 FilterBar.defaultProps = {
-	currentFilter: { isClient: null },
-	itemsMeta: { max: null }
+	currentFilter: { isClient: null, max: 5 },
 };
 
 FilterBar.propTypes = {
@@ -81,7 +80,7 @@ FilterBar.propTypes = {
 		max: PropTypes.number
 	}),
 	changeItemsFilter: PropTypes.func.isRequired,
-	changeItemsMeta: PropTypes.func.isRequired
+	// changeItemsMeta: PropTypes.func.isRequired
 };
 
 export { FilterBar };

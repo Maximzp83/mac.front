@@ -9,9 +9,10 @@ import {
 	Table
 } from 'reactstrap';
 
-import { Edit2,	Trash, Check } from 'react-feather';
+import { Edit2,	Trash /*Check*/ } from 'react-feather';
 
-const ItemsTable = ({ 
+const ItemsTable = ({
+	rulesData,
 	itemsLoading,
 	itemsList,
 	itemsNames: { itemsNameMult2 },
@@ -22,7 +23,7 @@ const ItemsTable = ({
 	
 	// =====getters====
 	// const getUserClient = user => (user.isClient ? user.company : '');
-	const getUserClient = user => (user.role && user.role.id === 1 ? '' : 'да');
+	const getUserClient = user => (user.type === 1 ? '' : 'да');
 
 	/* const userRoles = user => {
 		let roles = [];
@@ -63,9 +64,9 @@ const ItemsTable = ({
 								<th>Имя</th>
 								<th>Отчество</th>
 								<th>Клиент</th>
-								<th>Телефон</th>
+								{/*<th>Телефон</th>*/}
 								<th>Группа пользователей</th>
-								<th>Статус</th>
+								{/*<th>Статус</th>*/}
 								<th>Действия</th>
 							</tr>
 						</thead>
@@ -78,21 +79,25 @@ const ItemsTable = ({
 									<td>{user.first_name}</td>
 									<td>{user.second_name}</td>
 									<td>{getUserClient(user)}</td>
-									<td>{user.phone}</td>
+									{/*<td>{user.phone}</td>*/}
 									<td>{user.role ? user.role.display_name : ''}</td>
 									{/*<td>
 										{user.roles.map((role, roleInd) => (
 											<div key={`role-${roleInd}`}>{role.display_name}</div>
 										))}
 									</td>*/}
-									<td>{user.isActive && <Check size={20} className="text-success" />}</td>
+									{/*<td>{user.isActive && <Check size={20} className="text-success" />}</td>*/}
 									<td className="table-action">
+									{ rulesData.update && (
 										<Edit2 className="align-middle mr-1 pointer" size={18}
 											onClick={() => handleItemEdit(user)}
-										/>
+										/>)
+									}
+									{ rulesData.delete && (
 										<Trash className="align-middle pointer" size={18}
 											onClick={() => handleItemDelete(user)}
 										/>
+									)}
 									</td>
 								</tr>
 							))}
@@ -117,6 +122,7 @@ ItemsTable.propTypes = {
 		itemsNameMult2: PropTypes.string
 	}),
 	itemsLoading: PropTypes.bool,
+	rulesData: PropTypes.object.isRequired,
 	itemsList: PropTypes.array.isRequired
 };
 

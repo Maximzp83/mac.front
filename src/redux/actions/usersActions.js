@@ -1,5 +1,5 @@
 import {
-	handleSetItemsResponse,
+	handleGetItemsResponse,
 	handleError,
 	isSuccessStatus,
 	getResponseMessage,
@@ -7,6 +7,8 @@ import {
 } from 'services/api/api_helpers';
 import { api } from 'services/api';
 import { toastr } from 'react-redux-toastr';
+import store from 'redux/store';
+import { setAuthUser } from './authActions';
 
 export const types = {
 	USERS_REQUEST_START: 'USERS_REQUEST_START',
@@ -29,12 +31,16 @@ export const fetchUsers = payload => {
 
 		const settings = { 
 			dispatch,
-			types: { itemsAction: types.USERS_SET_ITEMS, statusEnd: types.USERS_REQUEST_END }			
+			types: {
+				itemsAction: types.USERS_SET_ITEMS,
+				statusEnd: types.USERS_REQUEST_END,
+				setMeta: types.USERS_SET_META
+			}
 		};
 		// console.log(payload)
 		api('GET','/users', payload)
 			.then(response => {
-				handleSetItemsResponse(response, settings);
+				handleGetItemsResponse(response, settings);
 			})
 			.catch(error => {
 				handleError(error, settings);
@@ -58,28 +64,43 @@ export const saveUser = payload => {
 				method: 'PUT',
 				url: `/users/${payload.data.id}`,
 				resultMessage: 'сохранен',
-				actionType: types.USERS_UPDATE_ITEM
+				// actionType: types.USERS_UPDATE_ITEM
+				// actions: [{name:fetchUsers}]
 			}
 		} else {
 			options = {
 				method: 'POST',
 				url: `/users`,
 				resultMessage: 'создан',
-				actionType: types.USERS_ADD_ITEM
+				// actionType: types.USERS_ADD_ITEM
+				// actions: [{name:fetchUsers}]
 			}
 		}
-		const { method, url, resultMessage, actionType } = options;
+		const { method, url, resultMessage, actionType, actions } = options;
 
 		return new Promise((resolve, reject) => {
 			api(method, url, payload)
 				.then(response => {
+					const savedUser = response.data.data;
 					// handleSetItemsResponse(response, settings);
 					if (isSuccessStatus(response)) {
-						dispatch({
-							type: actionType,
-							payload: response.data.data
-						});	
-						dispatch({ type: types.USERS_SAVE_STATUS, payload: false });
+						if (actionType) {
+							dispatch({ type: actionType, payload: savedUser });							
+						} 
+						if (actions && actions.length) {
+							for(let action of actions) {
+								const {payload} = action;
+								dispatch(action.name(payload || null));
+							}
+						} 
+
+						// ------Update AuthUser-----
+						let copyAuthUser = Object.assign({}, store.getState().auth.authUser);
+						if (savedUser.id === copyAuthUser.id) {
+							dispatch(setAuthUser(savedUser));	
+						}
+						// ---------------------------
+
 						toastr.success('', `Пользователь ${resultMessage}`);
 						resolve()
 					} else {
@@ -87,6 +108,7 @@ export const saveUser = payload => {
 						const message = getResponseMessage(response);
 						toastr.error('Ошибка', message || 'неправильный формат данных ответа', {timeOut: 0});
 					}
+					dispatch({ type: types.USERS_SAVE_STATUS, payload: false });
 				})
 				.catch(error => {
 					handleError(error, settings, {reject:reject});
@@ -101,12 +123,18 @@ export const deleteUser = id => {
 		
 		const settings = { 
 			dispatch, id,
-			types: { itemsAction: types.USERS_DELETE_ITEM, statusEnd: types.USERS_SAVE_STATUS },
+			types: {
+				// itemsAction: types.USERS_DELETE_ITEM,
+				statusEnd: types.USERS_SAVE_STATUS
+			},
 		};
-
-		api('DELETE', `/users/${id}`)
-			.then(response => {	handleRemoveItemsResponse(response, settings);	})
-			.catch(error => {	handleError(error, settings);	});
+		return new Promise((resolve, reject) => {
+			settings.resolve = resolve;
+			settings.reject = reject;
+			api('DELETE', `/roles/${id}`)
+				.then(response => {	handleRemoveItemsResponse(response, settings);	})
+				.catch(error => {	handleError(error, settings);	});
+		})
 	}
 }
 

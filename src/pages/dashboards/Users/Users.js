@@ -2,19 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Container, Button } from 'reactstrap';
-import swal from 'sweetalert'
+import swal from 'sweetalert';
+import { SECTIONS } from 'constants/global';
+import { getUserRules } from 'helpers';
 
-import { fetchUsers, setUsersFilter, setUsersMeta, setUsers, saveUser, deleteUser } from 'redux/actions/usersActions';
+// ------Actions-----------
+import { 
+	fetchUsers,
+	setUsersFilter,
+	// setUsersMeta,
+	setUsers,
+	saveUser,
+	deleteUser
+} from 'redux/actions/usersActions';
 import { fetchRoles } from 'redux/actions/rolesActions';
 
+// -----Components-----
 import { ItemsTable } from './ItemsTable';
 import { ItemModal } from './ItemModal';
-
-import { FilterBar } from './FilterBar';
+import { FilterBar } from 'components/FilterBar';
+import { PaginationContainer } from 'components/PaginationContainer';
 
 // import Loader from "components/Loader";
 // import isEqual from 'lodash.isequal'
 
+// =========================
 const Users = () => {
 	const dispatch = useDispatch();
 	const {
@@ -25,24 +37,25 @@ const Users = () => {
 		usersSaving,
 		userTypesList
 	} = useSelector(state => state.users);
-	const { rolesList } = useSelector(state => state.roles);
 	// console.log(usersSaving)
+	const { rolesList } = useSelector(state => state.roles);
+	const { authUser } = useSelector(state => state.auth);
 
-	// ---- local State -----
-	const [isInitialMount, setInitialMount] = useState(true);
-	const [itemModalOpen, setItemModalOpen] = useState(false);
-	const [itemData, setItemData] = useState({});
-
+	// ---- local Constants -----
 	const itemsNames = {
 		itemsName: 'Пользователь',
 		itemsNameMult1: 'Пользователи',
 		itemsNameMult2: 'Пользователей'
 	};
-	const rolesFilter = {
-		isClient: null,
-		isActive: null
-	}
-	const rolesMeta = {	maxItems: -1 }
+	const rolesFilter = {	max: -1 };
+
+	// ---- local State -----
+	const [rulesData, setRulesData] = useState({});
+	const [isInitialMount, setInitialMount] = useState(true);
+	const [itemModalOpen, setItemModalOpen] = useState(false);
+	const [itemData, setItemData] = useState({});
+	
+	// const rolesMeta = {	maxItems: -1 }
 
 	const itemModalToggle = () => setItemModalOpen(!itemModalOpen);
 
@@ -52,27 +65,33 @@ const Users = () => {
 		dispatch(setUsersFilter(newFilters));
 	};
 
-	const changeItemsMeta = ({ filterName, val }) => {
+	/*const changeItemsMeta = ({ filterName, val }) => {
 		const newMeta = { ...usersMeta, [filterName]: val };
 		dispatch(setUsersMeta(newMeta));
-	};
+	};*/
 
 	// ----- Methods ---------
-	const toggleItemEdit = (user) => {
+	const toggleItemEdit = user => {
+		// console.log(user)
 		setItemData(user)
 		setItemModalOpen(true);
 	};
 
-	const toggleItemDelete = (user) => {
+	const toggleItemDelete = user => {
 		swal({
 		  title: "Вы уверены?",
-		  text: `Удалить безвозвратно ${user.fullName}?`,
+		  text: `Удалить ${user.login}?`,
 		  icon: "warning",
 		  buttons: true,
 		  dangerMode: true,
 		})
 		.then(answer => {
-			if (answer) { dispatch( deleteUser(user.id) ) };
+			if (answer) { 
+				dispatch( deleteUser(user.id) )
+					.then(() => {
+						dispatch( fetchUsers({ getParams: {...usersFilter} }) );
+					})
+			};
 		});	
 	};
 
@@ -81,10 +100,13 @@ const Users = () => {
 		dispatch(setRolesMeta(newMeta));
 	};*/
 
-	const saveItem = (data) => {
+	const saveItem = itemData => {
 		// console.log('ok:', userData )
-		dispatch(saveUser({ data: data }))
-			.then(() => setItemModalOpen(false))
+		dispatch(saveUser({ data: itemData }))
+			.then(() => {
+				setItemModalOpen(false);
+				dispatch( fetchUsers({ getParams: {...usersFilter} }) );
+			})
 	};
 
 	// ===== Watch =======
@@ -92,22 +114,28 @@ const Users = () => {
 		// console.log('usersFilter: ', isInitialMount);
 
 		if (isInitialMount) {
+			setRulesData( getUserRules(SECTIONS.USER) );
+
 			// ------ Component Mount -------
 			if (usersList.length < 1) {
-				const payload = { getParams: {...usersFilter, ...usersMeta} };
-				dispatch(fetchUsers(payload));
+				const payload = { getParams: {...usersFilter} };
+				dispatch( fetchUsers(payload) );
 			}
 
-			dispatch(fetchRoles({ getParams: {...rolesFilter, ...rolesMeta} }));
+			dispatch(fetchRoles({ getParams: {...rolesFilter} }));
 			setInitialMount(false);
 			// -----------------------------
 		} else {
 			// ------ Component Update -----
-			const payload = { getParams: {...usersFilter, ...usersMeta} };
-			dispatch(fetchUsers(payload));
+			const payload = { getParams: {...usersFilter} };
+			dispatch( fetchUsers(payload) );
 			// -----------------------------
 		}
-	}, [usersFilter, usersMeta]);
+	}, [usersFilter]);
+
+	useEffect(() => {
+		setRulesData( getUserRules(SECTIONS.USER) );
+	}, [authUser])
 
 	// ===== Component Will Unmount ======
 	useEffect(() => {
@@ -121,18 +149,21 @@ const Users = () => {
 		<Container fluid className="p-0">
 			<h1 className="h3 mb-3">{itemsNames.itemsNameMult1}</h1>
 			
-			<Button color="tertiary" size="lg" onClick={()=>setItemModalOpen(true)}>
-				<span>Создать пользователя</span>
-			</Button>
-			
+			{ rulesData.create && (
+				<Button color="tertiary" size="lg" onClick={() => toggleItemEdit()}>
+					<span>Создать пользователя</span>
+				</Button>
+			)}
+
 			<FilterBar
-				changeItemsMeta={changeItemsMeta}
+				// changeItemsMeta={changeItemsMeta}
 				changeItemsFilter={changeItemsFilter}
 				currentFilter={usersFilter}
 				itemsMeta={usersMeta}
 			/>
 
 			<ItemsTable
+				rulesData={rulesData}
 				toggleItemEdit={toggleItemEdit}
 				toggleItemDelete={toggleItemDelete}
 				itemsNames={itemsNames}
@@ -140,17 +171,26 @@ const Users = () => {
 				userTypesList={userTypesList}
 				itemsList={usersList} />
 
-			<ItemModal 
+			{ rulesData.update || rulesData.create ? (
+				<ItemModal 
+					isInitialMount={isInitialMount}
+					isOpen={itemModalOpen}
+					itemModalToggle={itemModalToggle}
+					itemsNames={itemsNames}
+					submitItem={saveItem}
+					itemsSaving={usersSaving}
+					itemData={itemData}
+					rolesList={rolesList}
+					userTypesList={userTypesList}
+				/>
+			) : null}
+
+			<PaginationContainer
+				itemsLoading={usersLoading}
+				itemsMeta={usersMeta}
 				isInitialMount={isInitialMount}
-				isOpen={itemModalOpen}
-				itemModalToggle={itemModalToggle}
-				itemsNames={itemsNames}
-				submitItem={saveItem}
-				itemsSaving={usersSaving}
-				itemData={itemData}
-				rolesList={rolesList}
-				userTypesList={userTypesList}
-			/>
+				changeItemsFilter={changeItemsFilter}
+			/>			
 
 			{/* <div className="" /> */}
 		</Container>

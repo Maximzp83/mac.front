@@ -1,21 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import { subspace, namespaced } from 'redux-subspace';
-
 import { Container, Button } from 'reactstrap';
 
-import { fetchRoles, saveRole, deleteRole } from 'redux/actions/rolesActions';
+import { SECTIONS } from 'constants/global';
+import { getUserRules } from 'helpers';
+
+import {
+	fetchRoles,
+	saveRole,
+	deleteRole,
+	setRolesFilter
+} from 'redux/actions/rolesActions';
+
+// -----Components-----
 import { ItemsTable } from './ItemsTable';
 import { ItemModal } from './ItemModal';
-import swal from 'sweetalert'
+import { FilterBar } from 'components/FilterBar';
+import { PaginationContainer } from 'components/PaginationContainer';
+
+import swal from 'sweetalert';
 // import Loader from "components/Loader";
 // import isEqual from 'lodash.isequal'
 
+// ======================
 const Roles = () => {
 	const dispatch = useDispatch();
-	const { rolesLoading, rolesList, ruleTypes, rolesSaving, rolesFilter, rolesMeta } = useSelector(state => state.roles);
+	const {
+		rolesLoading,
+		rolesList,
+		ruleTypes,
+		rolesSaving,
+		rolesFilter,
+		rolesMeta
+	} = useSelector(state => state.roles);
 
 	// ---- local State -----
+	const [rulesData, setRulesData] = useState({});
+	const { authUser } = useSelector(state => state.auth);
 	const [isInitialMount, setInitialMount] = useState(true);
 	const [itemModalOpen, setItemModalOpen] = useState(false);
 
@@ -31,12 +53,18 @@ const Roles = () => {
 	const itemModalToggle = () => setItemModalOpen(!itemModalOpen);
 
 	// ----- Methods ---------
-	const toggleItemEdit = (role) => {
+	const changeItemsFilter = ({ filterName, val }) => {
+		// console.log(filterName)
+		const newFilters = { ...rolesFilter, [filterName]: val };
+		dispatch(setRolesFilter(newFilters));
+	};
+
+	const toggleItemEdit = role => {
 		setItemData(role)
 		setItemModalOpen(true);
 	};
 
-	const toggleItemDelete = (role) => {			
+	const toggleItemDelete = role => {			
 		swal({
 		  title: "Вы уверены?",
 		  text: `Удалить безвозвратно ${role.name}?`,
@@ -45,7 +73,12 @@ const Roles = () => {
 		  dangerMode: true,
 		})
 		.then(answer => {
-			if (answer) { dispatch( deleteRole(role.id) ) };
+			if (answer) { 
+				dispatch( deleteRole(role.id) )
+				.then(() => {
+					dispatch( fetchRoles({ getParams: {...rolesFilter} }) );
+				})
+			};
 		});		
 	};
 
@@ -54,30 +87,40 @@ const Roles = () => {
 		dispatch(setRolesMeta(newMeta));
 	};*/
 
-	const saveItem = (data) => {
+	const saveItem = data => {
 		// console.log('ok:', userData )
 		dispatch(saveRole({ data: data }))
-			.then(() => setItemModalOpen(false))
+			.then(() => {
+				setItemModalOpen(false);
+				dispatch( fetchRoles({ getParams: {...rolesFilter} }) );
+			})
 	};
 
 	// ===== Watch =======
 	useEffect(() => {
-		// console.log('rolesFilter: ');
+		// console.log('Roles: ');
 		if (isInitialMount) {
 			// ------ Component Mount -------
 			if (rolesList.length < 1) {
-				const payload = { getParams: { ...rolesFilter, ...rolesMeta } };
+				const payload = { getParams: { ...rolesFilter } };
 				dispatch(fetchRoles(payload));
 			}
 			setInitialMount(false);
 			// -----------------------------
 		} else {
 			// ------ Component Update -----
-			const payload = { getParams: { ...rolesFilter, ...rolesMeta } };
+			const payload = { getParams: { ...rolesFilter } };
 			dispatch(fetchRoles(payload));
 			// -----------------------------
 		}
-	}, [rolesFilter, rolesMeta]);
+	}, [rolesFilter]);
+
+	useEffect(() => {
+		let rules = getUserRules(SECTIONS.ROLE);
+		// rules.update = true;
+		setRulesData( rules );
+		// console.log('authUser: ', rules);
+	}, [authUser])
 
 	// ===== Component Will Unmount ======
 	useEffect(() => {
@@ -90,11 +133,21 @@ const Roles = () => {
 		<Container fluid className="p-0">
 			<h1 className="h3 mb-3">Настройка прав доступа и управление ролями</h1>
 			
-			<Button color="tertiary" size="lg" onClick={()=>setItemModalOpen(true)}>
-				<span>Создать группу пользователей</span>
-			</Button>
+			{ rulesData.create && (
+				<Button color="tertiary" size="lg" onClick={() => toggleItemEdit()}>
+					<span>Создать группу пользователей</span>
+				</Button>
+			)}
 
+			<FilterBar
+				// changeItemsMeta={changeItemsMeta}
+				changeItemsFilter={changeItemsFilter}
+				currentFilter={rolesFilter}
+				itemsMeta={rolesMeta}
+			/>
+			
 			<ItemsTable 
+				rulesData={rulesData}
 				toggleItemEdit={toggleItemEdit}
 				toggleItemDelete={toggleItemDelete}
 				itemsNames={itemsNames}
@@ -102,19 +155,26 @@ const Roles = () => {
 				itemsList={rolesList}
 				ruleTypes={ruleTypes}
 			/>
-
-			<ItemModal 
-				isInitialMount={isInitialMount}
-				isOpen={itemModalOpen}
-				itemModalToggle={itemModalToggle}
-				itemsNames={itemsNames}
-				submitItem={saveItem}
-				ruleTypes={ruleTypes}
-				itemsSaving={rolesSaving}
-				itemData={itemData}
-			/>
-
 			
+			{ rulesData.update || rulesData.create ? (
+				<ItemModal 
+					isInitialMount={isInitialMount}
+					isOpen={itemModalOpen}
+					itemModalToggle={itemModalToggle}
+					itemsNames={itemsNames}
+					submitItem={saveItem}
+					ruleTypes={ruleTypes}
+					itemsSaving={rolesSaving}
+					itemData={itemData}
+				/>
+			): null}
+
+			<PaginationContainer
+				itemsLoading={rolesLoading}
+				itemsMeta={rolesMeta}
+				isInitialMount={isInitialMount}
+				changeItemsFilter={changeItemsFilter}
+			/>
 
 			{/*<ConfirmModal
 				isOpen={confirmModalOpen}

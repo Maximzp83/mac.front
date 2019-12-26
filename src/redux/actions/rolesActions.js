@@ -1,5 +1,5 @@
 import {
-	handleSetItemsResponse,
+	handleGetItemsResponse,
 	handleError,
 	isSuccessStatus,
 	getResponseMessage,
@@ -8,6 +8,8 @@ import {
 
 import { toastr } from 'react-redux-toastr';
 import { api } from 'services/api';
+import store from 'redux/store';
+import { setAuthUser } from './authActions';
 
 export const types = {
 	ROLES_REQUEST_START: 'ROLES_REQUEST_START',
@@ -24,15 +26,18 @@ export const types = {
 export const fetchRoles = payload => {
 	return dispatch => {
 		dispatch({ type: types.ROLES_REQUEST_START });
-
 		const settings = { 
 			dispatch,
-			types: { itemsAction: types.ROLES_SET_ITEMS, statusEnd: types.ROLES_REQUEST_END }			
+			types: {
+				itemsAction: types.ROLES_SET_ITEMS,
+				statusEnd: types.ROLES_REQUEST_END,
+				setMeta: types.ROLES_SET_META
+			}			
 		};
 		// console.log(payload)
 		api('GET', '/roles', payload)
 			.then(response => {
-				handleSetItemsResponse(response, settings);
+				handleGetItemsResponse(response, settings);
 			})
 			.catch(error => {
 				handleError(error, settings);
@@ -56,27 +61,42 @@ export const saveRole = payload => {
 				method: 'PUT',
 				url: `/roles/${payload.data.id}`,
 				resultMessage: 'сохранена',
-				actionType: types.ROLES_UPDATE_ITEM
+				// actionType: types.ROLES_UPDATE_ITEM
 			}
 		} else {
 			options = {
 				method: 'POST',
 				url: `/roles`,
 				resultMessage: 'создана',
-				actionType: types.ROLES_ADD_ITEM
+				// actionType: types.ROLES_ADD_ITEM
+				// actions: [{name:fetchRoles}]
 			}
 		}
-		const { method, url, resultMessage, actionType } = options;
+		const { method, url, resultMessage, actionType, actions } = options;
 
 		return new Promise((resolve, reject) => {
 			api(method, url, payload)
 				.then(response => {
-					// handleSetItemsResponse(response, settings);
+					// handleGetItemsResponse(response, settings);
 					if (isSuccessStatus(response)) {
-						dispatch({
-							type: actionType,
-							payload: response.data.data
-						});	
+						const savedRole = response.data.data;
+						if (actionType) {
+							dispatch({ type: actionType, payload: savedRole });							
+						}
+						if (actions && actions.length) {
+							for(let action of actions) {
+								const {payload} = action;
+								dispatch(action.name(payload || null));
+							}
+						}
+						// ------Update AuthUser-----
+						let copyAuthUser = Object.assign({}, store.getState().auth.authUser);
+						if (savedRole.id === copyAuthUser.role.id) {
+							copyAuthUser.role.rules = savedRole.rules;
+							dispatch(setAuthUser(copyAuthUser));	
+						}
+						// ---------------------------
+
 						dispatch({ type: types.ROLES_SAVE_STATUS, payload: false });
 						toastr.success('', `Группа пользователей ${resultMessage}`);
 						resolve()
@@ -99,12 +119,16 @@ export const deleteRole = id => {
 		
 		const settings = { 
 			dispatch, id,
-			types: { itemsAction: types.ROLES_DELETE_ITEM, statusEnd: types.ROLES_SAVE_STATUS },
+			types: { statusEnd: types.ROLES_SAVE_STATUS },
 		};
 
-		api('DELETE', `/roles/${id}`)
-			.then(response => {	handleRemoveItemsResponse(response, settings);	})
-			.catch(error => {	handleError(error, settings);	});
+		return new Promise((resolve, reject) => {
+			settings.resolve = resolve;
+			settings.reject = reject;
+			api('DELETE', `/roles/${id}`)
+				.then(response => {	handleRemoveItemsResponse(response, settings);	})
+				.catch(error => {	handleError(error, settings);	});
+		})
 	}
 }
 

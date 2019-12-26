@@ -7,10 +7,18 @@ const initialState = {
 	usersStatus: 'ready',
 	usersFilter: {
 		isClient: null,
-		isActive: null
+		isActive: null,
+		max: 10,
+		page: 1
 	},
 	usersMeta: {
-		max: 10
+		current_page: 1,
+		from: 1,
+		last_page: 1,
+		path: '',
+		per_page: 0,
+		to: 0,
+		total: 0,
 	},
 	userTypesList: [
 		{ id: 1, name: 'Внутренний' },

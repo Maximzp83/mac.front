@@ -11,7 +11,10 @@ import AuthLayout from '../layouts/Auth';
 
 import ScrollToTop from '../components/ScrollToTop';
 
-const hasAccess = (isAuthenticated, authLoading) => {
+import { findItemBy } from 'helpers';
+
+// ================
+const routeMiddleware = (isAuthenticated, authLoading) => {
 	if (!isAuthenticated && !authLoading) {
 		setTimeout(() => {
 			toastr.warning('Доступ закрыт', 'авторизуйтесь чтобы увидеть эту страницу');
@@ -21,60 +24,107 @@ const hasAccess = (isAuthenticated, authLoading) => {
 	return isAuthenticated;
 };
 
+const checkAccessToRoute = (route, authUser) => {
+	let rules;
+	if (route.meta && route.meta.ruleType) {
+		rules = findItemBy('ruleType', route.meta.ruleType, authUser.role.rules);
+
+		const access = rules && rules.view;
+		if (!access) {
+			setTimeout(() => {
+				toastr.warning('Доступ закрыт', 'У вас недостаточно прав чтобы просматривать эту страницу');
+			}, 100);
+		}
+		// console.log(rules.view)
+		return access;
+	}
+	return true;
+}
+
 const PrivateRoute = ({ component: Component, ...rest }) => {
 	const { isAuthenticated, authLoading } = useSelector(state => state.auth);
 
 	return (
 		<Route
 			{...rest}
-			render={props =>
-				hasAccess(isAuthenticated, authLoading) ? (
-					<Component {...props} />
-				) : (
-					<Redirect
-						to={{
-							pathname: '/auth/sign-in',
-							state: { from: props.location }
-						}}
-					/>
-				)
+			render={props => {
+				// console.log(props)
+				return (
+					routeMiddleware(isAuthenticated, authLoading) ? (
+						<Component {...props} />
+					) : (
+						<Redirect
+							to={{
+								pathname: '/auth/sign-in',
+								state: { from: props.location }
+							}}
+						/>
+					)
+				)}
 			}
 		/>
 	);
 };
 
-const ChildRoutes = ({ layout: Layout, routes }) => (
-	<Layout>
-		<Switch>
-			{routes.map((category, routeIndex) =>
-				category.children ? (
-					// Route item with children
-					category.children.map((route, catIndex) => (
+/*const RouteMiddleware = ({ layout: Layout, routes }) => {
+
+	// const { isAuthenticated, authLoading } = useSelector(state => state.auth);
+	// console.log('middlewares')
+	return <ChildRoutes layout={DashboardLayout} routes={dashboardRoutes} />;
+};*/
+
+const ChildRoutes = ({ layout: Layout, routes }) => {
+	const { authUser } = useSelector(state => state.auth);
+	
+	return (
+		<Layout>
+			<Switch>
+				{routes.map((category, routeIndex) =>
+					category.children ? (
+						// Route item with children
+						category.children.map((route, catIndex) => {
+							const Component = route.component;
+							return (
+								<Route
+									key={`route-${catIndex}`}
+									path={route.path}
+									exact
+									// component={route.component}
+									error={route.error}
+									render={props =>
+										checkAccessToRoute(route, authUser) ? (
+											<Component {...props} />
+										) : (
+											<Redirect
+												to={{
+													pathname: '/auth/sign-in',
+													state: { from: props.location }
+												}}
+											/>
+										)
+									}
+								/>
+							)
+						})
+					) : (
+						// Route item without children
 						<Route
-							key={`category-${catIndex}`}
-							path={route.path}
+							key={`category-${routeIndex}`}
+							path={category.path}
 							exact
-							component={route.component}
-							error={route.error}
+							// component={category.component}
+							render={() => {
+								const Component = category.component;
+								return <Component error={category.error} />;
+							}}
 						/>
-					))
-				) : (
-					// Route item without children
-					<Route
-						key={`route-${routeIndex}`}
-						path={category.path}
-						exact
-						// component={category.component}
-						render={() => {
-							const Component = category.component;
-							return <Component error={category.error} />;
-						}}
-					/>
-				)
-			)}
-		</Switch>
-	</Layout>
-);
+					)
+				)}
+			</Switch>
+		</Layout>
+	);
+}
+
 
 const Routes = ({ history }) => (
 	<Router history={history}>
@@ -94,6 +144,7 @@ const Routes = ({ history }) => (
 				<PrivateRoute
 					path="/dashboard/*"
 					exact
+					// component={() => <RouteMiddleware layout={DashboardLayout} routes={dashboardRoutes} />}
 					component={() => <ChildRoutes layout={DashboardLayout} routes={dashboardRoutes} />}
 				/>
 

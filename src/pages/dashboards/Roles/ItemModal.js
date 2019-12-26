@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { findItemBy } from 'helpers'
+import isEmpty from 'lodash.isempty';
 
 import { 
 	Button,
@@ -45,7 +46,7 @@ const ItemModal = ({
 	// const [userData, setUserData] = useState(defaultUserData);
 
 	const setUpRulesFormData = data => {
-		let newRulesState = Object.assign([], rulesFormData)
+		let newRulesState = Object.assign([], initialRulesFormData)
 		let rules = Object.assign([], data.rules)
 
 		for (let i = 0; i < rules.length; i++) {
@@ -96,7 +97,7 @@ const ItemModal = ({
 	};
 
 	const handleSubmit = () => {
-		let stateCopy = Object.assign({}, itemFormData); 
+		let stateCopy = Object.assign({}, itemFormData);
 		let formData = { ...stateCopy, rules: rulesFormData }
 		// console.log(formData)
 		submitItem(formData);
@@ -110,9 +111,10 @@ const ItemModal = ({
 	// ===== Watch =======
 	useEffect(() => {
 		if (!isInitialMount) {
-			console.log('Modal Update: ', itemData);
-			setFormData(itemData);
-			setUpRulesFormData(itemData);
+			let data = isEmpty(itemData) ? initialItemFormData : itemData;
+				// console.log('Modal Update: ', data);
+			setFormData(data);
+			setUpRulesFormData(data);		
 		}
 	}, [itemData]);
 
@@ -207,7 +209,8 @@ const ItemModal = ({
 };
 
 ItemModal.defaultProps = {
-	itemsNames: { itemsNameMult2: 'Элементов' }
+	itemsNames: { itemsNameMult2: 'Элементов' },
+	itemData: {}
 };
 
 ItemModal.propTypes = {
@@ -219,7 +222,7 @@ ItemModal.propTypes = {
 	submitItem: PropTypes.func.isRequired,
 	ruleTypes: PropTypes.array.isRequired,
 	itemsSaving: PropTypes.bool.isRequired,
-	itemData: PropTypes.object.isRequired
+	itemData: PropTypes.object
 };
 
 export { ItemModal };

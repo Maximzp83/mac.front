@@ -73,6 +73,7 @@
     "redux": "^4.0.1",
     "redux-subspace": "^6.1.0",
     "redux-thunk": "^2.3.0",
+    "source-map-explorer": "^2.1.2",
     "sweetalert": "^2.1.2"
   },
   "devDependencies": {
