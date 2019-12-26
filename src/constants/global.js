@@ -6,4 +6,9 @@ const SECTIONS = {
 	ROLE: 5
 };
 
-export { SECTIONS }
+const userTypesList = [
+		{ id: 1, name: 'Внутренний' },
+		{ id: 2, name: 'Внешний' },
+	]
+
+export { SECTIONS, userTypesList }

@@ -97,6 +97,7 @@ export const saveUser = payload => {
 						// ------Update AuthUser-----
 						let copyAuthUser = Object.assign({}, store.getState().auth.authUser);
 						if (savedUser.id === copyAuthUser.id) {
+							savedUser.avatar = 'https://s3.amazonaws.com/uifaces/faces/twitter/snowshade/128.jpg';
 							dispatch(setAuthUser(savedUser));	
 						}
 						// ---------------------------

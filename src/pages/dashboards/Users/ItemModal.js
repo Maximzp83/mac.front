@@ -83,7 +83,8 @@ const ItemModal = ({
 
 	const handleSubmit = () => {
 		// let formData = prepareFormData(itemFormData)		
-		// console.log(formData)
+		// console.log(itemFormData)
+		if (!itemFormData.company_id) delete itemFormData.company_id;
 		submitItem(itemFormData);
 	};
 	/*const handleItemsMetaChange = value => {
@@ -227,7 +228,7 @@ const ItemModal = ({
 							<Col sm={7}>
 								<AvField
 								  type="select"
-								  name="user_company"
+								  name="user_role"
 									bsSize="lg"
 								  placeholder="Выберите роль"
 								  value={itemFormData.role_id}
