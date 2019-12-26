@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // import { subspace, namespaced } from 'redux-subspace';
 import { Container, Button } from 'reactstrap';
 
-import { SECTIONS } from 'constants/global';
+import { SECTIONS, ruleTypes } from 'constants/global';
 import { getUserRules } from 'helpers';
 
 import {
@@ -29,7 +29,6 @@ const Roles = () => {
 	const {
 		rolesLoading,
 		rolesList,
-		ruleTypes,
 		rolesSaving,
 		rolesFilter,
 		rolesMeta

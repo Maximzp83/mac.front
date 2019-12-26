@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { findItemBy } from 'helpers'
 import isEmpty from 'lodash.isempty';
 
+import { initialRulesFormData } from 'constants/global';
+
 import { 
 	Button,
 	Col,
@@ -34,13 +36,6 @@ const ItemModal = ({
 		rules: [],
 	}
 
-	const initialRulesFormData = [
-		{ruleType: 1, create:false, update:false, delete:false, view:false },
-		{ruleType: 2, create:false, update:false, delete:false, view:false },
-		{ruleType: 3, create:false, update:false, delete:false, view:false },
-		{ruleType: 4, create:false, update:false, delete:false, view:false },
-		{ruleType: 5, create:false, update:false, delete:false, view:false }
-	]
 	const [itemFormData, setFormData] = useState(initialItemFormData);
 	const [rulesFormData, setRulesFormData] = useState(initialRulesFormData);
 	// const [userData, setUserData] = useState(defaultUserData);

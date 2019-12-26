@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Container, Button } from 'reactstrap';
 import swal from 'sweetalert';
-import { SECTIONS } from 'constants/global';
+import { SECTIONS, userTypesList, ruleTypes } from 'constants/global';
 import { getUserRules } from 'helpers';
 
 // ------Actions-----------
@@ -34,8 +34,7 @@ const Users = () => {
 		usersList,
 		usersFilter,
 		usersMeta,
-		usersSaving,
-		userTypesList
+		usersSaving
 	} = useSelector(state => state.users);
 	// console.log(usersSaving)
 	const { rolesList } = useSelector(state => state.roles);
@@ -182,6 +181,7 @@ const Users = () => {
 					itemData={itemData}
 					rolesList={rolesList}
 					userTypesList={userTypesList}
+					ruleTypes={ruleTypes}
 				/>
 			) : null}
 
