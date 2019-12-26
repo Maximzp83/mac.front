@@ -10,7 +10,8 @@ import { toastr } from 'react-redux-toastr';
 import store from 'redux/store';
 import { setAuthUser } from './authActions';
 // import { setLoadingStatusFor, setSavingStatusFor } from './statusActions';
-import { fetchItemsFor } from 'redux/actions/common/operationActions';
+import { fetchItemsFor } from './common/operationActions';
+import { setItemsFor, setMetaFor } from './common/itemsDataActions';
 
 // import { LOAD_STATUS, SAVE_STATUS } from '../constants';
 
@@ -34,28 +35,8 @@ export const types = {
 
 export const fetchUsers = payload => {
 	return dispatch => {
-		// dispatch({ type: types.USERS_REQUEST_START });
 		// dispatch(setUsersLoadStatus(true));	
 		dispatch(fetchItemsFor('USERS_', '/users')(payload));
-
-		// dispatch({ type: LOAD_STATUS, payload: true });
-
-		/*const settings = { 
-			dispatch,
-			types: {
-				itemsAction: types.USERS_SET_ITEMS,
-				statusEnd: types.USERS_REQUEST_END,
-				setMeta: types.USERS_SET_META
-			}
-		};*/
-		// console.log(payload)
-		/*api('GET','/users', payload)
-			.then(response => {
-				handleGetItemsResponse(response, settings);
-			})
-			.catch(error => {
-				handleError(error, settings);
-			});*/
 	};
 };
 
@@ -152,7 +133,7 @@ export const deleteUser = id => {
 }
 
 export const setUsers = users => {
-	return { type: types.USERS_SET_ITEMS, payload: users };
+	return setItemsFor('USERS_')(users);
 };
 
 export const setUsersFilter = filter => {
@@ -160,5 +141,6 @@ export const setUsersFilter = filter => {
 };
 
 export const setUsersMeta = meta => {
-	return { type: types.USERS_SET_META, payload: meta };
+	// return dispatch(setMetaFor('USERS_')(meta));
+	return setMetaFor('USERS_')(meta);
 };

@@ -4,63 +4,65 @@ import {
 } from '../../constants';
 
 import {
-  handleError,
+  // handleError,
   isSuccessStatus,
   getResponseMessage,
-}  from 'services/api/api_helpers';
+} from 'services/api/api_helpers';
 import { toastr } from 'react-redux-toastr';
+import { push as routerPush } from 'react-router-redux';
 
 import { api } from 'services/api';
+import { clearAuth } from '../authActions';
 import { setLoadingStatusFor, setSavingStatusFor } from './statusActions';
+import { setMetaFor, setItemsFor } from './itemsDataActions';
+
+
+const handleError = (error, { dispatch, reject=null, prefix }) => {
+  const message = getResponseMessage(error);
+
+  if (error.response) {
+    if (error.response.status === 401) {
+      dispatch(clearAuth());
+      dispatch(routerPush('/auth/sign-in'));
+      dispatch(setLoadingStatusFor(prefix)(false));
+      toastr.error(message || 'Ваша сессия устарела', 'пожалуйста авторизируйтесь', { timeOut: 0 });
+      return;
+    }
+  }
+  if (reject) reject()
+  dispatch(setLoadingStatusFor(prefix)(false));
+  toastr.error('Ошибка', message || error.message, { timeOut: 0 });
+};
+
+// ---------------------------
 
 const fetchItemsFor = (prefix, url) => {
-  // const setLoadStatus = setLoadingStatusFor(prefix);
-
   const fetchItems = options => {
     return dispatch => {
-      // setLoadStatus(true)
       dispatch(setLoadingStatusFor(prefix)(true));  
-
-      // dispatch({ type: LOAD_STATUS, payload: true });
-
-     /* const settings = { 
-
-        types: {
-          itemsAction: types.USERS_SET_ITEMS,
-          statusEnd: types.USERS_REQUEST_END,
-          setMeta: types.USERS_SET_META
-        }
-      };*/
-      // console.log(payload)
-      // console.log('ok ', prefix)
 
       api('GET',url, options)
         .then(response => {
-          console.log(response)
+          // console.log(response)
           
           if (isSuccessStatus(response)) {
             dispatch(setItemsFor(prefix)(response.data.data));
 
-            /*if (response.data.meta) {
-              dispatch({
-                type: types.setMeta,
-                payload: response.data.meta
-              });
-            } */ 
+            if (response.data.meta) {
+              dispatch(setMetaFor(prefix)(response.data.meta));
+            }
+
           } else {
             const message = getResponseMessage(response);
             toastr.error('Ошибка', message || 'неправильный формат данных ответа', {
               timeOut: 0
             });
           }
-          dispatch(setLoadingStatusFor(prefix)(true));
-
-          // handleGetItemsResponse(response, settings);
+          dispatch(setLoadingStatusFor(prefix)(false));
         })
         .catch(error => {
           console.log(error)
-          dispatch(setLoadingStatusFor(prefix)(true));  
-          // handleError(error, settings);
+          handleError(error, {dispatch:dispatch, prefix:prefix});
         });
     };
   };

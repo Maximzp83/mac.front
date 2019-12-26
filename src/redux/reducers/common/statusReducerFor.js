@@ -1,4 +1,4 @@
-import { LOAD_STATUS, SAVE_STATUS } from '../constants';
+import { LOAD_STATUS, SAVE_STATUS } from '../../constants';
 
 const initialStatusState = {
   itemsLoading: false,
@@ -24,13 +24,3 @@ const statusReducerFor = (prefix) => {
 };
 
 export default statusReducerFor;
-
-// example usages
-/*const usersReducer = combineReducers({
-  usersData: usersDataReducer,
-  paginationData: paginationReducerFor('USERS_'),
-});*/
-/*const domainsReducer = combineReducers({
-  domainsData: domainsDataReducer,
-  paginationData: paginationReducerFor('DOMAINS_'),
-});*/

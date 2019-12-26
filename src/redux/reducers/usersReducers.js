@@ -1,4 +1,7 @@
 import { types } from '../actions/usersActions';
+import { combineReducers } from 'redux';
+import itemsDataReducerFor from './common/itemsDataReducerFor';
+import statusReducerFor from './common/statusReducerFor';
 
 const initialState = {
 	usersLoading: false,
@@ -19,7 +22,6 @@ const initialState = {
 		to: 0,
 		total: 0,
 	},
-
 };
 
 const usersDataReducer = (state = initialState, action) => {
@@ -29,7 +31,7 @@ const usersDataReducer = (state = initialState, action) => {
 
 		case types.USERS_REQUEST_START: {
 			return { ...state, usersLoading: true };
-		}
+		};
 
 		case types.USERS_REQUEST_END: {
 			return { ...state, usersLoading: false };
@@ -79,5 +81,10 @@ const usersDataReducer = (state = initialState, action) => {
 	}
 }
 
-export default usersDataReducer;
+const usersReducers = combineReducers({
+  // usersData: usersDataReducer,
+  usersData: itemsDataReducerFor('USERS_'),
+  usersStatus: statusReducerFor('USERS_'),
+});
 
+export default usersReducers;
