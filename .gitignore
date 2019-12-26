@@ -4,7 +4,7 @@ dist/
 .idea/
 npm-debug.log
 public/
-
+build/
 
 storybook-static/
 test/unit/coverage/
