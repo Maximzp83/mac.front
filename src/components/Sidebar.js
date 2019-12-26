@@ -136,7 +136,7 @@ class Sidebar extends React.Component {
 		const pathName = this.props.location.pathname;
 
 		this.setupRoutes(routes, pathName)
-		console.log(this.state.filteredRoutes, routes)
+		// console.log(this.state.filteredRoutes, routes)
 		// console.log('componentWillMount: ', this.state.filteredRoutes)		
 	}
 

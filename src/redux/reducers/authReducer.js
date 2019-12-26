@@ -31,7 +31,7 @@ export default function(state = initialState, action) {
 			};
 		}
 
-		case types.AUTH_SET_USER: {
+		case types.AUTH_SET_USER: {			
 			localStorage.setItem('authUser', JSON.stringify(action.payload));
 			return { ...state, authUser: action.payload };
 		}
