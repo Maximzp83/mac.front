@@ -131,7 +131,7 @@ export const deleteUser = id => {
 		return new Promise((resolve, reject) => {
 			settings.resolve = resolve;
 			settings.reject = reject;
-			api('DELETE', `/roles/${id}`)
+			api('DELETE', `/users/${id}`)
 				.then(response => {	handleRemoveItemsResponse(response, settings);	})
 				.catch(error => {	handleError(error, settings);	});
 		})
