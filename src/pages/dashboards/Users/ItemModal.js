@@ -84,6 +84,8 @@ const ItemModal = ({
 	const handleSubmit = () => {
 		// let formData = prepareFormData(itemFormData)		
 		// console.log(formData)
+		if (!itemFormData.company_id) delete itemFormData.company_id;
+		
 		submitItem(itemFormData);
 	};
 	/*const handleItemsMetaChange = value => {
