@@ -10,7 +10,7 @@ import { toastr } from 'react-redux-toastr';
 import store from 'redux/store';
 import { setAuthUser } from './authActions';
 // import { setLoadingStatusFor, setSavingStatusFor } from './statusActions';
-import { fetchItemsFor } from 'redux/actions/common/itemsActions';
+import { fetchItemsFor } from 'redux/actions/common/operationActions';
 
 // import { LOAD_STATUS, SAVE_STATUS } from '../constants';
 

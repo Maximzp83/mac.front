@@ -3,6 +3,13 @@ import {
   // SAVE_STATUS,
 } from '../../constants';
 
+import {
+  handleError,
+  isSuccessStatus,
+  getResponseMessage,
+}  from 'services/api/api_helpers';
+
+
 import { api } from 'services/api';
 import { setLoadingStatusFor, setSavingStatusFor } from './statusActions';
 
@@ -30,10 +37,32 @@ const fetchItemsFor = (prefix, url) => {
       api('GET',url, options)
         .then(response => {
           console.log(response)
+          
+          if (isSuccessStatus(response)) {
+            dispatch({
+              type: types.itemsAction,
+              payload: response.data.data
+            });
+
+            if (response.data.meta) {
+              dispatch({
+                type: types.setMeta,
+                payload: response.data.meta
+              });
+            }  
+          } else {
+            const message = getResponseMessage(response);
+            toastr.error('Ошибка', message || 'неправильный формат данных ответа', {
+              timeOut: 0
+            });
+          }
+          dispatch(setLoadingStatusFor(prefix)(true));
+
           // handleGetItemsResponse(response, settings);
         })
         .catch(error => {
           console.log(error)
+          dispatch(setLoadingStatusFor(prefix)(true));  
           // handleError(error, settings);
         });
     };
