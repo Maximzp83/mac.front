@@ -9,7 +9,8 @@ import { api } from 'services/api';
 import { toastr } from 'react-redux-toastr';
 import store from 'redux/store';
 import { setAuthUser } from './authActions';
-import { setLoadingStatusFor, setSavingStatusFor } from './statusActions';
+// import { setLoadingStatusFor, setSavingStatusFor } from './statusActions';
+import { fetchItemsFor } from 'redux/actions/common/itemsActions';
 
 // import { LOAD_STATUS, SAVE_STATUS } from '../constants';
 
@@ -28,40 +29,40 @@ export const types = {
 	// SET_AUTH_TO_LOCAL_STORAGE: "SET_AUTH_TO_LOCAL_STORAGE",
 };
 
-const setUsersLoadStatus = setLoadingStatusFor('USERS_');
-const setUsersSaveStatus = setSavingStatusFor('USERS_');
+// const setUsersLoadStatus = setLoadingStatusFor('USERS_');
+// const setUsersSaveStatus = setSavingStatusFor('USERS_');
 
 export const fetchUsers = payload => {
 	return dispatch => {
-		dispatch({ type: types.USERS_REQUEST_START });
-
-		dispatch(setUsersLoadStatus(true));	
+		// dispatch({ type: types.USERS_REQUEST_START });
+		// dispatch(setUsersLoadStatus(true));	
+		dispatch(fetchItemsFor('USERS_', '/users')(payload));
 
 		// dispatch({ type: LOAD_STATUS, payload: true });
 
-		const settings = { 
+		/*const settings = { 
 			dispatch,
 			types: {
 				itemsAction: types.USERS_SET_ITEMS,
 				statusEnd: types.USERS_REQUEST_END,
 				setMeta: types.USERS_SET_META
 			}
-		};
+		};*/
 		// console.log(payload)
-		api('GET','/users', payload)
+		/*api('GET','/users', payload)
 			.then(response => {
 				handleGetItemsResponse(response, settings);
 			})
 			.catch(error => {
 				handleError(error, settings);
-			});
+			});*/
 	};
 };
 
 export const saveUser = payload => {
 	return dispatch => {
 		dispatch({ type: types.USERS_SAVE_STATUS, payload: true });
-		dispatch(setUsersSaveStatus(true));	
+		// dispatch(setUsersSaveStatus(true));	
 
 		const settings = { 
 			dispatch,

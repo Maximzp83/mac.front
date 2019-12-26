@@ -15,6 +15,7 @@ import {
 	saveUser,
 	deleteUser
 } from 'redux/actions/usersActions';
+
 import { fetchRoles } from 'redux/actions/rolesActions';
 
 // -----Components-----
@@ -91,6 +92,8 @@ const Users = () => {
 			if (answer) { 
 				dispatch( deleteUser(user.id) )
 					.then(() => {
+						// dispatch( fetchItemsFor('USERS_', { getParams: {...usersFilter} }) );	
+
 						dispatch( fetchUsers({ getParams: {...usersFilter} }) );
 					})
 			};

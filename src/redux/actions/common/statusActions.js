@@ -1,7 +1,8 @@
-import { LOAD_STATUS, SAVE_STATUS } from '../constants';
+import { LOAD_STATUS, SAVE_STATUS } from '../../constants';
 
 const setLoadingStatusFor = prefix => {
   const setLoadingStatus = isLoading => {
+    // console.log(prefix, isLoading)
     return {
       type: prefix + LOAD_STATUS,
       payload: isLoading
