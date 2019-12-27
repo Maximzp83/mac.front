@@ -107,7 +107,7 @@ const saveItemFor = (prefix, payloadUrl) => {
               // ---------------------------
 
               toastr.success('', `Элемент ${resultMessage}`);
-              resolve()
+              resolve(response)
             } else {
               reject()
               const message = getResponseMessage(response);

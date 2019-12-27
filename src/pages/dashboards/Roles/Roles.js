@@ -27,12 +27,11 @@ import swal from 'sweetalert';
 const Roles = () => {
 	const dispatch = useDispatch();
 	const {
-		itemsLoading,
 		itemsList,
-		itemsSaving,
 		itemsFilters,
 		itemsMeta
 	} = useSelector(state => state.roles.rolesData);
+	const {	itemsLoading, itemsSaving } = useSelector(state => state.roles.rolesStatus);
 
 	// ---- local State -----
 	const [rulesData, setRulesData] = useState({});

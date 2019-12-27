@@ -131,7 +131,7 @@ const ItemModal = ({
 			delete stateCopy.rules;
 			formData = stateCopy;
 		}
-		console.log('submit: ', formData)
+		// console.log('submit: ', formData)
 		
 		submitItem(formData);
 	};
