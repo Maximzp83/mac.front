@@ -52,31 +52,37 @@ const ItemsTable = ({
 							</tr>
 						</thead>
 						<tbody>
-							{itemsList.map((role, roleIndex) => (
-								<tr key={`role_item-${roleIndex}`}>
-									<td>{role.id}</td>
-									<td>{role.name}</td>
-									{/*<td>{role.dispaly_name}</td>*/}
-									<td>{role.description}</td>
-									{/*<td>
-										{role.rules.map((rule, roleInd) => (
-											<div key={`rule-${roleInd}`}>{rule.display_name}</div>
-										))}
-									</td>*/}
-									<td className="table-action">
-										{ rulesData.update && (
-											<Edit2 className="align-middle mr-1 pointer" size={18}
-												onClick={() => handleItemEdit(role)}
-											/>)
-										}
-										{ rulesData.delete && (
-											<Trash className="align-middle pointer" size={18}
-												onClick={() => handleItemDelete(role)}
-											/>
-										)}
-									</td>
-								</tr>
-							))}
+							{
+								itemsList.map((role, roleIndex) => {
+									if (!role.is_default) {
+										return (
+											<tr key={`role_item-${roleIndex}`}>
+												<td>{role.id}</td>
+												<td>{role.name}</td>
+												{/*<td>{role.dispaly_name}</td>*/}
+												<td>{role.description}</td>
+												{/*<td>
+													{role.rules.map((rule, roleInd) => (
+														<div key={`rule-${roleInd}`}>{rule.display_name}</div>
+													))}
+												</td>*/}
+												<td className="table-action">
+													{ rulesData.update && (
+														<Edit2 className="align-middle mr-1 pointer" size={18}
+															onClick={() => handleItemEdit(role)}
+														/>)
+													}
+													{ rulesData.delete && (
+														<Trash className="align-middle pointer" size={18}
+															onClick={() => handleItemDelete(role)}
+														/>
+													)}
+												</td>
+											</tr>
+										) 
+									} else return null;
+								})
+							}
 						</tbody>
 					</Table>
 				</div>
