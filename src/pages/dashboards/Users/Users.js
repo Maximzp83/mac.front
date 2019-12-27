@@ -46,7 +46,7 @@ const Users = () => {
 		itemsNameMult1: 'Пользователи',
 		itemsNameMult2: 'Пользователей'
 	};
-	const rolesFilter = {	max: -1 };
+	const rolesFilter = {	max: -1, withDefault: true };
 
 	// ---- local State -----
 	const [rulesData, setRulesData] = useState({});

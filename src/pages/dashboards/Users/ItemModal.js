@@ -37,13 +37,13 @@ const ItemModal = ({
 	const initialItemFormData = {
 		id: null,
 		type: 1,
-		last_name: '',
-		first_name: '',
-		second_name: '',
-		email: '',
-		password: '',
+		last_name: 'asd',
+		first_name: 'asd',
+		second_name: 'asd',
+		email: '1asd@asd.com',
+		password: '123123',
 		login: '',
-		role_id: 1,
+		role_id: '',
 		rules: []
 	}
 
@@ -61,7 +61,7 @@ const ItemModal = ({
 				newRulesState[index] = rules[i];
 			}
 		}
-
+		// console.log(newRulesState)
 		setRulesFormData(newRulesState)
 	}
 	
@@ -121,10 +121,19 @@ const ItemModal = ({
 
 	const handleSubmit = () => {
 		// let formData = prepareFormData(itemFormData)		
-		// console.log(itemFormData)
-		if (!itemFormData.company_id) delete itemFormData.company_id;
+		let stateCopy = Object.assign({}, itemFormData);
 		
-		submitItem(itemFormData);
+		if (!stateCopy.company_id) delete stateCopy.company_id;
+
+		let formData;
+		if (stateCopy.type === 1) formData = { ...stateCopy, rules: rulesFormData }
+		else {
+			delete stateCopy.rules;
+			formData = stateCopy;
+		}
+		console.log('submit: ', formData)
+		
+		submitItem(formData);
 	};
 	/*const handleItemsMetaChange = value => {
 		if (maxItems !== value) {
@@ -152,6 +161,17 @@ const ItemModal = ({
 			}
 		}
 	}, [itemData]);
+
+	useEffect(() => {
+		if (!isInitialMount) {
+			let item = findItemBy('id', itemFormData.role_id, rolesList);
+
+			if (item && item.rules.length) {
+				setUpRulesFormData({rules:item.rules});		
+			}
+			
+		}
+	}, [itemFormData.role_id])
 
 	return (
 		<Modal size="lg"
@@ -282,45 +302,53 @@ const ItemModal = ({
 								  // helpMessage="Idk, this is an example. Deal with it!"
 								>	
 									<option value="" disabled>Выберите роль</option>
-									{ rolesList.map((role, roleIx) =>
-									  (<option key={'role-'+role.id} value={role.id}>{role.name}</option>)
+									{ rolesList.map((role, roleIx) => {
+											if (!role.is_default) {
+									  		return (<option key={'role-'+role.id} value={role.id}>{role.name}</option>)
+											} else return null;
+										}
 									)}
 								</AvField>
 							</Col>
 						</Row>
 					) : null}
 					<hr/>
-					<h4>Права</h4>
-					{ruleTypes.map((type, typeIndex) => (
-					  <FormGroup row key={'rule_type-'+type.ruleType}>
-					    <Label sm={3} className="text-sm-right pt-sm-0 uppercase"><strong>{type.name}</strong></Label>
-					    <Col sm={9}>
-					      <CustomInput inline
-					        type="checkbox"
-					        id={`create-${type.ruleType}`}
-					        checked={getCheckboxValue({type:type.ruleType, prop:'create'})}
-					        onChange={()=>handleRuleChange({prop:'create', type:type.ruleType})}
-					        label="Создание"/>
-					      <CustomInput inline
-					        type="checkbox"
-					        id={`update-${type.ruleType}`}
-					        checked={getCheckboxValue({type:type.ruleType, prop:'update'})}
-					        onChange={()=>handleRuleChange({prop:'update', type:type.ruleType})}
-					        label="Редактирование"/>
-					      <CustomInput inline
-					        type="checkbox"
-					        id={`delete-${type.ruleType}`}
-					        checked={getCheckboxValue({type:type.ruleType, prop:'delete'})}
-					        onChange={()=>handleRuleChange({prop:'delete', type:type.ruleType})}
-					        label="Удаление"/>
-					      <CustomInput inline
-					        type="checkbox"
-					        id={`view-${type.ruleType}`}
-					        checked={getCheckboxValue({type:type.ruleType, prop:'view'})}
-					        onChange={()=>handleRuleChange({prop:'view', type:type.ruleType})}
-					        label="Просмотр"/>
-					    </Col>
-					  </FormGroup>)
+
+					{itemFormData.type === 1 && (
+						<div>
+							<h4>Права</h4>
+							{ ruleTypes.map((type, typeIndex) => (
+							  <FormGroup row key={'rule_type-'+type.ruleType}>
+							    <Label sm={3} className="text-sm-right pt-sm-0 uppercase"><strong>{type.name}</strong></Label>
+							    <Col sm={9}>
+							      <CustomInput inline
+							        type="checkbox"
+							        id={`create-${type.ruleType}`}
+							        checked={getCheckboxValue({type:type.ruleType, prop:'create'})}
+							        onChange={()=>handleRuleChange({prop:'create', type:type.ruleType})}
+							        label="Создание"/>
+							      <CustomInput inline
+							        type="checkbox"
+							        id={`update-${type.ruleType}`}
+							        checked={getCheckboxValue({type:type.ruleType, prop:'update'})}
+							        onChange={()=>handleRuleChange({prop:'update', type:type.ruleType})}
+							        label="Редактирование"/>
+							      <CustomInput inline
+							        type="checkbox"
+							        id={`delete-${type.ruleType}`}
+							        checked={getCheckboxValue({type:type.ruleType, prop:'delete'})}
+							        onChange={()=>handleRuleChange({prop:'delete', type:type.ruleType})}
+							        label="Удаление"/>
+							      <CustomInput inline
+							        type="checkbox"
+							        id={`view-${type.ruleType}`}
+							        checked={getCheckboxValue({type:type.ruleType, prop:'view'})}
+							        onChange={()=>handleRuleChange({prop:'view', type:type.ruleType})}
+							        label="Просмотр"/>
+							    </Col>
+							  </FormGroup>)
+							)}
+						</div>
 					)}
 					
 					<FormGroup row>
@@ -356,7 +384,7 @@ ItemModal.propTypes = {
 	itemsSaving: PropTypes.bool.isRequired,
 	itemData: PropTypes.object,
 	rolesList: PropTypes.array.isRequired,
-	ruleTypes: PropTypes.array.isRequired
+	ruleTypes: PropTypes.array.isRequired,
 };
 
 export { ItemModal };
