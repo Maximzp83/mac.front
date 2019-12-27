@@ -9,8 +9,8 @@ import { getUserRules } from 'helpers';
 // ------Actions-----------
 import { 
 	fetchUsers,
-	setItemsFilter,
-	// setUsersMeta,
+	setUsersFilter,
+	setUsersMeta,
 	setUsers,
 	saveUser,
 	deleteUser
@@ -65,7 +65,7 @@ const Users = () => {
 	const changeItemsFilter = ({ filterName, val }) => {
 		// console.log(filterName)
 		const newFilters = { ...itemsFilter, [filterName]: val };
-		dispatch(setItemsFilter(newFilters));
+		dispatch(setUsersFilter(newFilters));
 	};
 
 	/*const changeItemsMeta = ({ filterName, val }) => {
@@ -169,7 +169,7 @@ const Users = () => {
 				// changeItemsMeta={changeItemsMeta}
 				changeItemsFilter={changeItemsFilter}
 				currentFilter={itemsFilter}
-				itemsMeta={usersMeta}
+				itemsMeta={itemsMeta}
 			/>
 
 			{/*<ItemsTable
@@ -188,7 +188,7 @@ const Users = () => {
 					itemModalToggle={itemModalToggle}
 					itemsNames={itemsNames}
 					submitItem={saveItem}
-					itemsSaving={usersSaving}
+					itemsSaving={itemsSaving}
 					itemData={itemData}
 					rolesList={rolesList}
 					userTypesList={userTypesList}
@@ -197,7 +197,7 @@ const Users = () => {
 
 			<PaginationContainer
 				itemsLoading={itemsLoading}
-				itemsMeta={usersMeta}
+				itemsMeta={itemsMeta}
 				isInitialMount={isInitialMount}
 				changeItemsFilter={changeItemsFilter}
 			/>			

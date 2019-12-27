@@ -11,7 +11,7 @@ import store from 'redux/store';
 import { setAuthUser } from './authActions';
 // import { setLoadingStatusFor, setSavingStatusFor } from './statusActions';
 import { fetchItemsFor } from './common/apiActions';
-import { setItemsFor, setMetaFor } from './common/itemsDataActions';
+import { setItemsFor, setMetaFor, setFiltersFor } from './common/itemsDataActions';
 
 // import { LOAD_STATUS, SAVE_STATUS } from '../constants';
 
