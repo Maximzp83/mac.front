@@ -22,8 +22,20 @@ const setItemsFor = prefix => {
   return setItems;
 };
 
+const setFiltersFor = prefix => {
+  const setFilters = filters => {
+    // console.log(prefix, meta)
+    return {
+      type: prefix + SET_FILTERS,
+      payload: filters
+    }
+  };
+  return setFilters;
+};
+
 
 export {
   setMetaFor,
-  setItemsFor
+  setItemsFor,
+  setFiltersFor
 }

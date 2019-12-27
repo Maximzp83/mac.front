@@ -19,3 +19,4 @@ export const LOAD_STATUS = 'LOAD_STATUS';
 export const SAVE_STATUS = 'SAVE_STATUS';
 export const SET_META = 'SET_META';
 export const SET_ITEMS = 'SET_ITEMS';
+export const SET_FILTERS = 'SET_FILTERS';

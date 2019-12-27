@@ -43,7 +43,7 @@ const fetchItemsFor = (prefix, url) => {
 
       api('GET',url, options)
         .then(response => {
-          // console.log(response)
+          console.log(response)
           
           if (isSuccessStatus(response)) {
             dispatch(setItemsFor(prefix)(response.data.data));

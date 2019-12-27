@@ -10,7 +10,7 @@ import { toastr } from 'react-redux-toastr';
 import store from 'redux/store';
 import { setAuthUser } from './authActions';
 // import { setLoadingStatusFor, setSavingStatusFor } from './statusActions';
-import { fetchItemsFor } from './common/operationActions';
+import { fetchItemsFor } from './common/apiActions';
 import { setItemsFor, setMetaFor } from './common/itemsDataActions';
 
 // import { LOAD_STATUS, SAVE_STATUS } from '../constants';
@@ -136,8 +136,10 @@ export const setUsers = users => {
 	return setItemsFor('USERS_')(users);
 };
 
-export const setUsersFilter = filter => {
-	return { type: types.USERS_SET_FILTER, payload: filter };
+export const setUsersFilter = filters => {
+	return setFiltersFor('USERS_')(filters);
+
+	// return { type: types.USERS_SET_FILTER, payload: filter };
 };
 
 export const setUsersMeta = meta => {

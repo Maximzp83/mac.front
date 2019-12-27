@@ -9,7 +9,7 @@ import { getUserRules } from 'helpers';
 // ------Actions-----------
 import { 
 	fetchUsers,
-	setUsersFilter,
+	setItemsFilter,
 	// setUsersMeta,
 	setUsers,
 	saveUser,
@@ -32,10 +32,10 @@ const Users = () => {
 	const dispatch = useDispatch();
 	const {
 		// usersLoading,
-		usersList,
-		usersFilter,
-		usersMeta,
-		usersSaving
+		itemsList,
+		itemsFilter,
+		itemsMeta,
+		// usersSaving
 	} = useSelector(state => state.users.usersData);
 	// console.log(usersSaving)
 
@@ -64,8 +64,8 @@ const Users = () => {
 
 	const changeItemsFilter = ({ filterName, val }) => {
 		// console.log(filterName)
-		const newFilters = { ...usersFilter, [filterName]: val };
-		dispatch(setUsersFilter(newFilters));
+		const newFilters = { ...itemsFilter, [filterName]: val };
+		dispatch(setItemsFilter(newFilters));
 	};
 
 	/*const changeItemsMeta = ({ filterName, val }) => {
@@ -92,9 +92,9 @@ const Users = () => {
 			if (answer) { 
 				dispatch( deleteUser(user.id) )
 					.then(() => {
-						// dispatch( fetchItemsFor('USERS_', { getParams: {...usersFilter} }) );	
+						// dispatch( fetchItemsFor('USERS_', { getParams: {...itemsFilter} }) );	
 
-						dispatch( fetchUsers({ getParams: {...usersFilter} }) );
+						dispatch( fetchUsers({ getParams: {...itemsFilter} }) );
 					})
 			};
 		});	
@@ -110,20 +110,20 @@ const Users = () => {
 		dispatch(saveUser({ data: itemData }))
 			.then(() => {
 				setItemModalOpen(false);
-				dispatch( fetchUsers({ getParams: {...usersFilter} }) );
+				dispatch( fetchUsers({ getParams: {...itemsFilter} }) );
 			})
 	};
 
 	// ===== Watch =======
 	useEffect(() => {
-		// console.log('usersFilter: ', isInitialMount);
+		console.log('itemsFilter: ', itemsList);
 		
 		if (isInitialMount) {
-			setRulesData( getUserRules(SECTIONS.USER) );
+			// setRulesData( getUserRules(SECTIONS.USER) );
 
 			// ------ Component Mount -------
-			if (usersList.length < 1) {
-				const payload = { getParams: {...usersFilter} };
+			if (itemsList.length < 1) {
+				const payload = { getParams: {...itemsFilter} };
 				dispatch( fetchUsers(payload) );
 			}
 
@@ -132,11 +132,11 @@ const Users = () => {
 			// -----------------------------
 		} else {
 			// ------ Component Update -----
-			const payload = { getParams: {...usersFilter} };
+			const payload = { getParams: {...itemsFilter} };
 			dispatch( fetchUsers(payload) );
 			// -----------------------------
 		}
-	}, [usersFilter]);
+	}, [itemsFilter]);
 
 	useEffect(() => {
 		setRulesData( getUserRules(SECTIONS.USER) );
@@ -168,18 +168,18 @@ const Users = () => {
 			<FilterBar
 				// changeItemsMeta={changeItemsMeta}
 				changeItemsFilter={changeItemsFilter}
-				currentFilter={usersFilter}
+				currentFilter={itemsFilter}
 				itemsMeta={usersMeta}
 			/>
 
-			<ItemsTable
+			{/*<ItemsTable
 				rulesData={rulesData}
 				toggleItemEdit={toggleItemEdit}
 				toggleItemDelete={toggleItemDelete}
 				itemsNames={itemsNames}
 				itemsLoading={itemsLoading}
 				userTypesList={userTypesList}
-				itemsList={usersList} />
+				itemsList={itemsList} />*/}
 
 			{ rulesData.update || rulesData.create ? (
 				<ItemModal 
