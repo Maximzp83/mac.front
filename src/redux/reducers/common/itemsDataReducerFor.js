@@ -45,3 +45,23 @@ const itemsDataReducerFor = (prefix) => {
 };
 
 export default itemsDataReducerFor;
+
+
+/*case types.USERS_ADD_ITEM: {
+      const newUser = action.payload;
+      return { ...state, usersList: [...state.usersList, newUser] }
+    }
+
+    case types.USERS_UPDATE_ITEM: {
+      const { id } = action.payload;
+      const newUsersList = state.usersList.map(user =>
+        user.id === id ? action.payload : user
+      ) 
+      return { ...state, usersList: newUsersList }
+    }
+
+    case types.USERS_DELETE_ITEM: {
+      const id = action.payload;
+      const newUsersList = state.usersList.filter(user => user.id !== id) 
+      return { ...state, usersList: newUsersList }
+    }*/

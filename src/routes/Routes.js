@@ -97,7 +97,7 @@ const ChildRoutes = ({ layout: Layout, routes }) => {
 										) : (
 											<Redirect
 												to={{
-													pathname: '/auth/sign-in',
+													pathname: '/dashboard/default',
 													state: { from: props.location }
 												}}
 											/>

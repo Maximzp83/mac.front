@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Container, Button } from 'reactstrap';
 import swal from 'sweetalert';
-import { SECTIONS, userTypesList } from 'constants/global';
+import { SECTIONS, userTypesList, ruleTypes } from 'constants/global';
 import { getUserRules } from 'helpers';
 
 // ------Actions-----------
@@ -46,7 +46,7 @@ const Users = () => {
 		itemsNameMult1: 'Пользователи',
 		itemsNameMult2: 'Пользователей'
 	};
-	const rolesFilter = {	max: -1 };
+	const rolesFilter = {	max: -1, withDefault: true };
 
 	// ---- local State -----
 	const [rulesData, setRulesData] = useState({});
@@ -182,6 +182,7 @@ const Users = () => {
 					itemData={itemData}
 					rolesList={rolesList}
 					userTypesList={userTypesList}
+					ruleTypes={ruleTypes}
 				/>
 			) : null}
 

@@ -129,18 +129,20 @@ const handleGetItemsResponse = (response, { dispatch, types, payload, resolve=nu
 };
 
 const handleRemoveItemsResponse = (response, { dispatch, types, payload, resolve=null, id }) => {
-	if (isSuccessStatus(response)) {
-		// console.log('handleResponse',types.itemsAction, id)
-		dispatch({ type: types.itemsAction, payload: id	});
-		toastr.success('', 'Элемент успешно удален');
-	} else {
-		const message = getResponseMessage(response);
-		toastr.error('Ошибка', message || 'неправильный формат данных ответа', {
-			timeOut: 0
-		});
-	}
-	if (resolve) resolve()
-	dispatch({ type: types.statusEnd, payload: false });
+	try {
+	 	if (isSuccessStatus(response)) {
+			// console.log('handleResponse',types.itemsAction, id)
+			// dispatch({ type: types.itemsAction, payload: id	});
+			toastr.success('', 'Элемент успешно удален');
+		} else {
+			const message = getResponseMessage(response);
+			toastr.error('Ошибка', message || 'неправильный формат данных ответа', {
+				timeOut: 0
+			});
+		}
+		if (resolve) resolve()
+		dispatch({ type: types.statusEnd, payload: false });
+	} catch (e) {console.log(e)}
 };
 
 const handleError = (error, { dispatch, types, payload, reject=null }) => {
@@ -156,6 +158,7 @@ const handleError = (error, { dispatch, types, payload, reject=null }) => {
 		}
 	}
 	if (reject) reject()
+		// console.log(types.statusEnd)
 	dispatch({ type: types.statusEnd, payload: false });
 	toastr.error('Ошибка', message || error.message, { timeOut: 0 });
 };

@@ -24,7 +24,7 @@ import { SECTIONS } from 'constants/global'
 // import Profile from '../pages/pages/Profile';
 
 // Dashboards
-// const Default = async(() => import('../pages/dashboards/Default'));
+const Default = async(() => import('../pages/dashboards/Default'));
 const Users = async(() => import('../pages/dashboards/Users/Users'));
 const Roles = async(() => import('../pages/dashboards/Roles/Roles'));
 
@@ -43,15 +43,15 @@ const dashboardRoutes = {
 	header: 'Main',
 	icon: SlidersIcon,
 	containsHome: true,
-	redirect: '/dashboard/users',
+	redirect: '/dashboard/default',
 	children: [
-		/*{
+		{
 			path: '/dashboard/default',
-			name: 'Default',
+			name: 'Стартовая',
 			component: Default
 			// badgeColor: "primary",
 			// badgeText: "bage text"
-		},*/
+		},
 		{
 			path: '/dashboard/users',
 			name: 'Пользователи',
