@@ -1,4 +1,4 @@
-import { SET_META, SET_ITEMS } from '../../constants';
+import { SET_META, SET_ITEMS, SET_FILTERS } from '../../constants';
 
 const setMetaFor = prefix => {
   const setMeta = meta => {
@@ -24,7 +24,7 @@ const setItemsFor = prefix => {
 
 const setFiltersFor = prefix => {
   const setFilters = filters => {
-    // console.log(prefix, meta)
+    // console.log(prefix, filters)
     return {
       type: prefix + SET_FILTERS,
       payload: filters

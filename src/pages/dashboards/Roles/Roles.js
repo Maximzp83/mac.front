@@ -10,7 +10,7 @@ import {
 	fetchRoles,
 	saveRole,
 	deleteRole,
-	setRolesFilter
+	setRolesFilters
 } from 'redux/actions/rolesActions';
 
 // -----Components-----
@@ -27,13 +27,13 @@ import swal from 'sweetalert';
 const Roles = () => {
 	const dispatch = useDispatch();
 	const {
-		rolesLoading,
-		rolesList,
+		itemsLoading,
+		itemsList,
 		ruleTypes,
-		rolesSaving,
-		rolesFilter,
-		rolesMeta
-	} = useSelector(state => state.roles);
+		itemsSaving,
+		itemsFilters,
+		itemsMeta
+	} = useSelector(state => state.roles.rolesData);
 
 	// ---- local State -----
 	const [rulesData, setRulesData] = useState({});
@@ -53,10 +53,10 @@ const Roles = () => {
 	const itemModalToggle = () => setItemModalOpen(!itemModalOpen);
 
 	// ----- Methods ---------
-	const changeItemsFilter = ({ filterName, val }) => {
+	const changeItemsFilters = ({ filterName, val }) => {
 		// console.log(filterName)
-		const newFilters = { ...rolesFilter, [filterName]: val };
-		dispatch(setRolesFilter(newFilters));
+		const newFilters = { ...itemsFilters, [filterName]: val };
+		dispatch(setRolesFilters(newFilters));
 	};
 
 	const toggleItemEdit = role => {
@@ -76,14 +76,14 @@ const Roles = () => {
 			if (answer) { 
 				dispatch( deleteRole(role.id) )
 				.then(() => {
-					dispatch( fetchRoles({ getParams: {...rolesFilter} }) );
+					dispatch( fetchRoles({ getParams: {...itemsFilters} }) );
 				})
 			};
 		});		
 	};
 
 	/*const changeItemsMeta = ({ filterName, val }) => {
-		const newMeta = { ...rolesMeta, [filterName]: val };
+		const newMeta = { ...itemsMeta, [filterName]: val };
 		dispatch(setRolesMeta(newMeta));
 	};*/
 
@@ -92,7 +92,7 @@ const Roles = () => {
 		dispatch(saveRole({ data: data }))
 			.then(() => {
 				setItemModalOpen(false);
-				dispatch( fetchRoles({ getParams: {...rolesFilter} }) );
+				dispatch( fetchRoles({ getParams: {...itemsFilters} }) );
 			})
 	};
 
@@ -101,19 +101,19 @@ const Roles = () => {
 		// console.log('Roles: ');
 		if (isInitialMount) {
 			// ------ Component Mount -------
-			if (rolesList.length < 1) {
-				const payload = { getParams: { ...rolesFilter } };
+			if (itemsList.length < 1) {
+				const payload = { getParams: { ...itemsFilters } };
 				dispatch(fetchRoles(payload));
 			}
 			setInitialMount(false);
 			// -----------------------------
 		} else {
 			// ------ Component Update -----
-			const payload = { getParams: { ...rolesFilter } };
+			const payload = { getParams: { ...itemsFilters } };
 			dispatch(fetchRoles(payload));
 			// -----------------------------
 		}
-	}, [rolesFilter]);
+	}, [itemsFilters]);
 
 	useEffect(() => {
 		let rules = getUserRules(SECTIONS.ROLE);
@@ -141,9 +141,9 @@ const Roles = () => {
 
 			<FilterBar
 				// changeItemsMeta={changeItemsMeta}
-				changeItemsFilter={changeItemsFilter}
-				currentFilter={rolesFilter}
-				itemsMeta={rolesMeta}
+				changeItemsFilters={changeItemsFilters}
+				currentFilter={itemsFilters}
+				itemsMeta={itemsMeta}
 			/>
 			
 			<ItemsTable 
@@ -151,8 +151,8 @@ const Roles = () => {
 				toggleItemEdit={toggleItemEdit}
 				toggleItemDelete={toggleItemDelete}
 				itemsNames={itemsNames}
-				itemsLoading={rolesLoading}
-				itemsList={rolesList}
+				itemsLoading={itemsLoading}
+				itemsList={itemsList}
 				ruleTypes={ruleTypes}
 			/>
 			
@@ -164,16 +164,16 @@ const Roles = () => {
 					itemsNames={itemsNames}
 					submitItem={saveItem}
 					ruleTypes={ruleTypes}
-					itemsSaving={rolesSaving}
+					itemsSaving={itemsSaving}
 					itemData={itemData}
 				/>
 			): null}
 
 			<PaginationContainer
-				itemsLoading={rolesLoading}
-				itemsMeta={rolesMeta}
+				itemsLoading={itemsLoading}
+				itemsMeta={itemsMeta}
 				isInitialMount={isInitialMount}
-				changeItemsFilter={changeItemsFilter}
+				changeItemsFilters={changeItemsFilters}
 			/>
 
 			{/*<ConfirmModal

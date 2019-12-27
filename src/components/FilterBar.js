@@ -12,7 +12,7 @@ import {
 	Row
 } from 'reactstrap';
 
-const FilterBar = ({ changeItemsFilter, currentFilter: { max }, itemsMeta }) => {
+const FilterBar = ({ changeItemsFilters, currentFilter: { max }, itemsMeta }) => {
 	const [maxItemsOpen, setMaxItems] = useState(false);
 	const maxToggle = () => setMaxItems(!maxItemsOpen);
 
@@ -22,13 +22,13 @@ const FilterBar = ({ changeItemsFilter, currentFilter: { max }, itemsMeta }) => 
 		if (isClient !== value) {
 			// const newFilters = { ...currentFilter, [name]: val };
 			// const payload = { filterName: 'isClient', val: value };
-			changeItemsFilter({ filterName: 'isClient', val: value });
+			changeItemsFilters({ filterName: 'isClient', val: value });
 		}
 	};*/
 
 	const handleFilterChange = value => {
 		if (max !== value) {
-			changeItemsFilter({ filterName: 'max', val: value });
+			changeItemsFilters({ filterName: 'max', val: value });
 		}
 	};
 
@@ -79,7 +79,7 @@ FilterBar.propTypes = {
 	itemsMeta: PropTypes.shape({
 		max: PropTypes.number
 	}),
-	changeItemsFilter: PropTypes.func.isRequired,
+	changeItemsFilters: PropTypes.func.isRequired,
 	// changeItemsMeta: PropTypes.func.isRequired
 };
 

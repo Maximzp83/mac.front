@@ -1,4 +1,47 @@
-import {
+import { fetchItemsFor, saveItemFor, deleteItemFor } from './common/apiActions';
+import { setItemsFor, setMetaFor, setFiltersFor } from './common/itemsDataActions';
+
+// import { LOAD_STATUS, SAVE_STATUS } from '../constants';
+
+// const setRolesLoadStatus = setLoadingStatusFor('ROLES_');
+// const setRolesSaveStatus = setSavingStatusFor('ROLES_');
+
+const fetchRoles = payload => {
+	return fetchItemsFor('ROLES_', '/roles')(payload);
+};
+
+const saveRole = payload => {
+	return saveItemFor('ROLES_', '/roles')(payload);
+};
+
+const deleteRole = id => {
+	return deleteItemFor('ROLES_', '/roles')(id);	
+}
+
+const setRoles = roles => {
+	return setItemsFor('ROLES_')(roles);
+};
+
+const setRolesFilters = filters => {
+	// console.log(filters)
+	return setFiltersFor('ROLES_')(filters);
+};
+
+const setRolesMeta = meta => {
+	return setMetaFor('ROLES_')(meta);
+};
+
+export {
+	fetchRoles,
+	saveRole,
+	deleteRole,
+	setRoles,
+	setRolesFilters,
+	setRolesMeta
+}
+
+
+/*import {
 	handleGetItemsResponse,
 	handleError,
 	isSuccessStatus,
@@ -143,3 +186,4 @@ export const setRolesFilter = filter => {
 export const setRolesMeta = meta => {
 	return { type: types.ROLES_SET_META, payload: meta };
 };
+*/

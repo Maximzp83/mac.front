@@ -9,8 +9,8 @@ import { getUserRules } from 'helpers';
 // ------Actions-----------
 import { 
 	fetchUsers,
-	setUsersFilter,
-	setUsersMeta,
+	setUsersFilters,
+	// setUsersMeta,
 	setUsers,
 	saveUser,
 	deleteUser
@@ -31,17 +31,13 @@ import { PaginationContainer } from 'components/PaginationContainer';
 const Users = () => {
 	const dispatch = useDispatch();
 	const {
-		// usersLoading,
 		itemsList,
-		itemsFilter,
+		itemsFilters,
 		itemsMeta,
-		// usersSaving
 	} = useSelector(state => state.users.usersData);
-	// console.log(usersSaving)
-
 	const {	itemsLoading, itemsSaving } = useSelector(state => state.users.usersStatus);
-
-	const { rolesList } = useSelector(state => state.roles);
+	const rolesState = useSelector(state => state.roles.rolesData);
+	const rolesList = rolesState.itemsList;
 	const { authUser } = useSelector(state => state.auth);
 
 	// ---- local Constants -----
@@ -62,10 +58,9 @@ const Users = () => {
 
 	const itemModalToggle = () => setItemModalOpen(!itemModalOpen);
 
-	const changeItemsFilter = ({ filterName, val }) => {
-		// console.log(filterName)
-		const newFilters = { ...itemsFilter, [filterName]: val };
-		dispatch(setUsersFilter(newFilters));
+	const changeItemsFilters = ({ filterName, val }) => {
+		const newFilters = { ...itemsFilters, [filterName]: val };
+		dispatch(setUsersFilters(newFilters));
 	};
 
 	/*const changeItemsMeta = ({ filterName, val }) => {
@@ -92,9 +87,9 @@ const Users = () => {
 			if (answer) { 
 				dispatch( deleteUser(user.id) )
 					.then(() => {
-						// dispatch( fetchItemsFor('USERS_', { getParams: {...itemsFilter} }) );	
+						// dispatch( fetchItemsFor('USERS_', { getParams: {...itemsFilters} }) );	
 
-						dispatch( fetchUsers({ getParams: {...itemsFilter} }) );
+						dispatch( fetchUsers({ getParams: {...itemsFilters} }) );
 					})
 			};
 		});	
@@ -110,20 +105,20 @@ const Users = () => {
 		dispatch(saveUser({ data: itemData }))
 			.then(() => {
 				setItemModalOpen(false);
-				dispatch( fetchUsers({ getParams: {...itemsFilter} }) );
+				dispatch( fetchUsers({ getParams: {...itemsFilters} }) );
 			})
 	};
 
 	// ===== Watch =======
 	useEffect(() => {
-		console.log('itemsFilter: ', itemsList);
+		// console.log('itemsFilters: ', itemsFilters);
 		
 		if (isInitialMount) {
 			// setRulesData( getUserRules(SECTIONS.USER) );
 
 			// ------ Component Mount -------
 			if (itemsList.length < 1) {
-				const payload = { getParams: {...itemsFilter} };
+				const payload = { getParams: {...itemsFilters} };
 				dispatch( fetchUsers(payload) );
 			}
 
@@ -132,20 +127,15 @@ const Users = () => {
 			// -----------------------------
 		} else {
 			// ------ Component Update -----
-			const payload = { getParams: {...itemsFilter} };
+			const payload = { getParams: {...itemsFilters} };
 			dispatch( fetchUsers(payload) );
 			// -----------------------------
 		}
-	}, [itemsFilter]);
+	}, [itemsFilters]);
 
 	useEffect(() => {
 		setRulesData( getUserRules(SECTIONS.USER) );
 	}, [authUser])
-
-	useEffect(() => {
-		console.log(itemsLoading)
-		// setRulesData( getUserRules(SECTIONS.USER) );
-	}, [itemsLoading])
 
 	// ===== Component Will Unmount ======
 	useEffect(() => {
@@ -167,19 +157,19 @@ const Users = () => {
 
 			<FilterBar
 				// changeItemsMeta={changeItemsMeta}
-				changeItemsFilter={changeItemsFilter}
-				currentFilter={itemsFilter}
+				changeItemsFilters={changeItemsFilters}
+				currentFilter={itemsFilters}
 				itemsMeta={itemsMeta}
 			/>
 
-			{/*<ItemsTable
+			<ItemsTable
 				rulesData={rulesData}
 				toggleItemEdit={toggleItemEdit}
 				toggleItemDelete={toggleItemDelete}
 				itemsNames={itemsNames}
 				itemsLoading={itemsLoading}
 				userTypesList={userTypesList}
-				itemsList={itemsList} />*/}
+				itemsList={itemsList} />
 
 			{ rulesData.update || rulesData.create ? (
 				<ItemModal 
@@ -199,7 +189,7 @@ const Users = () => {
 				itemsLoading={itemsLoading}
 				itemsMeta={itemsMeta}
 				isInitialMount={isInitialMount}
-				changeItemsFilter={changeItemsFilter}
+				changeItemsFilters={changeItemsFilters}
 			/>			
 
 			{/* <div className="" /> */}

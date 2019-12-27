@@ -1,10 +1,17 @@
 import { 
   SET_ITEMS,
-  SET_META
+  SET_META,
+  SET_FILTERS
 } from '../../constants';
 
 const initialDataState = {
   itemsList: [],
+  itemsFilters: {
+    isClient: null,
+    isActive: null,
+    max: 10,
+    page: 1
+  },
   itemsMeta: {
     current_page: 1,
     from: 1,
@@ -26,6 +33,9 @@ const itemsDataReducerFor = (prefix) => {
 
       case prefix + SET_META:
         return { ...state, itemsMeta: payload };
+
+      case prefix + SET_FILTERS:
+        return { ...state, itemsFilters: payload };
 
       default:
         return state;

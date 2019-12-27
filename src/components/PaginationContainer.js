@@ -15,7 +15,7 @@ const PaginationContainer = ({
 	itemsLoading,
 	itemsMeta,
 	isInitialMount,
-	changeItemsFilter
+	changeItemsFilters
 }) => {
 	// =====getters====
 	// const getUserClient = user => (user.isClient ? user.company : '');
@@ -25,7 +25,7 @@ const PaginationContainer = ({
 		current_page: 1,
 		per_page: 1,
 		total: 1,
-		defaultPagesToDisplay: 5
+		// defaultPagesToDisplay: 5
 	}
 
 	const [metaData, setMeta] = useState(initialMeta);
@@ -112,6 +112,7 @@ const PaginationContainer = ({
 		}*/
 
 	const setupPagination = (meta) => {
+		// console.log('meta: ', meta)
 		const maxItems = Math.ceil(meta.total / meta.per_page);
 		let itemsShow, itemsToAdd, firstItem, lastItem;
 		let items = [];
@@ -158,7 +159,7 @@ const PaginationContainer = ({
 	const handleChangePage = number => {
 		if (number !== metaData.current_page) {
 			// console.log(number)
-			changeItemsFilter({ filterName: 'page', val: number });
+			changeItemsFilters({ filterName: 'page', val: number });
 		}
 	}
 
@@ -213,6 +214,7 @@ PaginationContainer.propTypes = {
 	// 	itemsNameMult2: PropTypes.string
 	// }),
 	itemsLoading: PropTypes.bool,
+	changeItemsFilters: PropTypes.func.isRequired
 	// itemsList: PropTypes.array.isRequired
 };
 

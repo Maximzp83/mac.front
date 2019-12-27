@@ -5,7 +5,7 @@ import { reducer as toastrReducer } from 'react-redux-toastr';
 import sidebar from './sidebarReducers';
 import auth from './authReducer';
 import usersReducers from './usersReducers';
-import roles from './rolesReducer';
+import rolesReducers from './rolesReducers';
 
 
 export default combineReducers({
@@ -14,6 +14,6 @@ export default combineReducers({
 	sidebar,
 	auth,
 	users: usersReducers,
-	roles,
+	roles: rolesReducers
 	// itemsStatus
 });
