@@ -18,7 +18,7 @@ export function hideSidebar() {
 	};
 }
 
-export function toggleStickySidebar() {
+/*export function toggleStickySidebar() {
 	return {
 		type: types.SIDEBAR_STICKY_TOGGLE
 	};
@@ -35,3 +35,4 @@ export function disableStickySidebar() {
 		type: types.SIDEBAR_STICKY_DISABLE
 	};
 }
+*/

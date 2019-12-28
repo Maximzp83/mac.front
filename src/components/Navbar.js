@@ -30,8 +30,10 @@ import { toggleSidebar } from '../redux/actions/sidebarActions';
 const NavbarComponent = () => {
 	const dispatch = useDispatch();
 
-	const { authLoading, isAuthenticated, authUser } = useSelector(state => state.auth);
-
+	const { isAuthenticated, authUser } = useSelector(state => state.auth.authData);
+  const { itemsLoading } = useSelector(state => state.auth.authStatus);
+  const authLoading = itemsLoading;
+  
 	const handleLogout = () => {
 		// console.log('ok')
 		dispatch(signOut());
@@ -167,13 +169,12 @@ const NavbarComponent = () => {
 							</span>
 							<span className="d-none d-sm-inline-block">
 								<DropdownToggle nav caret>
-                  <span className="text-dark mr-2">{authUser.first_name}</span>
-
 									<img
 										src={authUser.avatar}
 										className="avatar img-fluid rounded-circle mr-1"
 										alt={authUser.first_name}
 									/>
+                  <span className="text-dark ml-2">{authUser.first_name}</span>
 								</DropdownToggle>
 							</span>
 							<DropdownMenu right>

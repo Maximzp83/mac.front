@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Container, Button } from 'reactstrap';
+import { Container } from 'reactstrap';
 import swal from 'sweetalert';
 import { SECTIONS, userTypesList, ruleTypes } from 'constants/global';
 import { getUserRules } from 'helpers';
@@ -38,13 +38,13 @@ const Users = () => {
 	const {	itemsLoading, itemsSaving } = useSelector(state => state.users.usersStatus);
 	const rolesState = useSelector(state => state.roles.rolesData);
 	const rolesList = rolesState.itemsList;
-	const { authUser } = useSelector(state => state.auth);
+	const { authUser } = useSelector(state => state.auth.authData);
 
 	// ---- local Constants -----
 	const itemsNames = {
 		itemsName: 'Пользователь',
 		itemsNameMult1: 'Пользователи',
-		itemsNameMult2: 'Пользователей'
+		itemsNameMult2: 'Пользователей',
 	};
 	const rolesFilter = {	max: -1, withDefault: true };
 
@@ -87,8 +87,6 @@ const Users = () => {
 			if (answer) { 
 				dispatch( deleteUser(user.id) )
 					.then(() => {
-						// dispatch( fetchItemsFor('USERS_', { getParams: {...itemsFilters} }) );	
-
 						dispatch( fetchUsers({ getParams: {...itemsFilters} }) );
 					})
 			};
@@ -112,10 +110,7 @@ const Users = () => {
 	// ===== Watch =======
 	useEffect(() => {
 		// console.log('itemsFilters: ', itemsFilters);
-		
 		if (isInitialMount) {
-			// setRulesData( getUserRules(SECTIONS.USER) );
-
 			// ------ Component Mount -------
 			if (itemsList.length < 1) {
 				const payload = { getParams: {...itemsFilters} };
@@ -149,17 +144,14 @@ const Users = () => {
 		<Container fluid className="p-0">
 			<h1 className="h3 mb-3">{itemsNames.itemsNameMult1}</h1>
 			
-			{ rulesData.create && (
-				<Button color="tertiary" size="lg" onClick={() => toggleItemEdit()}>
-					<span>Создать пользователя</span>
-				</Button>
-			)}
-
 			<FilterBar
 				// changeItemsMeta={changeItemsMeta}
 				changeItemsFilters={changeItemsFilters}
 				currentFilter={itemsFilters}
 				itemsMeta={itemsMeta}
+				rulesData={rulesData}
+				toggleItemEdit={toggleItemEdit}
+				namesData={{createButtonName:'Создать пользователя'}}
 			/>
 
 			<ItemsTable
@@ -191,6 +183,7 @@ const Users = () => {
 				itemsMeta={itemsMeta}
 				isInitialMount={isInitialMount}
 				changeItemsFilters={changeItemsFilters}
+				namesData={itemsNames}
 			/>			
 
 			{/* <div className="" /> */}

@@ -15,13 +15,11 @@ const fetchUsers = payload => {
 
 const saveUser = payload => {
 	return dispatch => {
-
 		return new Promise((resolve, reject) => {
 			dispatch(saveItemFor('USERS_', '/users')(payload))
 				.then((response) => {
-					let copyAuthUser = Object.assign({}, store.getState().auth.authUser);
+					let copyAuthUser = Object.assign({}, store.getState().auth.authData.authUser);
 					let savedUser = response.data;
-					console.log(savedUser)
 					if (savedUser.id === copyAuthUser.id) {
 					  savedUser.avatar = 'https://s3.amazonaws.com/uifaces/faces/twitter/snowshade/128.jpg';
 					  dispatch(setAuthUser(savedUser));  
@@ -29,7 +27,6 @@ const saveUser = payload => {
 					resolve()
 				})
 				.catch(() => {reject()})
-
 		})
 	}
 };

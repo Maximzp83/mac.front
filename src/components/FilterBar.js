@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
-	// Button,
+	Button,
 	// ButtonGroup,
 	ButtonDropdown,
 	DropdownToggle,
@@ -12,7 +12,15 @@ import {
 	Row
 } from 'reactstrap';
 
-const FilterBar = ({ changeItemsFilters, currentFilter: { max }, itemsMeta }) => {
+// ======================
+const FilterBar = ({ 
+	changeItemsFilters,
+	currentFilter: { max },
+	itemsMeta,
+	toggleItemEdit,
+	rulesData,
+	namesData: { createButtonName }
+}) => {
 	const [maxItemsOpen, setMaxItems] = useState(false);
 	const maxToggle = () => setMaxItems(!maxItemsOpen);
 
@@ -33,7 +41,14 @@ const FilterBar = ({ changeItemsFilters, currentFilter: { max }, itemsMeta }) =>
 	};
 
 	return (
-		<Row className="filterbar user-filterbar">
+		<Row className="filterbar user-filterbar align-items-center">
+			{ rulesData.create && (
+				<Col xs="12" md="auto">
+					<Button color="primary" size="lg" onClick={() => toggleItemEdit()}>
+						<span>{ createButtonName }</span>
+					</Button>
+				</Col>
+			)}
 			{/*<Col xs="12" md="8">
 				<ButtonGroup className="items-filterbar">
 					<Button color="primary" size="lg" onClick={() => handleFilter(null)} active={isClient === null}>
@@ -48,8 +63,9 @@ const FilterBar = ({ changeItemsFilters, currentFilter: { max }, itemsMeta }) =>
 				</ButtonGroup>
 			</Col>*/}
 
-			<Col xs="12" md="4" className="ml-auto d-flex">
-				<ButtonDropdown isOpen={maxItemsOpen} toggle={maxToggle} className="ml-auto">
+			<Col xs="12" md="3" className="d-flex align-items-center">
+				<div>Показывать по </div>
+				<ButtonDropdown isOpen={maxItemsOpen} toggle={maxToggle} className="ml-2">
 					<DropdownToggle caret>{max === -1 ? 'Все' : max}</DropdownToggle>
 					<DropdownMenu right className="maxItemsMenu">
 						<DropdownItem active={max === 10} onClick={() => handleFilterChange(10)}>
@@ -69,7 +85,10 @@ const FilterBar = ({ changeItemsFilters, currentFilter: { max }, itemsMeta }) =>
 };
 
 FilterBar.defaultProps = {
-	currentFilter: { isClient: null, max: 5 },
+	currentFilter: { isClient: null, max: 10 },
+	namesData: {
+		createButtonName: 'Создать'
+	},
 };
 
 FilterBar.propTypes = {
@@ -80,6 +99,9 @@ FilterBar.propTypes = {
 		max: PropTypes.number
 	}),
 	changeItemsFilters: PropTypes.func.isRequired,
+	toggleItemEdit: PropTypes.func.isRequired,
+	rulesData: PropTypes.object.isRequired,
+	namesData: PropTypes.object
 	// changeItemsMeta: PropTypes.func.isRequired
 };
 

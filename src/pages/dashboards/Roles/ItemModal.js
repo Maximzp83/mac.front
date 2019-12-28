@@ -94,6 +94,7 @@ const ItemModal = ({
 	const handleSubmit = () => {
 		let stateCopy = Object.assign({}, itemFormData);
 		let formData = { ...stateCopy, rules: rulesFormData }
+		delete formData.is_default;
 		// console.log(formData)
 		submitItem(formData);
 	};
@@ -105,11 +106,18 @@ const ItemModal = ({
 
 	// ===== Watch =======
 	useEffect(() => {
+		// console.log('Modal Update: ', itemData);
 		if (!isInitialMount) {
-			let data = isEmpty(itemData) ? initialItemFormData : itemData;
-				// console.log('Modal Update: ', data);
-			setFormData(data);
-			setUpRulesFormData(data);		
+			let newData;
+						
+			if (!isEmpty(itemData)) {
+				let itemDataCopy = Object.assign({}, itemData)
+				newData = itemDataCopy;
+			} else {
+				newData = {...initialItemFormData};
+			}
+			setFormData(newData);
+			setUpRulesFormData(newData);		
 		}
 	}, [itemData]);
 

@@ -1,21 +1,31 @@
-/* import { 
-	handleSetItemsResponse,
-	handleError,
-} from 'services/api/api_helpers'; */
+// import { setItemsFor, setMetaFor, setFiltersFor } from './common/itemsDataActions';
+import { setLoadingStatusFor/*, setSavingStatusFor*/ } from './common/statusActions';
+// import store from 'redux/store';
+// import { setAuthUser } from './authActions';
+
+/*const fetchRoles = payload => {
+	return fetchItemsFor('ROLES_', '/roles')(payload);
+};*/
+import {
+	AUTH_SUCCESS,
+	AUTH_CLEAR,
+	AUTH_SET_USER
+} from '../constants';
+
 import { api } from 'services/api';
 import { getResponseMessage, isSuccessStatus } from 'services/api/api_helpers';
 import { push as routerPush } from 'react-router-redux';
 import { toastr } from 'react-redux-toastr';
 
-export const types = {
+/*const types = {
 	AUTH_REQUEST_START: 'AUTH_REQUEST_START',
 	AUTH_SUCCESS: 'AUTH_SUCCESS',
 	AUTH_REQUEST_END: 'AUTH_REQUEST_END',
 	AUTH_CLEAR: 'AUTH_CLEAR',
 	AUTH_SET_USER: 'AUTH_SET_USER',
-};
+};*/
 
-/* export const fetchAuthUser = () => {
+/*const fetchAuthUser = () => {
 	return dispatch => {
 		 const options = {
 			url: '/auth/user',
@@ -34,31 +44,31 @@ export const types = {
 	};
 }; */
 
-export const signIn = payload => {
+const signIn = payload => {
 	return dispatch => {
-		dispatch({ type: types.AUTH_REQUEST_START });
+		// dispatch({ type: AUTH_REQUEST_START });
+    dispatch(setLoadingStatusFor('AUTH_')(true));  
 
 		api('POST', '/auth/login', payload)
 			.then(response => {
 				if (isSuccessStatus(response)) {
-					if (response.data && response.data.data && response.data.data.access_token) {
-						const responseData = response.data.data;
+					if (response.data.data.access_token) {
+						const { access_token, user } = response.data.data;
 						try {
 							// console.log('response: ', response)
-							const { user } = responseData;
+							// const { user } = responseData;
 							user.avatar = 'https://s3.amazonaws.com/uifaces/faces/twitter/snowshade/128.jpg';
 					
-							dispatch({ type: types.AUTH_SET_USER, payload: user });
-							dispatch({ type: types.AUTH_SUCCESS, payload: responseData.access_token });
-							dispatch({ type: types.AUTH_REQUEST_END });
+							dispatch({ type: AUTH_SET_USER, payload: user });
+							dispatch({ type: AUTH_SUCCESS, payload: access_token });
+							dispatch(setLoadingStatusFor('AUTH_')(false));  
 						} catch(e) {console.log(e)}
 
 						dispatch(routerPush('/dashboard'));
-						toastr.success('', `Вы вошли как ${responseData.user.login}`);
+						toastr.success('', `Вы вошли как ${user.login}`);
 					} else {
-						dispatch({ type: types.AUTH_CLEAR });
-						dispatch({ type: types.AUTH_REQUEST_END });
-
+						dispatch({ type: AUTH_CLEAR });
+						dispatch(setLoadingStatusFor('AUTH_')(false));
 						const message = getResponseMessage(response);
 						toastr.error('Ошибка', message || 'ответ не содержит данных', { timeOut: 0 });
 					}
@@ -68,29 +78,38 @@ export const signIn = payload => {
 				}
 			})
 			.catch(error => {
-				dispatch({ type: types.AUTH_CLEAR });
-				dispatch({ type: types.AUTH_REQUEST_END });
+				dispatch({ type: AUTH_CLEAR });
+				dispatch(setLoadingStatusFor('AUTH_')(false));
 				const message = getResponseMessage(error);
 				toastr.error('Ошибка', message || error.message);
 			});
 	};
 };
 
-export const signOut = () => {
+const signOut = () => {
 	return dispatch => {
-		dispatch({ type: types.AUTH_REQUEST_START });
-		dispatch({ type: types.AUTH_CLEAR });
+		dispatch(setLoadingStatusFor('AUTH_')(true));
+		// dispatch({ type: AUTH_REQUEST_START });
+		dispatch({ type: AUTH_CLEAR });
 		setTimeout(() => {
-			dispatch({ type: types.AUTH_REQUEST_END });
+			dispatch(setLoadingStatusFor('AUTH_')(false));  
+			// dispatch({ type: AUTH_REQUEST_END });
 		}, 100);
 		toastr.success('', 'Вы успешно вышли из аккаунта');
 	};
 };
 
-export const setAuthUser = (user) => {
+const setAuthUser = user => {
 	// console.log(user)
-	return { type: types.AUTH_SET_USER, payload: user };
+	return { type: AUTH_SET_USER, payload: user };
 };
-export const clearAuth = () => {
-	return { type: types.AUTH_CLEAR };
+const clearAuth = () => {
+	return { type: AUTH_CLEAR };
 };
+
+export {
+	signIn,
+	signOut,
+	setAuthUser,
+	clearAuth
+}

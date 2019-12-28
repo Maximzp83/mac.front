@@ -1,9 +1,4 @@
 import {
-  // LOAD_STATUS,
-  // SAVE_STATUS,
-} from '../../constants';
-
-import {
   // handleError,
   isSuccessStatus,
   getResponseMessage,
@@ -95,17 +90,7 @@ const saveItemFor = (prefix, payloadUrl) => {
       return new Promise((resolve, reject) => {
         api(method, url, payload)
           .then(response => {
-            // handleSetItemsResponse(response, settings);
             if (isSuccessStatus(response)) {
-         
-              // ------Update AuthUser-----
-              /*let copyAuthUser = Object.assign({}, store.getState().auth.authUser);
-              if (savedUser.id === copyAuthUser.id) {
-                savedUser.avatar = 'https://s3.amazonaws.com/uifaces/faces/twitter/snowshade/128.jpg';
-                dispatch(setAuthUser(savedUser));  
-              }*/
-              // ---------------------------
-
               toastr.success('', `Элемент ${resultMessage}`);
               resolve(response)
             } else {

@@ -3,7 +3,7 @@ import { routerReducer } from 'react-router-redux';
 
 import { reducer as toastrReducer } from 'react-redux-toastr';
 import sidebar from './sidebarReducers';
-import auth from './authReducer';
+import auth from './authReducers';
 import usersReducers from './usersReducers';
 import rolesReducers from './rolesReducers';
 

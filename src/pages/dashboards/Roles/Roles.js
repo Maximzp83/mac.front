@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import { subspace, namespaced } from 'redux-subspace';
-import { Container, Button } from 'reactstrap';
+import { Container } from 'reactstrap';
 
 import { SECTIONS, ruleTypes } from 'constants/global';
 import { getUserRules } from 'helpers';
@@ -35,7 +35,7 @@ const Roles = () => {
 
 	// ---- local State -----
 	const [rulesData, setRulesData] = useState({});
-	const { authUser } = useSelector(state => state.auth);
+	const { authUser } = useSelector(state => state.auth.authData);
 	const [isInitialMount, setInitialMount] = useState(true);
 	const [itemModalOpen, setItemModalOpen] = useState(false);
 
@@ -131,17 +131,14 @@ const Roles = () => {
 		<Container fluid className="p-0">
 			<h1 className="h3 mb-3">Настройка прав доступа и управление ролями</h1>
 			
-			{ rulesData.create && (
-				<Button color="tertiary" size="lg" onClick={() => toggleItemEdit()}>
-					<span>Создать группу пользователей</span>
-				</Button>
-			)}
-
 			<FilterBar
 				// changeItemsMeta={changeItemsMeta}
 				changeItemsFilters={changeItemsFilters}
 				currentFilter={itemsFilters}
 				itemsMeta={itemsMeta}
+				rulesData={rulesData}
+				toggleItemEdit={toggleItemEdit}
+				namesData={{createButtonName:'Создать группу пользователей'}}
 			/>
 			
 			<ItemsTable 
@@ -172,6 +169,7 @@ const Roles = () => {
 				itemsMeta={itemsMeta}
 				isInitialMount={isInitialMount}
 				changeItemsFilters={changeItemsFilters}
+				namesData={itemsNames}
 			/>
 
 			{/*<ConfirmModal

@@ -11,6 +11,10 @@
   min-width: 70px;
   max-width: 70px; }
 
+.modal-content {
+  max-height: 90vh;
+  overflow: auto; }
+
 input::placeholder,
 select::placeholder,
 textarea::placeholder {
@@ -33,3 +37,16 @@ textarea::placeholder {
   box-shadow: none !important; }
   .items-filterbar .btn + .btn {
     margin-left: 15px; }
+
+.sidebar-brand span {
+  font-size: 32px;
+  font-weight: 500; }
+
+.pagination-container {
+  background-color: #fff;
+  padding: 15px; }
+  .pagination-container .pagination {
+    margin-bottom: 0; }
+
+.table {
+  margin-bottom: 0; }

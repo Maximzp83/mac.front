@@ -26,7 +26,7 @@ const checkAuthorizationHeaders = () => {
 	if (!!axios.defaults.headers.common && !!axios.defaults.headers.common.Authorization) {
 		// empty
 	} else {
-		const token = store.getState().auth.access_token;
+		const token = store.getState().auth.authData.access_token;
 		setHttpToken(token);
 	}
 };

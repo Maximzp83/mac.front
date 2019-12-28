@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import { push as routerPush } from 'react-router-redux';
 // import { Link } from "react-router-dom";
-// import { toastr } from 'react-redux-toastr';
 
 import {
 	Button,
@@ -22,19 +20,14 @@ import { signIn } from '../../redux/actions/authActions';
 // import avatar from "../../assets/img/avatars/avatar.jpg";
 
 const SignIn = () => {
-	// console.log('ok')
 	const dispatch = useDispatch();
 
-	const defaultUserData = { email: 'admin@gmail.com', password: '12345678' };
+	const defaultUserData = { email: 'admin@gmail.com', password: '123123' };
 	const [userData, setUserData] = useState(defaultUserData);
 
-	// const [email, setEmail] = useState('test@gmail.com');
-	// const [password, setPass] = useState('12345678');
-
-	const { authLoading, isAuthenticated, authUser } = useSelector(state => {
-		// console.log(state);
-		return state.auth;
-	});
+	const { isAuthenticated, authUser } = useSelector(state => state.auth.authData);
+	const { itemsLoading } = useSelector(state => state.auth.authStatus);
+	const authLoading = itemsLoading;
 
 	const handleEmailChange = e => {
 		setUserData(prevState => ({ ...prevState, email: e.target.value }));

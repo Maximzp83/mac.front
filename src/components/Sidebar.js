@@ -15,7 +15,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import routes from '../routes';
 // import avatar from "../assets/img/avatars/avatar.jpg";
-import logoImg from '../assets/img/logo.png';
+// import logoImg from '../assets/img/logo.png';
 
 const SidebarCategory = withRouter(
 	({ name, badgeColor, badgeText, icon: Icon, isOpen, children, handleClick, location, to }) => {
@@ -78,7 +78,7 @@ class Sidebar extends React.Component {
 		this.state = {
 			filteredRoutes: []
 		};
-	}
+	};
 
 	toggleSideBarCategory = index => {
 		this.setState(state => ({
@@ -87,6 +87,7 @@ class Sidebar extends React.Component {
 	};
 
 	filterRoutesByRules = (routes, auth) => {
+		const { authUser } = auth.authData;
 		let rules;
 		let copyRoutes = Object.assign([], routes);
 		let filteredRoutes = [];
@@ -98,7 +99,7 @@ class Sidebar extends React.Component {
 				for (let route of copyCategory.children) {
 					let hasAccess = true;
 					if (route.meta && route.meta.ruleType) {
-						rules = findItemBy('ruleType', route.meta.ruleType, auth.authUser.role.rules);
+						rules = findItemBy('ruleType', route.meta.ruleType, authUser.role.rules);
 						hasAccess = rules && rules.view;
 					}
 					if (hasAccess) filteredChildren.push(route);
@@ -150,8 +151,8 @@ class Sidebar extends React.Component {
 					<PerfectScrollbar>
 						<a className="sidebar-brand" href="/">
 							{/* <Box className="align-middle text-primary mr-2" size={24} />{" "} */}
-							<img src={logoImg} alt="logo" width="40" height="40" className="align-middle" />
-							<span className="align-middle ml-3">
+							{/*<img src={logoImg} alt="logo" width="40" height="40" className="align-middle" />*/}
+							<span className="align-middle ">
 								<b>WebSpot</b>
 							</span>
 						</a>

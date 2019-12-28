@@ -32,7 +32,7 @@ const findItemBy = (property, value, itemsList, returnIndex=false) => {
 		for (let i = 0; i < itemsList.length; i++) {
 			if (itemsList[i][property]) {
 				if (itemsList[i][property] === value) {
-					result = itemsList[i];
+					result = JSON.parse(JSON.stringify(itemsList[i]));
 					index = i;
 					break;
 				}
@@ -43,7 +43,7 @@ const findItemBy = (property, value, itemsList, returnIndex=false) => {
 };
 
 const getUserRules = (ruleType) => {
-	const authUser = store.getState().auth.authUser;
+	const authUser = JSON.parse(JSON.stringify( store.getState().auth.authData.authUser ));
 	let rules;
 	if (authUser.role && authUser.role.rules.length) {
 		rules = findItemBy('ruleType', ruleType, authUser.role.rules);

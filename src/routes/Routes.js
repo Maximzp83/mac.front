@@ -42,7 +42,9 @@ const checkAccessToRoute = (route, authUser) => {
 }
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-	const { isAuthenticated, authLoading } = useSelector(state => state.auth);
+	const { isAuthenticated } = useSelector(state => state.auth.authData);
+	const { itemsLoading } = useSelector(state => state.auth.authStatus);
+	const authLoading = itemsLoading;
 
 	return (
 		<Route
@@ -74,7 +76,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 };*/
 
 const ChildRoutes = ({ layout: Layout, routes }) => {
-	const { authUser } = useSelector(state => state.auth);
+	const { authUser } = useSelector(state => state.auth.authData);
 	
 	return (
 		<Layout>

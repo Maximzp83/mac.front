@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 // import { findItemBy } from 'helpers'
 import isEmpty from 'lodash.isempty';
+import isEqual from 'lodash.isequal'
 import { findItemBy } from 'helpers'
 import { initialRulesFormData } from 'constants/global';
 
@@ -33,27 +34,31 @@ const ItemModal = ({
 	ruleTypes,
 	userTypesList
 }) => {
+	
+	// ------local state----------
 
 	const initialItemFormData = {
 		id: null,
 		type: 1,
-		last_name: 'asd',
-		first_name: 'asd',
-		second_name: 'asd',
-		email: '1asd@asd.com',
-		password: '123123',
+		last_name: '',
+		first_name: '',
+		second_name: '',
+		email: '',
+		password: '',
 		login: '',
 		role_id: '',
 		rules: []
 	}
-
 	const [itemFormData, setFormData] = useState(initialItemFormData);
-	// const [userData, setUserData] = useState(defaultUserData);
+	const [attachedRole, setAttachedRole] = useState(null);
 	const [rulesFormData, setRulesFormData] = useState(initialRulesFormData);
+
+	// -------------------
 	
 	const setUpRulesFormData = data => {
+		let dataCopy = JSON.parse(JSON.stringify(data));
 		let newRulesState = Object.assign([], initialRulesFormData)
-		let rules = Object.assign([], data.rules)
+		let rules = Object.assign([], dataCopy.rules)
 
 		for (let i = 0; i < rules.length; i++) {
 			let {item, index} = findItemBy('ruleType', rules[i].ruleType, newRulesState, true);
@@ -73,8 +78,7 @@ const ItemModal = ({
 		throw new Error('error in code');
 		// return;
 	}
-	// -------Form Models--------
-
+	// -------Form Models-------
 	const handleFieldChange = data => {
 		const { prop, val } = data;
 		setFormData( prevState => ({ ...prevState, [prop]: val }) );
@@ -100,7 +104,7 @@ const ItemModal = ({
 				let isChecked = item[data.prop];
 				newRulesState[index][data.prop] = !isChecked;
 			}
-			return [...newRulesState];
+			return newRulesState;
 		})
 	};
 
@@ -121,19 +125,23 @@ const ItemModal = ({
 
 	const handleSubmit = () => {
 		// let formData = prepareFormData(itemFormData)		
-		let stateCopy = Object.assign({}, itemFormData);
+		let formDataCopy = Object.assign({}, itemFormData);
+		let submitData;
 		
-		if (!stateCopy.company_id) delete stateCopy.company_id;
+		if (!formDataCopy.company_id) delete formDataCopy.company_id;
 
-		let formData;
-		if (stateCopy.type === 1) formData = { ...stateCopy, rules: rulesFormData }
-		else {
-			delete stateCopy.rules;
-			formData = stateCopy;
-		}
-		// console.log('submit: ', formData)
+		// console.log( isEqual(rulesFormData, attachedRole.rules) )
 		
-		submitItem(formData);
+		if (formDataCopy.type === 1 && !isEqual(rulesFormData, attachedRole.rules)) {
+			submitData = { ...formDataCopy, rules: rulesFormData }
+		}
+		else {
+			delete formDataCopy.rules;
+			submitData = formDataCopy;
+		}
+		// console.log('submit: ', submitData)
+		
+		submitItem(submitData);
 	};
 	/*const handleItemsMetaChange = value => {
 		if (maxItems !== value) {
@@ -144,32 +152,34 @@ const ItemModal = ({
 	// ===== Watch =======
 	useEffect(() => {
 		if (!isInitialMount) {
-				// console.log('Modal Update: ', itemData);
+			let newData;
+
 			if (!isEmpty(itemData)) {
-				const role_id = itemData.role ? itemData.role.id : '';
-				let data = { ...itemData, role_id:role_id, role:null, password: '' };
+				let itemDataCopy = Object.assign({}, itemData)
+				const role_id = itemDataCopy.role ? itemDataCopy.role.id : '';
+				newData = { ...itemDataCopy, role_id:role_id, role:null, password: '' };
 
-				if (itemData.role) {
-					data.rules = itemData.role.rules || [];
+				if (itemDataCopy.role) {
+					newData.rules = itemDataCopy.role.rules || [];
 				}
-
-				setFormData(data);
-				setUpRulesFormData(data);		
 			} else {
-				setFormData(initialItemFormData);
-				setUpRulesFormData(initialItemFormData);		
+				newData = {...initialItemFormData};
 			}
+
+			setFormData(newData);
+			setUpRulesFormData(newData);		
 		}
 	}, [itemData]);
 
 	useEffect(() => {
 		if (!isInitialMount) {
-			let item = findItemBy('id', itemFormData.role_id, rolesList);
-
-			if (item && item.rules.length) {
-				setUpRulesFormData({rules:item.rules});		
+			let role = findItemBy('id', itemFormData.role_id, rolesList);
+			if (role) {
+				if (role.rules.length) {
+					setUpRulesFormData({rules:role.rules});
+				}
+				setAttachedRole(role)
 			}
-			
 		}
 	}, [itemFormData.role_id])
 
@@ -384,7 +394,7 @@ ItemModal.propTypes = {
 	itemsSaving: PropTypes.bool.isRequired,
 	itemData: PropTypes.object,
 	rolesList: PropTypes.array.isRequired,
-	ruleTypes: PropTypes.array.isRequired,
+	ruleTypes: PropTypes.array.isRequired
 };
 
 export { ItemModal };
