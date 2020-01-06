@@ -1,6 +1,15 @@
 .navbar {
   border-bottom: $navbar-border-bottom;
 
+  .avatar {
+    vertical-align: initial;
+  }
+  
+  .dropdown-toggle:after {
+    vertical-align: 2px;
+    margin-left: 15px;
+  }
+
   @include media-breakpoint-down(md) {
     width: 100vw;
   }
@@ -9,6 +18,7 @@
 .navbar-brand {
   font-weight: $navbar-brand-font-weight;
 }
+
 
 .nav-icon,
 .nav-flag {
